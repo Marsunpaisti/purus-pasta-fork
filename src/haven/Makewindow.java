@@ -51,6 +51,10 @@ public class Makewindow extends Widget {
         }
     }
 
+    private static final OwnerContext.ClassResolver<Makewindow> ctxr = new OwnerContext.ClassResolver<Makewindow>()
+            .add(Glob.class, wdg -> wdg.ui.sess.glob)
+            .add(Session.class, wdg -> wdg.ui.sess);
+
     public class Spec implements GSprite.Owner, ItemInfo.SpriteOwner {
         public Indir<Resource> res;
         public MessageBuf sdt;
@@ -120,6 +124,11 @@ public class Makewindow extends Widget {
             return (res.get());
         }
 
+        public <T> T context(Class<T> cl) {
+            return (ctxr.context(cl, Makewindow.this));
+        }
+
+        @Deprecated
         public Glob glob() {
             return (ui.sess.glob);
         }

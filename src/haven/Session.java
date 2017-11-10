@@ -31,8 +31,8 @@ import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
 
-public class Session {
-    public static final int PVER = 12;
+public class Session implements Resource.Resolver {
+    public static final int PVER = 13;
 
     public static final int MSG_SESS = 0;
     public static final int MSG_REL = 1;
