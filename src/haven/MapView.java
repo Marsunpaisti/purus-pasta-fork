@@ -70,6 +70,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private Coord lasttc = Coord.z;
     private static final Gob.Overlay rovlsupport = new Gob.Overlay(new BPRadSprite(100.0F, 0, BPRadSprite.smatDanger));
     private static final Gob.Overlay rovlcolumn = new Gob.Overlay(new BPRadSprite(125.0F, 0, BPRadSprite.smatDanger));
+    private static final Gob.Overlay rovlbeam = new Gob.Overlay(new BPRadSprite(150.0F, 0, BPRadSprite.smatDanger));
     private static final Gob.Overlay rovltrough = new Gob.Overlay(new BPRadSprite(200.0F, -10.0F, BPRadSprite.smatTrough));
     private static final Gob.Overlay rovlbeehive = new Gob.Overlay(new BPRadSprite(151.0F, -10.0F, BPRadSprite.smatBeehive));
     private long lastmmhittest = System.currentTimeMillis();
@@ -670,6 +671,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             show = Config.showminerad;
         } else if (gob.type == Gob.Type.STONE_SUPPORT) {
             rovl = rovlcolumn;
+            show = Config.showminerad;
+        } else if (gob.type == Gob.Type.METAL_SUPPORT) {
+            rovl = rovlbeam;
             show = Config.showminerad;
         }
 
