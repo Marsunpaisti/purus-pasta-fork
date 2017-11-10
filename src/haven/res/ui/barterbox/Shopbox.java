@@ -332,6 +332,11 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
         }
     }
 
+    @Override
+    public <T> T context(Class<T> cl) {
+        return null;
+    }
+
     public abstract class AttrCache<T> {
         private List<ItemInfo> forinfo;
         private T save;

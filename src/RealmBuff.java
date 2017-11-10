@@ -70,4 +70,9 @@ public class RealmBuff extends Buff implements ResOwner {
             super.uimsg(var1, var2);
         }
     }
+
+    @Override
+    public <T> T context(Class<T> cl) {
+        return null;
+    }
 }

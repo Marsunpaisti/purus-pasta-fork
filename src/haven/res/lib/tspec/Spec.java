@@ -80,4 +80,9 @@ public class Spec implements Owner, SpriteOwner {
         Name var2 = (Name)ItemInfo.find(Name.class, this.info());
         return var2 == null ? null : var2.str.text;
     }
+
+    @Override
+    public <T> T context(Class<T> cl) {
+        return null;
+    }
 }

@@ -103,7 +103,7 @@ public class ISlots extends Tip implements NumberInfo, GildingInfo {
         return left > 0;
     }
 
-    public static class SItem implements ResOwner {
+    public static class SItem {
         private final ISlots islots;
         public final Resource res;
         public final GSprite spr;
