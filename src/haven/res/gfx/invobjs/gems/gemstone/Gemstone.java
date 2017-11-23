@@ -16,9 +16,10 @@ import haven.Tex;
 import haven.TexI;
 import haven.TexL;
 import haven.TexR;
-import haven.GSprite.Owner;
+import haven.GSprite.ImageSprite;
 import haven.PUtils.Lanczos;
 import haven.Resource.Image;
+import haven.Resource.Resolver;
 import haven.Resource.Tooltip;
 import haven.res.ui.tt.defn.DynName;
 import java.awt.Graphics2D;
@@ -29,17 +30,17 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.util.Hashtable;
 
-public class Gemstone extends GSprite implements DynName {
+public class Gemstone extends GSprite implements ImageSprite, DynName  {
     public final BufferedImage img;
     public final Tex tex;
     public final String name;
 
     public Gemstone(Owner var1, Resource var2, Message var3) {
         super(var1);
-        Glob var4 = var1.glob();
+        Resolver var4 = (Resolver)var1.context(Resolver.class);
         if (!var3.eom()) {
-            Resource var5 = (Resource)var4.sess.getres(var3.uint16()).get();
-            Resource var6 = (Resource)var4.sess.getres(var3.uint16()).get();
+            Resource var5 = (Resource)var4.getres(var3.uint16()).get();
+            Resource var6 = (Resource)var4.getres(var3.uint16()).get();
             this.tex = new TexI(this.img = construct(var5, var6));
             this.name = ((Tooltip)var5.layer(Resource.tooltip)).t + " " + ((Tooltip)var6.layer(Resource.tooltip)).t;
         } else {
@@ -127,5 +128,9 @@ public class Gemstone extends GSprite implements DynName {
 
     public String name() {
         return this.name;
+    }
+
+    public BufferedImage image() {
+        return this.img;
     }
 }

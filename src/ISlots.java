@@ -13,7 +13,6 @@ import haven.Resource;
 import haven.Text;
 import haven.Utils;
 
-import haven.Resource.Image;
 import haven.res.gfx.invobjs.gems.gemstone.Gemstone;
 import haven.res.lib.tspec.Spec;
 import haven.res.ui.tt.defn.DefName;
@@ -112,11 +111,11 @@ public class ISlots extends Tip implements NumberInfo, GildingInfo {
 
         public SItem(ISlots var1, ResData var2, Object[] var3) {
             this.islots = var1;
-            this.res = var2.res.get();
-            Spec var4 = new Spec(var2, var1.owner.glob(), Utils.extend(new Object[]{ISlots.defn}, var3));
+            this.res = (Resource)var2.res.get();
+            Spec var4 = new Spec(var2, var1.owner, Utils.extend(new Object[]{ISlots.defn}, var3));
             this.spr = var4.spr();
             this.name = var4.name();
-            Spec var5 = new Spec(var2, var1.owner.glob(), var3);
+            Spec var5 = new Spec(var2, var1.owner, var3);
             this.info = var5.info();
         }
 
