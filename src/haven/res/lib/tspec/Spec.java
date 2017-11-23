@@ -28,7 +28,7 @@ public class Spec implements Owner, SpriteOwner {
     }
 
     public static OwnerContext uictx(UI var0) {
-        return uictx(var0);
+        return new Spec$1(var0);
     }
 
     public <T> T context(Class<T> var1) {
@@ -87,5 +87,17 @@ public class Spec implements Owner, SpriteOwner {
         GSprite var1 = this.spr();
         Name var2 = (Name) ItemInfo.find(Name.class, this.info());
         return var2 == null ? null : var2.str.text;
+    }
+
+    final static class Spec$1 implements OwnerContext {
+        private UI ui;
+
+        Spec$1(UI var1) {
+            this.ui = var1;
+        }
+
+        public <C> C context(Class<C> var1) {
+            return Spec.uictx.context(var1, this.ui);
+        }
     }
 }
