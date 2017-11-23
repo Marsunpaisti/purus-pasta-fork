@@ -7,6 +7,7 @@ import haven.ItemInfo.SpriteOwner;
 import haven.Label;
 import haven.Resource.Image;
 import haven.Resource.Pagina;
+import haven.res.lib.tspec.Spec;
 import haven.res.ui.tt.q.qbuff.QBuff;
 
 import java.awt.*;
@@ -192,6 +193,7 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
         }
     }
 
+    @Deprecated
     public Glob glob() {
         return this.ui.sess.glob;
     }
@@ -309,7 +311,7 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
                         }
                     }
 
-                    this.price = new Spec(new ResData(var4, (Message) var5), this.ui.sess.glob, (Object[]) var6);
+                    this.price = new Spec(new ResData(var4, (Message)var5), Spec.uictx(this.ui), (Object[])var6);
                 }
 
                 this.pricetip = null;
@@ -333,8 +335,8 @@ public class Shopbox extends Widget implements SpriteOwner, Owner {
     }
 
     @Override
-    public <T> T context(Class<T> cl) {
-        return null;
+    public <C> C context(Class<C> var1) {
+        return Spec.uictx.context(var1, this.ui);
     }
 
     public abstract class AttrCache<T> {

@@ -14,7 +14,7 @@ public class Spec implements Owner, SpriteOwner {
     public final Object[] info;
     public final ResData res;
     public final OwnerContext ctx;
-    private static final ClassResolver<UI> uictx = new ClassResolver<UI>()
+    public static final ClassResolver<UI> uictx = new ClassResolver<UI>()
             .add(Glob.class, var0 -> var0.sess.glob)
             .add(Session.class, var0 -> var0.sess);
     private Random rnd = null;
