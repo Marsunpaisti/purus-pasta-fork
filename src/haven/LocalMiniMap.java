@@ -42,7 +42,7 @@ public class LocalMiniMap extends Widget {
     private static final Tex gridblue = Resource.loadtex("gfx/hud/mmap/gridblue");
     private static final Tex gridred = Resource.loadtex("gfx/hud/mmap/gridred");
     public final MapView mv;
-    public final MapFile save;
+    public MapFile save;
     private Coord cc = null;
     public MapTile cur = null;
     private UI.Grab dragging;
@@ -167,11 +167,10 @@ public class LocalMiniMap extends Widget {
     public LocalMiniMap(Coord sz, MapView mv) {
         super(sz);
         this.mv = mv;
-        if(ResCache.global != null) {
-            save = MapFile.load(ResCache.global);
-        } else {
-            save = null;
-        }
+    }
+
+    public void save(MapFile file) {
+        this.save = file;
     }
 
     public Coord p2c(Coord2d pc) {
@@ -417,6 +416,7 @@ public class LocalMiniMap extends Widget {
                 }
                 if (f.done()) {
                     cur = f.get();
+                    MapFile save = this.save;
                     if(save != null)
                         save.update(ui.sess.glob.map, cur.grid.gc);
                 }

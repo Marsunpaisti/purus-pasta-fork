@@ -60,6 +60,10 @@ public abstract class Message {
         public void overflow(int min) {
             throw (new RuntimeException("nil message is not writable"));
         }
+
+        public String toString() {
+            return ("Message(nil)");
+        }
     };
 
     public static class BinError extends RuntimeException {

@@ -459,6 +459,17 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
+    private String mapfilename() {
+        StringBuilder buf = new StringBuilder();
+        buf.append(genus);
+        String chrid = Utils.getpref("mapfile/" + this.chrid, "");
+        if (!chrid.equals("")) {
+            if (buf.length() > 0) buf.append('/');
+            buf.append(chrid);
+        }
+        return (buf.toString());
+    }
+
     public void addchild(Widget child, Object... args) {
         String place = ((String) args[0]).intern();
         if (place == "mapview") {
@@ -473,7 +484,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             }
             minimapWnd = minimap();
             mmap = minimapWnd.mmap;
-            if(mmap.save != null) {
+            if(ResCache.global != null) {
+                MapFile file = MapFile.load(ResCache.global, mapfilename());
+                mmap.save(file);
                 mapfile = new MapWnd(mmap.save, map, new Coord(700, 500), "Map");
                 mapfile.hide();
                 add(mapfile, 50, 50);
@@ -1299,6 +1312,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Object[] ad = new Object[args.length - 1];
             System.arraycopy(args, 1, ad, 0, ad.length);
             wdgmsg("act", ad);
+        });
+        cmdmap.put("chrmap", new Console.Command() {
+            public void run(Console cons, String[] args) {
+                Utils.setpref("mapfile/" + chrid, args[1]);
+            }
         });
         cmdmap.put("tool", (cons, args) -> add(gettype(args[1]).create(ui, new Object[0]), 200, 200));
         cmdmap.put("help", (cons, args) -> {
