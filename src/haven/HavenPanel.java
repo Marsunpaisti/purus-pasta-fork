@@ -376,7 +376,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             tooltip = "...";
         }
         Tex tt = null;
-        if (tooltip != null) {
+        if (tooltip != null && !TexGL.disableall) {
             if (tooltip instanceof Text) {
                 tt = ((Text) tooltip).tex();
             } else if (tooltip instanceof Tex) {
