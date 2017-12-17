@@ -1,7 +1,8 @@
 package haven;
 
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InventoryBelt extends Widget implements DTarget {
     private static final Tex invsq = Resource.loadtex("gfx/hud/invsq-opaque");

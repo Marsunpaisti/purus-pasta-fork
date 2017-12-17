@@ -1,12 +1,19 @@
 package haven.timers;
 
 
-import haven.*;
-import haven.Button;
-import haven.Window;
-
-import java.awt.*;
 import java.util.List;
+
+import haven.Button;
+import haven.CheckBox;
+import haven.Config;
+import haven.Coord;
+import haven.GOut;
+import haven.GameUI;
+import haven.Glob;
+import haven.Scrollport;
+import haven.Utils;
+import haven.Widget;
+import haven.Window;
 
 public class TimersWnd extends Window {
     public final GameUI gui;

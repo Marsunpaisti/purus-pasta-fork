@@ -27,9 +27,15 @@
 package haven;
 
 import java.awt.Color;
-import java.awt.image.*;
-import javax.media.opengl.*;
-import java.nio.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 
 public class GOut {
     public final static boolean glerror = false;

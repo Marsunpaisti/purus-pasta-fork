@@ -26,19 +26,19 @@
 
 package haven;
 
-import haven.automation.WItemDestroyCallback;
-import haven.res.ui.tt.Wear;
-import haven.res.ui.tt.q.qbuff.QBuff;
+import static haven.Inventory.sqsz;
+import static haven.Text.num10Fnd;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
-import java.util.function.*;
+import java.util.List;
+import java.util.function.Function;
 
-import static haven.Inventory.sqsz;
-import static haven.Text.num10Fnd;
+import haven.automation.WItemDestroyCallback;
+import haven.res.ui.tt.Wear;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class WItem extends Widget implements DTarget {
     public static final Resource missing = Resource.local().loadwait("gfx/invobjs/missing");

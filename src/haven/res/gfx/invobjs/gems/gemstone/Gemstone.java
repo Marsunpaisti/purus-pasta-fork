@@ -5,23 +5,6 @@
 
 package haven.res.gfx.invobjs.gems.gemstone;
 
-import haven.Coord;
-import haven.GOut;
-import haven.GSprite;
-import haven.Glob;
-import haven.Message;
-import haven.PUtils;
-import haven.Resource;
-import haven.Tex;
-import haven.TexI;
-import haven.TexL;
-import haven.TexR;
-import haven.GSprite.ImageSprite;
-import haven.PUtils.Lanczos;
-import haven.Resource.Image;
-import haven.Resource.Resolver;
-import haven.Resource.Tooltip;
-import haven.res.ui.tt.defn.DynName;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -29,6 +12,23 @@ import java.awt.image.ImageObserver;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.util.Hashtable;
+
+import haven.Coord;
+import haven.GOut;
+import haven.GSprite;
+import haven.GSprite.ImageSprite;
+import haven.Message;
+import haven.PUtils;
+import haven.PUtils.Lanczos;
+import haven.Resource;
+import haven.Resource.Image;
+import haven.Resource.Resolver;
+import haven.Resource.Tooltip;
+import haven.Tex;
+import haven.TexI;
+import haven.TexL;
+import haven.TexR;
+import haven.res.ui.tt.defn.DynName;
 
 public class Gemstone extends GSprite implements ImageSprite, DynName  {
     public final BufferedImage img;

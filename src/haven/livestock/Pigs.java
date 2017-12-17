@@ -1,11 +1,11 @@
 package haven.livestock;
 
 
-import haven.Resource;
-import haven.Tex;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import haven.Resource;
+import haven.Tex;
 
 public class Pigs extends Animal {
     private int attributesRequired = columns.size() + 1;

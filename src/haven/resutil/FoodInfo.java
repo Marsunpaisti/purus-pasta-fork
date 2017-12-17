@@ -26,13 +26,20 @@
 
 package haven.resutil;
 
-import haven.*;
-import haven.res.ui.tt.q.qbuff.QBuff;
-
-import java.text.DecimalFormat;
-import java.util.*;
 import java.awt.Color;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import haven.CharWnd;
+import haven.GItem;
+import haven.ItemInfo;
+import haven.Resource;
+import haven.RichText;
+import haven.Utils;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class FoodInfo extends ItemInfo.Tip {
     public final double end, glut;

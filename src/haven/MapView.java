@@ -26,23 +26,36 @@
 
 package haven;
 
-import haven.GLProgram.VarID;
-import haven.automation.*;
-import haven.pathfinder.PFListener;
-import haven.pathfinder.Pathfinder;
-import haven.resutil.BPRadSprite;
+import static haven.MCache.tilesz;
+import static haven.OCache.posres;
 
-import javax.media.opengl.GL;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
 
-import static haven.MCache.tilesz;
-import static haven.OCache.posres;
+import javax.media.opengl.GL;
+
+import haven.GLProgram.VarID;
+import haven.automation.AreaSelectCallback;
+import haven.automation.GobSelectCallback;
+import haven.automation.MusselPicker;
+import haven.automation.SteelRefueler;
+import haven.pathfinder.PFListener;
+import haven.pathfinder.Pathfinder;
+import haven.resutil.BPRadSprite;
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
     public static boolean clickdb = false;

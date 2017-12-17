@@ -1,11 +1,15 @@
 package haven.res.ui.tt.q.qbuff;
 
-import haven.*;
+import static haven.Text.num10Fnd;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import static haven.Text.num10Fnd;
+import haven.ItemInfo;
+import haven.Resource;
+import haven.Tex;
+import haven.Text;
+import haven.Utils;
 
 
 public class QBuff extends ItemInfo.Tip {

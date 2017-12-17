@@ -26,13 +26,34 @@
 
 package haven.resutil;
 
-import haven.*;
-import haven.glsl.*;
+import static haven.glsl.Cons.add;
+import static haven.glsl.Cons.l;
+import static haven.glsl.Cons.mul;
+import static haven.glsl.Cons.neg;
+import static haven.glsl.Cons.reflect;
+import static haven.glsl.Cons.textureCube;
+import static haven.glsl.Cons.vec4;
+import static haven.glsl.Type.MAT3;
+import static haven.glsl.Type.SAMPLERCUBE;
+import static haven.glsl.Type.VEC3;
+
 import java.awt.Color;
-import javax.media.opengl.*;
-import static haven.glsl.Cons.*;
-import static haven.glsl.Function.PDir.*;
-import static haven.glsl.Type.*;
+
+import javax.media.opengl.GL;
+
+import haven.BGL;
+import haven.GLState;
+import haven.GOut;
+import haven.Material;
+import haven.PView;
+import haven.Resource;
+import haven.TexCube;
+import haven.glsl.Expression;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Uniform;
 
 @Material.ResName("envref")
 public class EnvMap extends GLState {

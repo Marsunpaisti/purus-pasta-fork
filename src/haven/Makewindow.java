@@ -26,10 +26,13 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Makewindow extends Widget {
     Widget obtn, cbtn;

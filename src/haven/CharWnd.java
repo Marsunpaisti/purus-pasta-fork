@@ -26,16 +26,30 @@
 
 package haven;
 
-import haven.resutil.Curiosity;
-import haven.resutil.FoodInfo;
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.convolvedown;
+import static haven.PUtils.imgblur;
+import static haven.PUtils.rasterimg;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-import static haven.PUtils.*;
+import haven.PUtils.BlurFurn;
+import haven.PUtils.Convolution;
+import haven.PUtils.Hanning;
+import haven.PUtils.TexFurn;
+import haven.resutil.Curiosity;
+import haven.resutil.FoodInfo;
 
 /* XXX: There starts to seem to be reason to split the while character
  * sheet into some more modular structure, as it is growing quite

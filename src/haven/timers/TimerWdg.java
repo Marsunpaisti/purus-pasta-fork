@@ -1,11 +1,18 @@
 package haven.timers;
 
 
-import haven.*;
-import haven.Label;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.List;
+
+import haven.Audio;
+import haven.Config;
+import haven.Coord;
+import haven.GameUI;
+import haven.Glob;
+import haven.Label;
+import haven.Resource;
+import haven.Text;
+import haven.Widget;
 
 public class TimerWdg extends Widget {
     private static final Resource timersfx = Resource.local().loadwait("sfx/timer");

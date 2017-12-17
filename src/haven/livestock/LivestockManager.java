@@ -1,10 +1,22 @@
 package haven.livestock;
 
 
-import haven.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import haven.Avaview;
+import haven.Button;
+import haven.Coord;
+import haven.GOut;
+import haven.Label;
+import haven.Scrollport;
+import haven.TextEntry;
+import haven.Widget;
+import haven.Window;
 
 public class LivestockManager extends Window {
     private final Panel cattle, horses, sheep, pigs;

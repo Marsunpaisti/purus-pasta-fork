@@ -26,10 +26,15 @@
 
 package haven;
 
-import haven.resutil.BPRadSprite;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
 
-import java.awt.*;
-import java.util.*;
+import haven.resutil.BPRadSprite;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord2d rc;

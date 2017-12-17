@@ -26,9 +26,14 @@
 
 package haven.resutil;
 
-import haven.*;
-
 import java.awt.image.BufferedImage;
+
+import haven.GItem;
+import haven.Glob;
+import haven.ItemInfo;
+import haven.Resource;
+import haven.RichText;
+import haven.Utils;
 
 public class Curiosity extends ItemInfo.Tip {
     public final int exp, mw, enc;

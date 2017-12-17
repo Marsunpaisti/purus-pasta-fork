@@ -1,9 +1,14 @@
 package haven.automation;
 
 
-import haven.*;
-
 import static haven.OCache.posres;
+
+import haven.CheckListboxItem;
+import haven.Config;
+import haven.GameUI;
+import haven.Gob;
+import haven.Loading;
+import haven.Resource;
 
 public class PickForageable implements Runnable {
     private GameUI gui;

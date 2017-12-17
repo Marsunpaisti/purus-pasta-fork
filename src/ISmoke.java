@@ -1,15 +1,40 @@
-import haven.*;
-import haven.Gob.Overlay.CDel;
-import haven.Material.Res;
-import haven.Skeleton.BoneOffset;
-import haven.glsl.*;
-import haven.res.lib.env.Environ;
-
 import java.nio.FloatBuffer;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import haven.BGL;
+import haven.Coord3f;
+import haven.GLState;
+import haven.GOut;
+import haven.Gob;
+import haven.Gob.Overlay.CDel;
+import haven.Location;
+import haven.Material;
+import haven.Material.Res;
+import haven.Message;
+import haven.RenderList;
+import haven.Resource;
+import haven.Skeleton.BoneOffset;
+import haven.Sprite;
+import haven.States;
+import haven.Utils;
+import haven.glsl.Cons;
+import haven.glsl.Expression;
+import haven.glsl.FragmentContext;
+import haven.glsl.Function;
+import haven.glsl.Macro1;
+import haven.glsl.MiscLib;
+import haven.glsl.ProgramContext;
+import haven.glsl.Return;
+import haven.glsl.ShaderMacro;
+import haven.glsl.Tex2D;
+import haven.glsl.Type;
+import haven.glsl.Uniform;
+import haven.glsl.Variable;
+import haven.glsl.VertexContext;
+import haven.res.lib.env.Environ;
 
 public class ISmoke extends Sprite implements CDel {
     FloatBuffer posb = null;

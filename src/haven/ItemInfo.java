@@ -26,15 +26,31 @@
 
 package haven;
 
-import haven.factories.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import haven.factories.BackwaterFactory;
+import haven.factories.BullmythFactory;
+import haven.factories.CenteroflearningFactory;
+import haven.factories.FecundearthFactory;
+import haven.factories.FoundingmythosFactory;
+import haven.factories.GamekeepingFactory;
+import haven.factories.GuardedmarchesFactory;
+import haven.factories.HeraldicswanFactory;
+import haven.factories.LocalcuisineFactory;
+import haven.factories.MountaintraditionFactory;
+import haven.factories.SeamarriageFactory;
+import haven.factories.WoodlandrealmFactory;
 import haven.res.ui.tt.ArmorFactory;
 import haven.res.ui.tt.WearFactory;
-import haven.res.ui.tt.defn.DefName;
-
-import java.lang.reflect.*;
-import java.util.*;
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
 
 public abstract class ItemInfo {
     public final Owner owner;

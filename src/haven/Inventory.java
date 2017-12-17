@@ -26,9 +26,13 @@
 
 package haven;
 
-import haven.res.ui.tt.q.qbuff.QBuff;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 public class Inventory extends Widget implements DTarget {
     public static final Tex invsq = Resource.loadtex("gfx/hud/invsq");

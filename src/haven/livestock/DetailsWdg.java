@@ -1,13 +1,21 @@
 package haven.livestock;
 
 
-import haven.*;
-import haven.Label;
+import static haven.OCache.posres;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Map;
 
-import static haven.OCache.posres;
+import haven.Coord;
+import haven.GOut;
+import haven.Gob;
+import haven.GobHighlight;
+import haven.Img;
+import haven.Label;
+import haven.Resource;
+import haven.Scrollport;
+import haven.Text;
+import haven.Widget;
 
 public class DetailsWdg extends Widget {
     public final static int HEIGHT = 25;

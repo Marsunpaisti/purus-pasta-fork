@@ -26,12 +26,13 @@
 
 package haven;
 
-import haven.res.ui.tt.Armor;
-
-import java.awt.*;
-import java.util.*;
-
 import static haven.Inventory.invsq;
+
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
+import haven.res.ui.tt.Armor;
 
 public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");

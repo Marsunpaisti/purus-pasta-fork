@@ -26,11 +26,19 @@
 
 package haven;
 
-import haven.Resource.Tileset;
-
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+
+import haven.Resource.Tileset;
 
 public class MCache {
     public static final Coord2d tilesz = new Coord2d(11, 11);

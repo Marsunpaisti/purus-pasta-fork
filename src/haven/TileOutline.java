@@ -1,10 +1,11 @@
 package haven;
 
-import javax.media.opengl.GL2;
+import static haven.MCache.tilesz;
+
 import java.nio.BufferOverflowException;
 import java.nio.FloatBuffer;
 
-import static haven.MCache.tilesz;
+import javax.media.opengl.GL2;
 
 public class TileOutline implements Rendered {
     private final MCache map;

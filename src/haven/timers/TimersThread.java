@@ -1,14 +1,15 @@
 package haven.timers;
 
 
-import haven.Glob;
-import haven.Session;
-import haven.Utils;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import haven.Glob;
+import haven.Session;
+import haven.Utils;
 
 public class TimersThread extends Thread {
     private List<TimerWdg> timers = new ArrayList<TimerWdg>();

@@ -26,18 +26,30 @@
 
 package haven;
 
-import haven.MapFile.*;
+import static haven.MCache.cmaps;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Objects;
 
-import static haven.MCache.cmaps;
+import javax.imageio.ImageIO;
+
+import haven.MapFile.Grid;
+import haven.MapFile.GridInfo;
+import haven.MapFile.Marker;
+import haven.MapFile.PMarker;
+import haven.MapFile.SMarker;
+import haven.MapFile.Segment;
 
 public class MapFileWidget extends Widget {
     public final MapFile file;

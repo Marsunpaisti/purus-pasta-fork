@@ -1,7 +1,17 @@
 package haven.automation;
 
 
-import haven.*;
+import haven.BeltWnd;
+import haven.Config;
+import haven.Coord;
+import haven.Equipory;
+import haven.GItem;
+import haven.GameUI;
+import haven.Inventory;
+import haven.InventoryBelt;
+import haven.WItem;
+import haven.Widget;
+import haven.Window;
 
 public class EquipWeapon implements Runnable {
     private GameUI gui;

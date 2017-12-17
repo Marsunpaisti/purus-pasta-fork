@@ -26,8 +26,8 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.LinkedList;
 
 public class Fightview extends Widget {
     static Tex bg = Resource.loadtex("gfx/hud/bosq");

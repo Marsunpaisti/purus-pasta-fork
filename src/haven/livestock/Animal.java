@@ -1,12 +1,20 @@
 package haven.livestock;
 
 
-import haven.*;
-import haven.Label;
-
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import haven.Coord;
+import haven.Label;
+import haven.Resource;
+import haven.Scrollport;
+import haven.Tex;
+import haven.Text;
+import haven.Widget;
 
 
 public abstract class Animal extends HashMap<String, Integer> {

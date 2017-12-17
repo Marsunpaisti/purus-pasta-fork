@@ -26,11 +26,16 @@
 
 package haven;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
+import haven.MapView.ClickInfo;
 import haven.Skeleton.Pose;
 import haven.Skeleton.PoseMod;
-import haven.MapView.ClickInfo;
 
 public class Composited implements Rendered, MapView.Clickable {
     public final Skeleton skel;

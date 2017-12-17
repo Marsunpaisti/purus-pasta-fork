@@ -1,7 +1,5 @@
 package haven.res.lib.globfx;
 
-import haven.res.lib.globfx.Datum;
-
 public abstract class GlobData implements Datum {
     public GlobData() {
     }

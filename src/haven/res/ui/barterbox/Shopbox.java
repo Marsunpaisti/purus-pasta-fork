@@ -1,19 +1,40 @@
 package haven.res.ui.barterbox;
 
-import haven.*;
-import haven.Button;
-import haven.GSprite.Owner;
-import haven.ItemInfo.SpriteOwner;
-import haven.Label;
-import haven.Resource.Image;
-import haven.Resource.Pagina;
-import haven.res.lib.tspec.Spec;
-import haven.res.ui.tt.q.qbuff.QBuff;
-
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Random;
+
+import haven.Button;
+import haven.Coord;
+import haven.GItem;
+import haven.GOut;
+import haven.GSprite;
+import haven.GSprite.Owner;
+import haven.Glob;
+import haven.Indir;
+import haven.Inventory;
+import haven.ItemInfo;
+import haven.ItemInfo.SpriteOwner;
+import haven.Label;
+import haven.Loading;
+import haven.Message;
+import haven.MessageBuf;
+import haven.ResData;
+import haven.Resource;
+import haven.Resource.Image;
+import haven.Resource.Pagina;
+import haven.RichText;
+import haven.Tex;
+import haven.TexI;
+import haven.Text;
+import haven.TextEntry;
+import haven.UI;
+import haven.Utils;
+import haven.WItem;
+import haven.Widget;
+import haven.res.lib.tspec.Spec;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 // ui/barterstand
 public class Shopbox extends Widget implements SpriteOwner, Owner {

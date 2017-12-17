@@ -1,13 +1,22 @@
 package haven.pathfinder;
 
 
-import haven.*;
+import static haven.OCache.posres;
 
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import static haven.OCache.posres;
+import haven.Coord;
+import haven.Coord2d;
+import haven.Coordf;
+import haven.Gob;
+import haven.GobHitbox;
+import haven.LinMove;
+import haven.MCache;
+import haven.MapView;
+import haven.OCache;
+import haven.Pair;
 
 public class Pathfinder implements Runnable {
     private OCache oc;

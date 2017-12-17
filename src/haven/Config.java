@@ -26,16 +26,28 @@
 
 package haven;
 
-import haven.error.ErrorHandler;
+import static haven.Utils.getprop;
+
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-
-import static haven.Utils.getprop;
+import haven.error.ErrorHandler;
 
 public class Config {
     public static final boolean iswindows = System.getProperty("os.name").startsWith("Windows");

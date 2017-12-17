@@ -26,15 +26,39 @@
 
 package haven;
 
-import haven.Resource.AButton;
-import haven.automation.*;
-
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
+
+import haven.Resource.AButton;
+import haven.automation.AddBranchesToOven;
+import haven.automation.AddCoalToSmelter;
+import haven.automation.ButcherFish;
+import haven.automation.Dismount;
+import haven.automation.DreamHarvester;
+import haven.automation.EquipWeapon;
+import haven.automation.FeedClover;
+import haven.automation.FillCheeseTray;
+import haven.automation.GobSelectCallback;
+import haven.automation.LeashAnimal;
+import haven.automation.LightWithTorch;
+import haven.automation.Shoo;
+import haven.automation.SteelRefueler;
+import haven.automation.TrellisDestroy;
+import haven.automation.TrellisHarvest;
 
 public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);

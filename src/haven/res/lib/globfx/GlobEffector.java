@@ -1,7 +1,5 @@
 package haven.res.lib.globfx;
 
-import haven.*;
-import haven.Sprite.Owner;
 import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
@@ -12,6 +10,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import haven.Coord2d;
+import haven.Coord3f;
+import haven.Drawable;
+import haven.GLState;
+import haven.Glob;
+import haven.Gob;
+import haven.RenderList;
+import haven.Resource;
+import haven.Sprite.Owner;
 
 public class GlobEffector extends Drawable {
     static Map<Glob, Reference<GlobEffector>> cur = new WeakHashMap<>();

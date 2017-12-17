@@ -26,10 +26,13 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.event.KeyEvent;
+import java.awt.Color;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fightsess extends Widget {
     public static final Tex cdframe = Resource.loadtex("gfx/hud/combat/cool");

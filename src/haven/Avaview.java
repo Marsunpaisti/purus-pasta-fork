@@ -27,7 +27,8 @@
 package haven;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.List;
+import java.util.Random;
 
 import haven.Composited.Desc;
 

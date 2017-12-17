@@ -26,19 +26,28 @@
 
 package haven;
 
-import java.util.*;
-import java.util.function.*;
+import static haven.MCache.cmaps;
+import static haven.MCache.tilesz;
+
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
+import haven.BuddyWnd.GroupSelector;
 import haven.MapFile.Marker;
 import haven.MapFile.PMarker;
 import haven.MapFile.SMarker;
-import haven.MapFileWidget.*;
-import haven.BuddyWnd.GroupSelector;
-
-import static haven.MCache.tilesz;
-import static haven.MCache.cmaps;
+import haven.MapFileWidget.Locator;
+import haven.MapFileWidget.MapLocator;
+import haven.MapFileWidget.SpecLocator;
 
 public class MapWnd extends Window {
     public static final Resource markcurs = Resource.local().loadwait("gfx/hud/curs/flag");

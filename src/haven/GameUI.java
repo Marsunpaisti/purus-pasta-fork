@@ -26,18 +26,24 @@
 
 package haven;
 
+import static haven.Inventory.invsq;
+
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.image.WritableRaster;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.resutil.FoodInfo;
-
-import java.awt.*;
-import java.util.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.WritableRaster;
-import java.util.List;
-
-import static haven.Inventory.invsq;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, Text.cfg.msg);

@@ -1,16 +1,16 @@
 package haven.pathfinder.test;
 
-import haven.Coord;
-import haven.pathfinder.Pathfinder;
-import haven.GobHitbox.BBox;
-
 import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
+import haven.Coord;
+import haven.GobHitbox.BBox;
+import haven.pathfinder.Pathfinder;
 
 @RunWith(Parameterized.class)
 public class PathfinderIsInsideBoundBoxTest {

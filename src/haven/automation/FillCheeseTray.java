@@ -1,7 +1,12 @@
 package haven.automation;
 
 
-import haven.*;
+import haven.Coord;
+import haven.GameUI;
+import haven.Inventory;
+import haven.WItem;
+import haven.Widget;
+import haven.Window;
 
 public class FillCheeseTray implements Runnable {
     private GameUI gui;

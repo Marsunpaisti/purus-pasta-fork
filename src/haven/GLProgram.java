@@ -26,11 +26,13 @@
 
 package haven;
 
-import java.util.*;
-import javax.media.opengl.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
-import haven.GLShader.VertexShader;
-import haven.GLShader.FragmentShader;
+import javax.media.opengl.GL2;
 
 public class GLProgram implements java.io.Serializable {
     public final Collection<GLShader> shaders;

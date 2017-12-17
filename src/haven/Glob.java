@@ -26,8 +26,14 @@
 
 package haven;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Observable;
 
 public class Glob {
     public static final double SERVER_TIME_RATIO = 3.29d;

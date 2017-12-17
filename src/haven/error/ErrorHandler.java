@@ -26,11 +26,13 @@
 
 package haven.error;
 
-import haven.Config;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import haven.Config;
 
 public class ErrorHandler extends ThreadGroup {
     private final ThreadGroup initial;

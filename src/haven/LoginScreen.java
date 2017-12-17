@@ -26,7 +26,7 @@
 
 package haven;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 public class LoginScreen extends Widget {
