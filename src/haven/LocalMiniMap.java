@@ -48,14 +48,17 @@ public class LocalMiniMap extends Widget {
     private UI.Grab dragging;
     private Coord doff = Coord.z;
     private Coord delta = Coord.z;
+    private static final Resource alarmplayerWhite = Resource.local().loadwait("sfx/alarms/whitePlayer");
+    private static final Resource alarmplayerRed = Resource.local().loadwait("sfx/alarms/redPlayer");
 	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
-    private static final Resource bearsfx = Resource.local().loadwait("sfx/bear");
+    private static final Resource voiveljet = Resource.local().loadwait("sfx/alarms/voiveljet");
+    private static final Resource bearsfx = Resource.local().loadwait("sfx/alarms/bear");
     private static final Resource lynxfx = Resource.local().loadwait("sfx/lynx");
-    private static final Resource walrusfx = Resource.local().loadwait("sfx/walrus");
+    private static final Resource walrusfx = Resource.local().loadwait("sfx/alarms/walrus");
     private static final Resource trollsfx = Resource.local().loadwait("sfx/troll");
     private static final Resource mammothsfx = Resource.local().loadwait("sfx/mammoth");
-    private static final Resource doomedsfx = Resource.local().loadwait("sfx/doomed");
+    private static final Resource doomedsfx = Resource.local().loadwait("sfx/alarms/bram");
     private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
     private final Map<Coord, Tex> maptiles = new LinkedHashMap<Coord, Tex>(100, 0.75f, false) {
@@ -269,11 +272,11 @@ public class LocalMiniMap extends Widget {
                         boolean enemy = false;
                         if (Config.alarmunknown && kininfo == null) {
                             sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmunknownvol);
+                            Audio.play(alarmplayerWhite, Config.alarmunknownvol);
                             enemy = true;
                         } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
                             sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmredvol);
+                            Audio.play(alarmplayerRed, Config.alarmredvol);
                             enemy = true;
                         }
 
@@ -290,7 +293,7 @@ public class LocalMiniMap extends Widget {
 
                     if (Config.alarmonforagables && gob.type == Gob.Type.FU_YE_CURIO) {
                         sgobs.add(gob.id);
-                        Audio.play(foragablesfx, Config.alarmonforagablesvol);
+                        Audio.play(voiveljet, Config.alarmonforagablesvol);
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
                         sgobs.add(gob.id);
                         Audio.play(swagsfx, Config.alarmlocresvol);
