@@ -27,12 +27,21 @@
 package haven;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class LoginScreen extends Widget {
+	boolean serverStatus;
     Login cur;
     Text error;
     IButton btn;
+    Button statusbtn;
     Button optbtn;
     OptWnd opts;
     static Text.Foundry textf, textfs, special;
@@ -52,6 +61,8 @@ public class LoginScreen extends Widget {
         optbtn = adda(new Button(100, "Options"), sz.x-110, 40, 0, 1);
         new UpdateChecker().start();
         add(new LoginList(200, 29), new Coord(10, 10));
+        statusbtn = adda(new Button(100, "Initializing..."), sz.x-110, 80, 0, 1);
+        StartUpdaterThread();
         GameUI.swimon = false;
         GameUI.trackon = false;
         GameUI.crimeon = false;
@@ -303,8 +314,19 @@ public class LoginScreen extends Widget {
         } else if (sender == opts) {
             opts.reqdestroy();
             opts = null;
-        }
-        super.wdgmsg(sender, msg, args);
+        } else if(sender == statusbtn) {
+        	if(!serverStatus) {
+        		Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        		if(desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+        			try {
+						desktop.browse(new URI("https://youtu.be/insM7oUYNOE"));
+					} catch (IOException | URISyntaxException e) {
+						e.printStackTrace();
+					}
+        		}
+        	}
+        } else
+        	super.wdgmsg(sender, msg, args);
     }
 
     public void cdestroy(Widget ch) {
@@ -358,4 +380,40 @@ public class LoginScreen extends Widget {
         }
         return (super.type(k, ev));
     }
+    
+    private void StartUpdaterThread() {
+        Thread statusupdaterthread = new Thread(new Runnable() {
+            public void run() {
+				try {
+	        		URL url = new URL("http://www.havenandhearth.com/mt/srv-mon"); // URL to connect
+	        		HttpURLConnection con = (HttpURLConnection) url.openConnection(); // Initialise connection
+	        		InputStream is;
+					is = con.getInputStream(); // Inputstream from url
+	        		String stringBuf = ""; // Initialize buffer
+	        		while(true) {
+	        			int i = is.read(); // Reads next char as int
+	        			if(i!=10) { // If its not line break, add char to current buffer
+	        				stringBuf = stringBuf+(char)i;
+	        			} else { // Here we have one full line of textif(stringBuf.contains("state hafen ")) {
+	        				if(stringBuf.contains("state hafen ")) {
+	        					System.out.println(stringBuf.substring(12));
+	        					if(stringBuf.substring(12).equals("up")) {
+		        					statusbtn.change("Server is up M8", Color.GREEN);
+		        					serverStatus = true;
+		        				} else {
+		        					statusbtn.change("Server is " + stringBuf.substring(1), Color.RED);
+		        					serverStatus = false;
+		        				}
+	        				}
+		        			stringBuf = "";
+	        			}
+	        		}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+            }
+        });
+        statusupdaterthread.start();
+}
 }
