@@ -488,6 +488,7 @@ public abstract class GLState {
         public ShaderMacro.Program prog;
         public boolean pdirty = false, sdirty = false;
         public long time = 0;
+        public boolean usedprog;
 
         /* XXX: Arguably, there should be a way to more fundamentally
          * affect the gl_Position generation code instead of this. */
@@ -599,6 +600,7 @@ public abstract class GLState {
                     }
                 }
             }
+            usedprog = prog != null;
             if(sdirty || (prog == null)) {
                 ShaderMacro.Program np;
                 np = findprog(nproghash, nshaders);

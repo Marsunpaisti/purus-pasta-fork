@@ -61,6 +61,7 @@ public class Config {
     public static boolean nopreload = false;
     public static int mainport = 1870;
     public static int authport = 1871;
+    public static boolean hidesky = Utils.getprefb("hidesky", false);
     public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);

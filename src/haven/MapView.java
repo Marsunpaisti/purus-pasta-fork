@@ -98,6 +98,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public static final Set<Long> markedGobs = new HashSet<>();
     public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
     public Object[] lastItemactClickArgs;
+    private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
 
     public interface Delayed {
         public void run(GOut g);
@@ -1004,6 +1005,32 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 rl.add(extra, null);
             extradraw.clear();
         }
+        
+        // This solution is bad but currently no better avaible
+        if(!Config.hidesky) {
+            boolean skyb = true;
+            if(player()!=null) {
+    	        Coord pltc = new Coord((int)player().getc().x / 11, (int)player().getc().y / 11);
+    	        for (int x = -44; x < 44; x++) {
+    	            for (int y = -44; y < 44; y++) {
+    	                int t = glob.map.gettile(pltc.sub(x, y));
+    	                Resource res = glob.map.tilesetr(t);
+    	                if (res == null)
+    	                    continue;
+    	
+    	                String name = res.name;
+    	                if (name.equals("gfx/tiles/mine") ||
+    	                		name.equals("gfx/tiles/boards")) {
+    	                	skyb = false;
+    	                	break;
+    	                }
+    	                
+    	            }
+    	        }
+            }
+            if(skyb)
+            	rl.add(new DropSky(sky), Rendered.last);
+        }
     }
 
     public static final haven.glsl.Uniform amblight = new haven.glsl.Uniform.AutoApply(haven.glsl.Type.INT) {
@@ -1177,6 +1204,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     pixel = new Coord2d((col.getBlue() * tilesz.x) / 255, (col.getAlpha() * tilesz.y) / 255);
                     ckdone(2);
                 });
+                
             }
 
             void ckdone(int fl) {

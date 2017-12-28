@@ -691,6 +691,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+        appender.add(new CheckBox("Hide skybox") {
+            {
+                a = Config.hidesky;
+            }
+            
+            public void set(boolean val) {
+                Utils.setprefb("hidesky", val);
+                Config.hidesky = val;
+                a = val;
+            }
+        });
     }
 
     private void initMap() {
