@@ -30,6 +30,8 @@ import static haven.Inventory.invsq;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import haven.res.ui.tt.Armor;
@@ -40,6 +42,7 @@ public class Equipory extends Widget implements DTarget {
     private static final int acx = 34 + bg.sz().x / 2;
     private static final Text.Foundry acf = new Text.Foundry(Text.sans, Text.cfg.def).aa(true);
     private Tex armorclass = null;
+    private List <GItem> checkForDrop = new LinkedList<GItem>();
     public static final Coord ecoords[] = {
             new Coord(0, 0),
             new Coord(rx, 0),
@@ -132,6 +135,17 @@ public class Equipory extends Widget implements DTarget {
             }
         }
         super.tick(dt);
+        try {
+    	    if (!checkForDrop.isEmpty()) {
+    		GItem g = checkForDrop.get(0);
+    		if (g.resource().name.equals("gfx/invobjs/leech")) {
+    			 g.drop = true; 
+    			//ui.gui.map.wdgmsg("drop", Coord.z);
+    		}
+    		checkForDrop.remove(0);
+    	    }
+    	} catch (Resource.Loading ignore) {
+    }
     }
 
     public void addchild(Widget child, Object... args) {
@@ -144,7 +158,8 @@ public class Equipory extends Widget implements DTarget {
                 v[i] = quickslots[ep] = add(new WItem(g), ecoords[ep].add(1, 1));
             }
             wmap.put(g, v);
-
+            if(Config.leechdrop)
+            	checkForDrop.add(g);
             if (armorclass != null) {
                 armorclass.dispose();
                 armorclass = null;

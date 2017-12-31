@@ -187,6 +187,7 @@ public class Config {
     public static String gitrev;
     public static boolean fepmeter = Utils.getprefb("fepmeter", true);
     public static boolean hungermeter = Utils.getprefb("hungermeter", true);
+    public static boolean leechdrop = Utils.getprefb("leechdrop", false);
 
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
