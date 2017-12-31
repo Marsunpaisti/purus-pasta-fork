@@ -53,6 +53,7 @@ public class UI {
     private Collection<AfterDraw> afterdraws = new LinkedList<AfterDraw>();
     public final ActAudio audio = new ActAudio();
     public int beltWndId = -1;
+	public GameUI gui;
 
     {
         lastevent = lasttick = System.currentTimeMillis();

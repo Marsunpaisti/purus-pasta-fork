@@ -57,6 +57,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public MapView map;
     public Fightview fv;
     private List<Widget> meters = new LinkedList<Widget>();
+    private List<Widget> cmeters = new LinkedList<Widget>();
     private Text lastmsg;
     private long msgtime;
     public Window invwnd, equwnd, makewnd;
@@ -96,6 +97,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public CraftHistoryBelt histbelt;
     private ErrorSysMsgCallback errmsgcb;
     public LivestockManager livestockwnd;
+    public GameUI gui = null;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -235,6 +237,12 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         menuSearch = new MenuSearch();
         add(menuSearch, 300, 300);
         menuSearch.hide();
+    }
+    
+    @Override
+    protected void attach(UI ui) {
+    	super.attach(ui);
+    	ui.gui = this;
     }
 
     protected void added() {
@@ -476,6 +484,47 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         return (buf.toString());
     }
 
+    public void addcmeter(Widget meter) {
+		ulpanel.add(meter);
+		cmeters.add(meter);
+		updcmeters();
+	}
+
+	public <T extends Widget> void delcmeter(Class<T> cl) {
+		Widget widget = null;
+		for (Widget meter : cmeters) {
+			if (cl.isAssignableFrom(meter.getClass())) {
+				widget = meter;
+				break;
+			}
+		}
+		if (widget != null) {
+			cmeters.remove(widget);
+			widget.destroy();
+			updcmeters();
+		}
+	}
+
+
+	private Coord getMeterPos(int x, int y) {
+		return new Coord(portrait.c.x + portrait.sz.x + 10 + x * (IMeter.fsz.x + 5), portrait.c.y + y * (IMeter.fsz.y + 2));
+	}
+
+	public void addMeterAt(Widget m, int x, int y) {
+		ulpanel.add(m, getMeterPos(x, y));
+		ulpanel.pack();
+	}
+
+    private void updcmeters() {
+        int i = 0;
+        for (Widget meter : cmeters) {
+            int x = ((meters.size() + i) % 3) * (IMeter.fsz.x + 5);
+            int y = ((meters.size() + i) / 3) * (IMeter.fsz.y + 2);
+            meter.c = new Coord(portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
+            i++;
+        }
+    }
+    
     public void addchild(Widget child, Object... args) {
         String place = ((String) args[0]).intern();
         if (place == "mapview") {
@@ -545,6 +594,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (place == "chr") {
             chrwdg = add((CharWnd) child, new Coord(300, 50));
             chrwdg.hide();
+            if(Config.hungermeter)
+            	addcmeter(new HungerMeter(chrwdg.glut));
+            if(Config.fepmeter)	
+            	addcmeter(new FepMeter(chrwdg.feps));
         } else if (place == "craft") {
             final Widget mkwdg = child;
             makewnd = new Window(Coord.z, "Crafting", true) {
@@ -585,6 +638,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             int y = (meters.size() / 3) * (IMeter.fsz.y + 2);
             ulpanel.add(child, portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
             meters.add(child);
+            updcmeters();
         } else if (place == "buff") {
             buffs.addchild(child);
         } else if (place == "qq") {
@@ -647,7 +701,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (w == chrwdg) {
             chrwdg = null;
         }
-        meters.remove(w);
+        if(meters.remove(w))
+        	updcmeters();
+        cmeters.remove(w);
     }
 
     private static final Resource.Anim progt = Resource.local().loadwait("gfx/hud/prog").layer(Resource.animc);

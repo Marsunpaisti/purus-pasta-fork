@@ -185,6 +185,8 @@ public class Config {
     public static String prefspec = "hafen";
     public static String version;
     public static String gitrev;
+    public static boolean fepmeter = Utils.getprefb("fepmeter", true);
+    public static boolean hungermeter = Utils.getprefb("hungermeter", true);
 
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;

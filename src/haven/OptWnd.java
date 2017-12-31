@@ -1191,6 +1191,28 @@ public class OptWnd extends Window {
                 }
             }
         });
+        appender.add(new CheckBox("Show hungermeter") {
+            {
+                a = Config.hungermeter;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hungermeter", val);
+                Config.hungermeter = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Show fepmeter") {
+            {
+                a = Config.fepmeter;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("fepmeter", val);
+                Config.fepmeter = val;
+                a = val;
+            }
+        });
         appender.add(new CheckBox("Show inventory on login") {
             {
                 a = Config.showinvonlogin;
