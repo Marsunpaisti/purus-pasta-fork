@@ -295,14 +295,14 @@ public class Fightsess extends Widget {
 
                 g.chcolor(clr);
                 g.frect(bc, simpleOpeningSz);
-                // FIXME
-                /*g.chcolor(Color.WHITE);
+
+                g.chcolor(Color.WHITE);
                 if (buff.atex == null)
                     buff.atex = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
                 Tex atex = buff.atex;
                 bc.x = bc.x + simpleOpeningSz.x / 2 - atex.sz().x / 2;
                 bc.y = bc.y + simpleOpeningSz.y / 2 - atex.sz().y / 2;
-                g.image(atex, bc);*/
+                g.image(atex, bc);
                 g.chcolor();
             } catch (Loading l) {
             }

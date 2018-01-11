@@ -1,6 +1,5 @@
 import haven.*;
 import haven.GItem.NumberInfo;
-import haven.GItem.GildingInfo;
 import haven.ItemInfo.Tip;
 
 import haven.CharWnd;
@@ -17,6 +16,7 @@ import haven.res.gfx.invobjs.gems.gemstone.Gemstone;
 import haven.res.lib.tspec.Spec;
 import haven.res.ui.tt.defn.DefName;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 
-public class ISlots extends Tip implements NumberInfo, GildingInfo {
+public class ISlots extends Tip implements NumberInfo {
     public static final Text ch = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Gilding:"));
     public final Collection<SItem> s = new ArrayList<SItem>();
     public final int left;
@@ -98,8 +98,8 @@ public class ISlots extends Tip implements NumberInfo, GildingInfo {
         return this.s.size();
     }
 
-    public boolean hasGildableSlots() {
-        return left > 0;
+    public Color numcolor() {
+        return left > 0 ? new Color(0, 169, 224) : Color.WHITE;
     }
 
     public static class SItem {

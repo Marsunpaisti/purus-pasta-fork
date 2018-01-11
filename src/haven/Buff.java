@@ -51,6 +51,7 @@ public class Buff extends Widget implements ItemInfo.ResOwner {
     int ameter = -1;
     int nmeter = -1;
     Tex ntext = null;
+    public Tex atex;
 
     @RName("buff")
     public static class $_ implements Factory {
@@ -250,6 +251,9 @@ public class Buff extends Widget implements ItemInfo.ResOwner {
         } else if (msg == "am") {
             this.ameter = (Integer) args[0];
             shorttip = longtip = null;
+            if (atex != null)
+                atex.dispose();
+            atex = null;
         } else if (msg == "nm") {
             this.nmeter = (Integer) args[0];
             ntext = null;

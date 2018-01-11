@@ -160,11 +160,8 @@ public class WItem extends Widget implements DTarget {
     });
 
     public final AttrCache<Tex> itemnum = new AttrCache<>(this::info, AttrCache.map1s(GItem.NumberInfo.class, ninf -> new TexI(GItem.NumberInfo.numrender(ninf.itemnum(), ninf.numcolor()))));
-
-    public final AttrCache<Double> itemmeter = new AttrCache<>(this::info, AttrCache.map1(GItem.MeterInfo.class, minf -> minf::meter));
-    // FIXME
-    /*public final AttrCache<Double> itemmeter = new AttrCache<Double>(info -> {
-        GItem.MeterInfo minf = ItemInfo.find(GItem.MeterInfo.class, info);
+    
+    public final AttrCache<Double> itemmeter = new AttrCache<>(this::info, AttrCache.map1(GItem.MeterInfo.class, minf -> {
         GItem itm = WItem.this.item;
         if (minf != null) {
             double meter = minf.meter();
@@ -174,13 +171,13 @@ public class WItem extends Widget implements DTarget {
                 int minutesleft = timeleft - hoursleft * 60;
                 itm.metertex = Text.renderstroked(String.format("%d:%02d", hoursleft, minutesleft), Color.WHITE, Color.BLACK, num10Fnd).tex();
             } else {
-                itm.metertex = Text.renderstroked(String.format("%d%%", (int)(meter * 100)), Color.WHITE, Color.BLACK, num10Fnd).tex();
+                itm.metertex = Text.renderstroked(String.format("%d%%", (int) (meter * 100)), Color.WHITE, Color.BLACK, num10Fnd).tex();
             }
-            return meter;
+            return minf::meter;
         }
         itm.metertex = null;
-        return null;
-    });*/
+        return minf::meter;
+    }));
 
     private GSprite lspr = null;
 

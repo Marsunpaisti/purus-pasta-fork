@@ -147,7 +147,6 @@ public class UI {
             // use custom belt window
             type = "wnd-belt";
             beltWndId = id;
-            // pargs[1] = Utils.getprefc("Belt_c", new Coord(550, HavenPanel.h - 160)); FIXME
         } else if (type.equals("inv") && pargs[0].toString().equals("study")) {
             // use custom study inventory
             type = "inv-study";
@@ -160,7 +159,7 @@ public class UI {
 
             Widget wdg = f.create(this, cargs);
             wdg.attach(this);
-            if(parent != 65535) {
+            if (parent != 65535) {
                 Widget pwdg = widgets.get(parent);
                 if(pwdg == null)
                     throw(new UIException("Null parent widget " + parent + " for " + id, type, cargs));

@@ -273,7 +273,13 @@ public class Widget {
     }
 
     public <T extends Widget> T add(T child, Coord c) {
-        child.c = child instanceof Window ? Utils.getprefc(((Window) child).origcap + "_c", c) : c;
+        if (child instanceof Window) {
+            child.c = Utils.getprefc(((Window) child).origcap + "_c", c);
+        } else if (child instanceof BeltWnd) {   // FIXME. this is ugly
+            child.c = Utils.getprefc(((BeltWnd) child).origcap + "_c", c);
+        } else {
+            child.c = c;
+        }
         return (add(child));
     }
 
