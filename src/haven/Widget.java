@@ -310,6 +310,8 @@ public class Widget {
                 st.push(args[off++]);
             } else if (op == '$') {
                 st.push(self);
+            } else if(op == '@') {
+                st.push(this);
             } else if (op == '_') {
                 st.push(st.peek());
             } else if (op == '.') {
@@ -328,6 +330,9 @@ public class Widget {
                 st.push(w.c.add(w.sz));
             } else if (op == 'p') {
                 st.push(((Widget) st.pop()).c);
+            } else if(op == 'P') {
+                Widget parent = (Widget)st.pop();
+                st.push(((Widget)st.pop()).parentpos(parent));
             } else if (op == 's') {
                 st.push(((Widget) st.pop()).sz);
             } else if (op == 'w') {
@@ -393,10 +398,12 @@ public class Widget {
     public void addchild(Widget child, Object... args) {
         if (args[0] instanceof Coord) {
             add(child, (Coord) args[0]);
+        } else if (args[0] instanceof Coord2d) {
+            add(child, ((Coord2d) args[0]).mul(new Coord2d(this.sz.sub(child.sz))).round());
         } else if (args[0] instanceof String) {
             add(child, relpos((String) args[0], child, args, 1));
         } else {
-            throw (new RuntimeException("Unknown child widget creation specification."));
+            throw (new UI.UIException("Unknown child widget creation specification.", null, args));
         }
     }
 
@@ -646,8 +653,8 @@ public class Widget {
             next = wdg.next;
             wdg.tick(dt);
         }
-	/* It would be very nice to do these things in harmless mix-in
-	 * classes, but alas, this is Java. */
+        /* It would be very nice to do these things in harmless mix-in
+         * classes, but alas, this is Java. */
         anims.addAll(nanims);
         nanims.clear();
         for (Iterator<Anim> i = anims.iterator(); i.hasNext(); ) {

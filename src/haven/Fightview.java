@@ -43,8 +43,8 @@ public class Fightview extends Widget {
     public Indir<Resource> blk, batk, iatk;
     public double atkcs, atkct;
     public Indir<Resource> lastact = null;
-    public long lastuse = 0;
-    public int atkcd;
+    public double lastuse = 0;
+    public double atkcd;
     private GiveButton curgive;
     private Avaview curava;
     private Button curpurs;
@@ -67,7 +67,7 @@ public class Fightview extends Widget {
         }
         public int ip, oip;
         public Indir<Resource> lastact = null;
-        public long lastuse = 0;
+        public double lastuse = 0;
 
         public Relation(long gobid) {
             this.gobid = gobid;
@@ -96,7 +96,7 @@ public class Fightview extends Widget {
 
         public void use(Indir<Resource> act) {
             lastact = act;
-            lastuse = System.currentTimeMillis();
+            lastuse = Utils.rtime();
             if (lastact != null && Config.logcombatactions) {
                 try {
                     Resource res = lastact.get();
@@ -114,7 +114,7 @@ public class Fightview extends Widget {
 
     public void use(Indir<Resource> act) {
         lastact = act;
-        lastuse = System.currentTimeMillis();
+        lastuse = Utils.rtime();
         if (lastact != null && Config.logcombatactions) {
             try {
                 Resource res = lastact.get();
@@ -312,8 +312,8 @@ public class Fightview extends Widget {
             }
             return;
         } else if (msg == "atkc") {
-            atkcd = (Integer) args[0];
-            atkcs = System.currentTimeMillis() / 1000.0;
+            atkcd = ((Number)args[0]).doubleValue();
+            atkcs = Utils.rtime();
             atkct = atkcs + (atkcd * 0.06);
             return;
         } else if (msg == "blk") {

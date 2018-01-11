@@ -31,7 +31,7 @@ import java.util.*;
 
 public class Glob {
     public static final double SERVER_TIME_RATIO = 3.29d;
-    public long serverEpoch, localEpoch = System.currentTimeMillis();
+    public double serverEpoch, localEpoch = Utils.rtime();
     public Astronomy ast;
     public OCache oc = new OCache(this);
     public MCache map;
@@ -152,22 +152,21 @@ public class Glob {
         lastctick = now;
     }
 
-    private long lastrep = 0;
-    private double rgtime = 0;
+    private double lastrep = 0, rgtime = 0;
 
-    public long globtime() {
-        long now = System.currentTimeMillis();
-        double raw = ((now - localEpoch) * SERVER_TIME_RATIO) + serverEpoch * 1000;
+    public double globtime() {
+        double now = Utils.rtime();
+        double raw = ((now - localEpoch) * SERVER_TIME_RATIO) + serverEpoch;
         if (lastrep == 0) {
             rgtime = raw;
         } else {
             double gd = (now - lastrep) * SERVER_TIME_RATIO;
             rgtime += gd;
-            if (Math.abs(rgtime - raw) > 1000)
-                rgtime = rgtime + (long) ((raw - rgtime) * (1.0 - Math.pow(10.0, -(now - lastrep) / 1000.0)));
+            if (Math.abs(rgtime + gd - raw) > 1.0)
+                rgtime = rgtime + ((raw - rgtime) * (1.0 - Math.pow(10.0, -(now - lastrep))));
         }
         lastrep = now;
-        return (long)rgtime;
+        return rgtime;
     }
 
     private static final long secinday = 60 * 60 * 24;
@@ -175,7 +174,7 @@ public class Glob {
     private static final long dewyladysmantletimemax = 7 * 60 * 60 + 15 * 60;
 
     private void servertimecalc() {
-        long secs = globtime() / 1000;
+        long secs = (long)globtime();
         long day = secs / secinday;
         long secintoday = secs % secinday;
         long hours = secintoday / 3600;
@@ -193,8 +192,8 @@ public class Glob {
             Object[] a = msg.list();
             int n = 0;
             if (t == "tm") {
-                serverEpoch = ((Number) a[n++]).intValue();
-                localEpoch = System.currentTimeMillis();
+                serverEpoch = ((Number) a[n++]).doubleValue();
+                localEpoch = Utils.rtime();
                 if (!inc)
                     lastrep = 0;
                 servertimecalc();

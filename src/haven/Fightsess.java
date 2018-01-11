@@ -160,7 +160,7 @@ public class Fightsess extends Widget {
 
     public void draw(GOut g) {
         updatepos();
-        double now = System.currentTimeMillis() / 1000.0;
+        double now = Utils.rtime();
 
         GameUI gui = gameui();
         int gcx = gui.sz.x / 2;
@@ -203,13 +203,13 @@ public class Fightsess extends Widget {
                 this.lastact1 = lastact;
                 this.lastacttip1 = null;
             }
-            long lastuse = fv.lastuse;
+            double lastuse = fv.lastuse;
             if (lastact != null) {
                 Tex ut = lastact.get().layer(Resource.imgc).tex();
                 Coord useul = Config.altfightui ? new Coord(gcx - 69, 120) : pcc.add(usec1).sub(ut.sz().div(2));
                 g.image(ut, useul);
                 g.image(useframe, useul.sub(useframeo));
-                double a = now - (lastuse / 1000.0);
+                double a = now - lastuse;
                 if (a < 1) {
                     Coord off = new Coord((int) (a * ut.sz().x / 2), (int) (a * ut.sz().y / 2));
                     g.chcolor(255, 255, 255, (int) (255 * (1 - a)));
@@ -227,13 +227,13 @@ public class Fightsess extends Widget {
                     this.lastact2 = lastact;
                     this.lastacttip2 = null;
                 }
-                long lastuse = fv.current.lastuse;
+                double lastuse = fv.current.lastuse;
                 if (lastact != null) {
                     Tex ut = lastact.get().layer(Resource.imgc).tex();
                     Coord useul = Config.altfightui ? new Coord(gcx + 69 - ut.sz().x, 120) : pcc.add(usec2).sub(ut.sz().div(2));
                     g.image(ut, useul);
                     g.image(useframe, useul.sub(useframeo));
-                    double a = now - (lastuse / 1000.0);
+                    double a = now - lastuse;
                     if (a < 1) {
                         Coord off = new Coord((int) (a * ut.sz().x / 2), (int) (a * ut.sz().y / 2));
                         g.chcolor(255, 255, 255, (int) (255 * (1 - a)));
@@ -295,14 +295,14 @@ public class Fightsess extends Widget {
 
                 g.chcolor(clr);
                 g.frect(bc, simpleOpeningSz);
-
-                g.chcolor(Color.WHITE);
+                // FIXME
+                /*g.chcolor(Color.WHITE);
                 if (buff.atex == null)
                     buff.atex = Text.renderstroked(buff.ameter + "", Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
                 Tex atex = buff.atex;
                 bc.x = bc.x + simpleOpeningSz.x / 2 - atex.sz().x / 2;
                 bc.y = bc.y + simpleOpeningSz.y / 2 - atex.sz().y / 2;
-                g.image(atex, bc);
+                g.image(atex, bc);*/
                 g.chcolor();
             } catch (Loading l) {
             }
@@ -418,9 +418,10 @@ public class Fightsess extends Widget {
             return (true);
         }
 
+        int n = -1;
         if (Config.combatkeys == 0) {
             if ((key == 0) && (ev.getModifiersEx() & (InputEvent.CTRL_DOWN_MASK | KeyEvent.META_DOWN_MASK | KeyEvent.ALT_DOWN_MASK)) == 0) {
-                int n = -1;
+
                 switch(ev.getKeyCode()) {
                     case KeyEvent.VK_1: n = 0; break;
                     case KeyEvent.VK_2: n = 1; break;
@@ -430,14 +431,10 @@ public class Fightsess extends Widget {
                 }
                 if((n >= 0) && ((ev.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0))
                     n += 5;
-                if((n >= 0) && (n < actions.length)) {
-                    wdgmsg("use", n);
-                    return(true);
-                }
             }
         } else { // F1-F5
             if (key == 0) {
-                int n = -1;
+
                 switch(ev.getKeyCode()) {
                     case KeyEvent.VK_1: n = 0; break;
                     case KeyEvent.VK_2: n = 1; break;
@@ -450,12 +447,30 @@ public class Fightsess extends Widget {
                     case KeyEvent.VK_F4: n = 8; break;
                     case KeyEvent.VK_F5: n = 9; break;
                 }
-                if((n >= 0) && (n < actions.length)) {
-                    wdgmsg("use", n);
-                    return(true);
-                }
             }
         }
+
+        int fn = n;
+        if ((n >= 0) && (n < actions.length)) {
+            MapView map = getparent(GameUI.class).map;
+            Coord mvc = map.rootxlate(ui.mc);
+            if (mvc.isect(Coord.z, map.sz)) {
+                map.delay(map.new Hittest(mvc) {
+                    protected void hit(Coord pc, Coord2d mc, MapView.ClickInfo inf) {
+                        Object[] args = {fn, 1, ui.modflags(), mc.floor(OCache.posres)};
+                        if (inf != null)
+                            args = Utils.extend(args, MapView.gobclickargs(inf));
+                        wdgmsg("use", args);
+                    }
+
+                    protected void nohit(Coord pc) {
+                        wdgmsg("use", fn, 1, ui.modflags());
+                    }
+                });
+            }
+            return (true);
+        }
+
 
         return(super.globtype(key, ev));
     }

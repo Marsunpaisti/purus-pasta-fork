@@ -77,7 +77,7 @@ public class CharWnd extends Window {
         private List<El> enew = null, etr = null;
         private Indir<Resource> trev = null;
         private Tex trol;
-        private long trtm = 0;
+        private double trtm = 0;
 
         @Resource.LayerName("foodev")
         public static class Event extends Resource.Layer {
@@ -184,7 +184,7 @@ public class CharWnd extends Window {
                     if (gui != null)
                         gui.msg("You gained " + Loading.waitfor(trev).layer(Event.class).orignm, Color.WHITE);
                     trol = new TexI(mktrol(etr, trev));
-                    trtm = System.currentTimeMillis();
+                    trtm = Utils.rtime();
                     trev = null;
                 } catch (Loading l) {
                 }
@@ -192,17 +192,17 @@ public class CharWnd extends Window {
         }
 
         public void draw(GOut g) {
-            int d = (trtm > 0) ? ((int) (System.currentTimeMillis() - trtm)) : Integer.MAX_VALUE;
+            double d = (trtm > 0) ? (Utils.rtime() - trtm) : Double.POSITIVE_INFINITY;
             g.chcolor(0, 0, 0, 255);
             g.frect(marg, sz.sub(marg.mul(2)));
             drawels(g, els, 255);
-            if (d < 1000)
-                drawels(g, etr, 255 - ((d * 255) / 1000));
+            if (d < 1.0)
+                drawels(g, etr, (int) (255 - (d * 255)));
             g.chcolor();
             g.image(frame, Coord.z);
-            if (d < 2500) {
+            if (d < 2.5) {
                 GOut g2 = g.reclipl(trmg.inv(), sz.add(trmg.mul(2)));
-                g2.chcolor(255, 255, 255, 255 - ((d * 255) / 2500));
+                g2.chcolor(255, 255, 255, (int) (255 - ((d * 255) * (1.0 / 2.5))));
                 g2.image(trol, Coord.z);
             } else {
                 trtm = 0;
@@ -692,9 +692,9 @@ public class CharWnd extends Window {
             add(new Label("Learning points:"), 2, sz.y - 32);
 
             if (Config.studybuff && ((Inventory)study).getFreeSpace() > 0) {
-                BuffToggle tgl = study.gameui().buffs.gettoggle("brain");
+                Buff tgl = study.gameui().buffs.gettoggle("brain");
                 if (tgl == null)
-                    study.gameui().buffs.addchild(new BuffToggle("brain", Bufflist.buffbrain));
+                    study.gameui().buffs.addchild(new Buff(Bufflist.buffbrain.indir()));
             }
         }
 

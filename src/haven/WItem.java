@@ -27,6 +27,7 @@
 package haven;
 
 import haven.automation.WItemDestroyCallback;
+import haven.ItemInfo.AttrCache;
 import haven.res.ui.tt.Wear;
 import haven.res.ui.tt.q.qbuff.QBuff;
 
@@ -106,16 +107,16 @@ public class WItem extends Widget implements DTarget {
         }
     }
 
-    private long hoverstart;
+    private double hoverstart;
     private ItemTip shorttip = null, longtip = null;
     private List<ItemInfo> ttinfo = null;
 
     public Object tooltip(Coord c, Widget prev) {
-        long now = System.currentTimeMillis();
+        double now = Utils.rtime();
         if (prev == this) {
         } else if (prev instanceof WItem) {
-            long ps = ((WItem) prev).hoverstart;
-            if (now - ps < 1000)
+            double ps = ((WItem)prev).hoverstart;
+            if (now - ps < 1.0)
                 hoverstart = now;
             else
                 hoverstart = ps;
@@ -130,7 +131,7 @@ public class WItem extends Widget implements DTarget {
                 shorttip = longtip = null;
                 ttinfo = info;
             }
-            if (now - hoverstart < 1000) {
+            if (now - hoverstart < 1.0) {
                 if (shorttip == null)
                     shorttip = new ShortTip(info);
                 return (shorttip);
@@ -144,32 +145,8 @@ public class WItem extends Widget implements DTarget {
         }
     }
 
-    public volatile static int cacheseq = 0;
-
-    public class AttrCache<T> {
-        private final Function<List<ItemInfo>, T> data;
-        private List<ItemInfo> forinfo = null;
-        public T save = null;
-        private int forseq = -1;
-
-        public AttrCache(Function<List<ItemInfo>, T> data) {this.data = data;}
-
-        public T get() {
-            try {
-                List<ItemInfo> info = item.info();
-                if ((cacheseq != forseq) || (info != forinfo)) {
-                    save = data.apply(info);
-                    forinfo = info;
-                    forseq = cacheseq;
-                }
-            } catch (Loading e) {
-                return (null);
-            }
-            return (save);
-        }
-    }
-
-    public final AttrCache<Color> olcol = new AttrCache<Color>(info -> {
+    private List<ItemInfo> info() {return(item.info());}
+    public final AttrCache<Color> olcol = new AttrCache<>(this::info, info -> {
         Color ret = null;
         for(ItemInfo inf : info) {
             if(inf instanceof GItem.ColorInfo) {
@@ -178,21 +155,15 @@ public class WItem extends Widget implements DTarget {
                     ret = (ret == null)?c:Utils.preblend(ret, c);
             }
         }
-        return(ret);
+        Color fret = ret;
+        return(() -> fret);
     });
 
-    public final AttrCache<Tex> itemnum = new AttrCache<>(info -> {
-        GItem.NumberInfo ninf = ItemInfo.find(GItem.NumberInfo.class, info);
-        if (ninf == null)
-            return null;
+    public final AttrCache<Tex> itemnum = new AttrCache<>(this::info, AttrCache.map1s(GItem.NumberInfo.class, ninf -> new TexI(GItem.NumberInfo.numrender(ninf.itemnum(), ninf.numcolor()))));
 
-        if (ninf instanceof GItem.GildingInfo && ((GItem.GildingInfo) ninf).hasGildableSlots())
-            return Text.renderstroked(ninf.itemnum() + "", new Color(0, 169, 224), Color.BLACK).tex();
-
-        return Text.renderstroked(ninf.itemnum() + "", ninf.numcolor(), Color.BLACK).tex();
-    });
-
-    public final AttrCache<Double> itemmeter = new AttrCache<Double>(info -> {
+    public final AttrCache<Double> itemmeter = new AttrCache<>(this::info, AttrCache.map1(GItem.MeterInfo.class, minf -> minf::meter));
+    // FIXME
+    /*public final AttrCache<Double> itemmeter = new AttrCache<Double>(info -> {
         GItem.MeterInfo minf = ItemInfo.find(GItem.MeterInfo.class, info);
         GItem itm = WItem.this.item;
         if (minf != null) {
@@ -209,7 +180,7 @@ public class WItem extends Widget implements DTarget {
         }
         itm.metertex = null;
         return null;
-    });
+    });*/
 
     private GSprite lspr = null;
 

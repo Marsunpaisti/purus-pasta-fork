@@ -42,7 +42,7 @@ public class UI {
     public boolean modshift, modctrl, modmeta, modsuper;
     public int keycode;
     public Object lasttip;
-    long lastevent, lasttick;
+    double lastevent, lasttick;
     public Widget mouseon;
     public Console cons = new WidgetConsole();
     private Collection<AfterDraw> afterdraws = new LinkedList<AfterDraw>();
@@ -50,7 +50,7 @@ public class UI {
     public int beltWndId = -1;
 
     {
-        lastevent = lasttick = System.currentTimeMillis();
+        lastevent = lasttick = Utils.rtime();
     }
 
     public interface Receiver {
@@ -128,8 +128,8 @@ public class UI {
     }
 
     public void tick() {
-        long now = System.currentTimeMillis();
-        root.tick((now - lasttick) / 1000.0);
+        double now = Utils.rtime();
+        root.tick(now - lasttick);
         lasttick = now;
     }
 
@@ -147,37 +147,50 @@ public class UI {
             // use custom belt window
             type = "wnd-belt";
             beltWndId = id;
-            pargs[1] = Utils.getprefc("Belt_c", new Coord(550, HavenPanel.h - 160));
+            // pargs[1] = Utils.getprefc("Belt_c", new Coord(550, HavenPanel.h - 160)); FIXME
         } else if (type.equals("inv") && pargs[0].toString().equals("study")) {
             // use custom study inventory
             type = "inv-study";
         }
 
         Widget.Factory f = Widget.gettype2(type);
-
-        synchronized (this) {
-            Widget pwdg = widgets.get(parent);
-
-            // use custom belt window inventory
-            if (pwdg instanceof BeltWnd)
+        synchronized(this) {
+            if (parent == beltWndId)
                 f = Widget.gettype2("inv-belt");
 
             Widget wdg = f.create(this, cargs);
             wdg.attach(this);
-            if (parent != 65535) {
-                if (pwdg == null)
-                    throw (new UIException("Null parent widget " + parent + " for " + id, type, cargs));
-
+            if(parent != 65535) {
+                Widget pwdg = widgets.get(parent);
+                if(pwdg == null)
+                    throw(new UIException("Null parent widget " + parent + " for " + id, type, cargs));
                 pwdg.addchild(wdg, pargs);
 
-                GameUI gui = wdg.gameui();
-                if (wdg instanceof Window)
-                    processWindowCreation(id, gui, (Window) wdg);
-                else if (pwdg instanceof Window)
+                if (pwdg instanceof Window) {
+                    // here be horrors... FIXME
+                    GameUI gui = null;
+                    for (Widget w : rwidgets.keySet()) {
+                        if (w instanceof GameUI) {
+                            gui = (GameUI) w;
+                            break;
+                        }
+                    }
                     processWindowContent(parent, gui, (Window) pwdg, wdg);
-
-                bind(wdg, id);
+                }
+            } else {
+                if (wdg instanceof Window) {
+                    // here be horrors... FIXME
+                    GameUI gui = null;
+                    for (Widget w : rwidgets.keySet()) {
+                        if (w instanceof GameUI) {
+                            gui = (GameUI) w;
+                            break;
+                        }
+                    }
+                    processWindowCreation(id, gui, (Window) wdg);
+                }
             }
+            bind(wdg, id);
         }
     }
 
@@ -323,14 +336,17 @@ public class UI {
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
         int id;
-        synchronized (this) {
+        synchronized(this) {
             if (msg.endsWith("-identical"))
                 return;
-            if (!rwidgets.containsKey(sender))
-                throw (new UIException("Wdgmsg sender (" + sender.getClass().getName() + ") is not in rwidgets", msg, args));
+
+            if(!rwidgets.containsKey(sender)) {
+                System.err.printf("Wdgmsg sender (%s) is not in rwidgets, message is %s", sender.getClass().getName(), msg);
+                return;
+            }
             id = rwidgets.get(sender);
         }
-        if (rcvr != null)
+        if(rcvr != null)
             rcvr.rcvmsg(id, msg, args);
     }
 
