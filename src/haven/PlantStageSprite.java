@@ -49,12 +49,9 @@ public class PlantStageSprite extends Sprite {
 
     public void update(int stg, int stgmax) {
         this.stg = stg;
-        if (multistg && stg == stgmax - 1)
-            tex = stghrvtex;
-        else if (stg == stgmax)
-            tex = stgmaxtex;
-        else
-            tex = stgtex[stg - 1];
+        String str = String.format("%d/%d", new Object[]{stg, stgmax});
+        tex = Text.renderstroked(str, stg>=stgmax ? Color.GREEN : Color.RED, Color.black).tex();
+
     }
 
     public Object staticp() {
