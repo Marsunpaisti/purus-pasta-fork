@@ -30,7 +30,7 @@ public class TimersThread extends Thread {
                     if (!sess.state.equals("") || sess.glob.serverEpoch == 0)
                         continue;
 
-                    timer.elapsed = (long)(sess.glob.globtime() / Glob.SERVER_TIME_RATIO) - timer.start;
+                    timer.elapsed = (long)(sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO) - timer.start;
                     timer.updateRemaining();
 
                     if (timer.elapsed >= timer.duration) {

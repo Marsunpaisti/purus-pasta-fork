@@ -84,7 +84,7 @@ public class TimerWdg extends Widget {
     }
 
     public void start() {
-        start = (long)(ui.sess.glob.globtime() / Glob.SERVER_TIME_RATIO);
+        start = (long)(ui.sess.glob.globtime() * 1000 / Glob.SERVER_TIME_RATIO);
         btnstart.hide();
         btnstop.show();
         active = true;
