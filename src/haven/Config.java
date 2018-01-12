@@ -188,6 +188,17 @@ public class Config {
     public static boolean fepmeter = Utils.getprefb("fepmeter", true);
     public static boolean hungermeter = Utils.getprefb("hungermeter", true);
     public static boolean leechdrop = Utils.getprefb("leechdrop", false);
+    public static boolean hideTrees = Utils.getprefb("hideTrees", true);
+    public static boolean hideCrops = Utils.getprefb("hideCrops", true);
+    public static boolean hideWalls = Utils.getprefb("hideWalls", true);
+    public static boolean hideWagons = Utils.getprefb("hideWagons", false);
+    public static boolean hideHouses = Utils.getprefb("hideHouses", false);
+    public static boolean hideBushes = Utils.getprefb("hideBushes", true);
+    public static boolean hideDFrames = Utils.getprefb("hideDFrames", false);
+    public static boolean hideDCatchers = Utils.getprefb("hideDCatchers", false);
+    public static int hidered = Utils.getprefi("hidered", 51);
+    public static int hidegreen = Utils.getprefi("hidegreen", 102);
+    public static int hideblue = Utils.getprefi("hideblue", 255);
 
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;

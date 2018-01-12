@@ -75,7 +75,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13),
         PLANT(16), MULTISTAGE_PLANT(17),
         MOB(32), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
-        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68);
+        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), WAGON(600), WALL(602), DREAMCATCHER(603), HOUSE(604);
 
         public final int value;
 
@@ -491,6 +491,18 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.GARDENPOT;
         else if (name.endsWith("/mussels"))
             type = Type.MUSSEL;
+        else if (name.endsWith("/wagon"))
+        	type = Type.WAGON;
+        else if(name.endsWith("/stonemansion")||name.endsWith("/logcabin")||name.endsWith("/greathall")||name.endsWith("/stonestead")||name.endsWith("/timberhouse")||name.endsWith("stonetower"))
+        	type = Type.HOUSE;
+        else if(name.endsWith("dreca"))
+        	type = Type.DREAMCATCHER;
+        else if (name.startsWith("gfx/terobjs/arch/pali") && !name.equals("gfx/terobjs/arch/palisadegate") &&
+   			 !name.equals("gfx/terobjs/arch/palisadebiggate") || name.startsWith("gfx/terobjs/arch/brick")
+   			 && !name.equals("gfx/terobjs/arch/brickwallgate") &&!name.equals("gfx/terobjs/arch/brickwallbiggate")
+   			 || name.startsWith("gfx/terobjs/arch/pole") && !name.equals("gfx/terobjs/arch/polegate") && 
+!name.equals("gfx/terobjs/arch/polebiggate")) // Excludes gates
+        	type = Type.WALL;
         else if (Config.foragables.contains(name))
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
@@ -552,14 +564,53 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
         Drawable d = getattr(Drawable.class);
         if (d != null) {
-            if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
+        	// Replace hide stuff with Purus Pasta hide
+        	if(Config.hidegobs) {
+        		if(Config.hideTrees && type == Type.TREE) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else if(Config.hideCrops && type == Type.PLANT) {
+        			// Crops don't have bounding boxes
+        			rl.add(new Overlay(new GobHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
+        		} else if(Config.hideWalls && type == Type.WALL) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else if(Config.hideBushes && type == Type.BUSH) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else if(Config.hideDFrames && type == Type.DFRAME) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else if(Config.hideWagons && type == Type.WAGON) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else if(Config.hideHouses && type == Type.HOUSE) {
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			if(bbox != null) {
+        				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
+        			}
+        		} else 
+        			d.setup(rl);
+        	} else
+        		d.setup(rl);
+          /*if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
                 GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
                 if (bbox != null) {
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
                 }
             } else {
                 d.setup(rl);
-            }
+            }*/
 
             if (Config.showboundingboxes) {
                 GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);

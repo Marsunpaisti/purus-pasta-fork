@@ -5,7 +5,7 @@ import java.awt.Color;
 import javax.media.opengl.GL2;
 
 public class GobHitbox extends Sprite {
-    public static States.ColState fillclrstate = new States.ColState(Utils.hex2rgb(Config.treeboxclr));
+    public static States.ColState fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
     private static final States.ColState bbclrstate = new States.ColState(new Color(255, 255, 255, 255));
     private Coordf a, b, c, d;
     private int mode;

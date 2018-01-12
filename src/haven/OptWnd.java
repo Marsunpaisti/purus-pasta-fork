@@ -49,7 +49,7 @@ public class OptWnd extends Window {
     public static final int VERTICAL_MARGIN = 10;
     public static final int HORIZONTAL_MARGIN = 5;
     public static final int VERTICAL_AUDIO_MARGIN = 5;
-    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms;
+    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms, hidesettings;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -347,6 +347,7 @@ public class OptWnd extends Window {
         quality = add(new Panel());
         flowermenus = add(new Panel());
         soundalarms = add(new Panel());
+        hidesettings = add(new Panel());
 
         initMain(gopts);
         initAudio();
@@ -359,7 +360,8 @@ public class OptWnd extends Window {
         initQuality();
         initFlowermenus();
         initSoundAlarms();
-
+        initHideMenu();
+        
         chpanel(main);
     }
 
@@ -375,6 +377,7 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
         main.add(new PButton(200, "Menu settings", 'f', flowermenus), new Coord(420, 30));
         main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
+        main.add(new PButton(200, "Hide settings", 'h', hidesettings), new Coord(420, 90));
         if (gopts) {
             main.add(new Button(200, "Switch character") {
                 public void click() {
@@ -1457,6 +1460,164 @@ public class OptWnd extends Window {
 
         flowermenus.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         flowermenus.pack();
+    }
+    
+    private void initHideMenu() {
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(hidesettings, new Coord(620, 350)));
+
+        appender.setVerticalMargin(VERTICAL_MARGIN);
+        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+        
+        appender.add(new Label("Toggle hide by pressing ctrl + h"));
+        
+        appender.add(new CheckBox("Hide trees") {
+            {
+                a = Config.hideTrees;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideTrees", val);
+                Config.hideTrees = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide crops") {
+            {
+                a = Config.hideCrops;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideCrops", val);
+                Config.hideCrops = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide walls") {
+            {
+                a = Config.hideWalls;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideWalls", val);
+                Config.hideWalls = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide wagons") {
+            {
+                a = Config.hideWagons;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideWagons", val);
+                Config.hideWagons = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide houses (Also doors)") {
+            {
+                a = Config.hideHouses;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideHouses", val);
+                Config.hideHouses = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide bushes") {
+            {
+                a = Config.hideBushes;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideBushes", val);
+                Config.hideBushes = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide drying frames") {
+            {
+                a = Config.hideDFrames;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideDFrames", val);
+                Config.hideDFrames = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new CheckBox("Hide dream catchers") {
+            {
+                a = Config.hideDCatchers;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("hideDCatchers", val);
+                Config.hideDCatchers = val;
+                a = val;
+            }
+        });
+        
+        appender.add(new Label("Red"));
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(150, 0, 255, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.hidered);
+            }
+
+            public void changed() {
+            	int vol = val;
+                Config.hidered = vol;
+                Utils.setprefd("hidered", vol);
+                GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
+            }
+        });
+        
+        appender.setVerticalMargin(0);
+        appender.add(new Label("Green"));
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(150, 0, 255, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.hidegreen);
+            }
+
+            public void changed() {
+            	int vol = val;
+                Config.hidegreen = vol;
+                Utils.setprefd("hidegreen", vol);
+                GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
+            }
+        });
+        
+        appender.setVerticalMargin(0);
+        appender.add(new Label("Blue"));
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(150, 0, 255, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.hideblue);
+                GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
+            }
+
+            public void changed() {
+            	int vol = val;
+                Config.hideblue = vol;
+                Utils.setprefd("hideblue", vol);
+                GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
+            }
+        });
+        hidesettings.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+        hidesettings.pack();
     }
 
     private void initSoundAlarms() {
