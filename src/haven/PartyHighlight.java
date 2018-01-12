@@ -28,7 +28,7 @@ public class PartyHighlight {
                 if (gob == null)
                     continue;
                 if (Config.partycircles)
-                    highlight(gob, (m.gobid == playerId) ? PLAYER_OL_COLOR : MEMBER_OL_COLOR);
+                    highlight(gob, MEMBER_OL_COLOR);
                 else
                     unhighlight(gob);
                 old.remove(gob);
