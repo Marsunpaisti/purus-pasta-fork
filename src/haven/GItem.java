@@ -29,6 +29,7 @@ package haven;
 import static haven.Text.num10Fnd;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -67,10 +68,10 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         public default Color numcolor() {
             return(Color.WHITE);
         }
-    }
 
-    public interface GildingInfo {
-        public boolean hasGildableSlots();
+        public static BufferedImage numrender(int num, Color col) {
+            return Text.renderstroked(num + "", col, Color.BLACK).img;
+        }
     }
 
     public interface MeterInfo {

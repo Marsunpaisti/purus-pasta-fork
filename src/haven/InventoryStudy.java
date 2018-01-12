@@ -126,7 +126,7 @@ public class InventoryStudy extends Inventory {
         }
 
         if (Config.studybuff && getFreeSpace() == 0) {
-            BuffToggle tgl = gameui().buffs.gettoggle("brain");
+            Buff tgl = gameui().buffs.gettoggle("brain");
             if (tgl != null)
                 tgl.reqdestroy();
         }
@@ -162,9 +162,9 @@ public class InventoryStudy extends Inventory {
         }
 
         if (Config.studybuff && getFreeSpace() > 0) {
-            BuffToggle tgl = gameui().buffs.gettoggle("brain");
+            Buff tgl = gameui().buffs.gettoggle("brain");
             if (tgl == null)
-                gameui().buffs.addchild(new BuffToggle("brain", Bufflist.buffbrain));
+                gameui().buffs.addchild(new Buff(Bufflist.buffbrain.indir()));
         }
     }
 

@@ -46,7 +46,7 @@ public class TextEntry extends SIWidget {
     public boolean pw = false;
     public String text;
     private boolean dirty = false;
-    private long focusstart;
+    private double focusstart;
     private Text.Line tcache = null;
 
     @RName("text")
@@ -130,7 +130,7 @@ public class TextEntry extends SIWidget {
 
     public void draw(GOut g) {
         super.draw(g);
-        if (hasfocus && (((System.currentTimeMillis() - focusstart) % 1000) < 500)) {
+        if (hasfocus && (((Utils.rtime() - focusstart) % 1.0) < 0.5)) {
             int cx = tcache.advance(buf.point);
             int lx = cx - sx + 1;
             g.image(caret, toff.add(coff).add(lx, 0));
@@ -175,7 +175,7 @@ public class TextEntry extends SIWidget {
     }
 
     public void gotfocus() {
-        focusstart = System.currentTimeMillis();
+        focusstart = Utils.rtime();
     }
 
     public void resize(int w) {
