@@ -218,7 +218,6 @@ public class Widget {
             }
         }
     }
-
     public static Factory gettype(String name) {
         long start = System.currentTimeMillis();
         Factory f;

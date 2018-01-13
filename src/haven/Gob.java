@@ -880,4 +880,14 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
 
         return true;
     }
+
+    public int getStage() {
+        Resource res = getres();
+        if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+	    	GAttrib rd = getattr(ResDrawable.class);
+	    	final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+	        return stage;
+        } else
+        	return -1;
+    }
 }

@@ -71,7 +71,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private Plob placing = null;
     private int[] visol = new int[32];
     private Grabber grab;
-    private Selector selection;
+    public Selector selection;
     private MCache.Overlay miningOverlay;
     private Coord3f camoff = new Coord3f(Coord3f.o);
     public double shake = 0.0;
@@ -99,6 +99,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
     public Object[] lastItemactClickArgs;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
+    public boolean farmSelect = false;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1936,6 +1937,17 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     }
 
     public boolean mousedown(Coord c, int button) {
+    	if(button == 1 && farmSelect) {
+            synchronized (this) {
+                if (selection == null) {
+                    selection = new Selector();
+                } else if (selection != null) {
+                    selection.destroy();
+                    selection = null;
+                    farmSelect = false;
+                }
+            }
+    	}
         if (miningOverlay != null && button == 1) {
             miningOverlay.destroy();
             disol(18);
@@ -2177,7 +2189,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
-    private class Selector implements Grabber {
+    public class Selector implements Grabber {
         Coord sc;
         MCache.Overlay ol;
         UI.Grab mgrab;

@@ -59,6 +59,7 @@ import haven.automation.Shoo;
 import haven.automation.SteelRefueler;
 import haven.automation.TrellisDestroy;
 import haven.automation.TrellisHarvest;
+import haven.purus.Farmer;
 
 public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
@@ -253,6 +254,8 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/amber/cheesetrayfiller")));
             p.add(paginafor(Resource.local().load("paginae/amber/equipweapon")));
             p.add(paginafor(Resource.local().load("paginae/amber/dismount")));
+            // Purus Pasta
+            p.add(paginafor(Resource.local().load("paginae/purus/farmer")));
         }
     }
 
@@ -479,6 +482,13 @@ public class MenuGrid extends Widget {
             new Thread(new EquipWeapon(gui), "EquipWeapon").start();
         } else if (ad[1].equals("dismount")) {
             new Thread(new Dismount(gui), "Dismount").start();
+        } else if(ad[1].equals("farmbot")) {
+        	Farmer f = new Farmer();
+        	Window w = f;
+        	gui.add(w, new Coord(gui.sz.x/2 - w.sz.x/2, gui.sz.y/2 - w.sz.y/2 - 200));
+            synchronized (GobSelectCallback.class) {
+                gameui().map.registerAreaSelect(f);
+            }
         }
     }
 

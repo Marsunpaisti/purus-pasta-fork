@@ -45,6 +45,7 @@ import java.util.TreeMap;
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
+import haven.purus.BotUtils;
 import haven.resutil.FoodInfo;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
@@ -239,6 +240,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         menuSearch = new MenuSearch();
         add(menuSearch, 300, 300);
         menuSearch.hide();
+        BotUtils.gui = this;
     }
     
     @Override
@@ -452,8 +454,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         }
     }
 
-    static class DraggedItem {
-        final GItem item;
+    public static class DraggedItem {
+        public final GItem item;
         final Coord dc;
 
         DraggedItem(GItem item, Coord dc) {
