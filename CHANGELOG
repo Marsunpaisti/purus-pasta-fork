@@ -1,11 +1,21 @@
+Version 1.66.1
+    Fixed:
+        * Timers.
+
+    Misc:
+        * Upstream code merge.
+
+
 Version 1.66.0
     Misc:
         * Upstream code merge.
+
 
 Version 1.65.5
     Misc:
         * Russian localization updates.
         * Upstream code merge.
+
 
 Version 1.65.4
     Fixed:
