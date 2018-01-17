@@ -785,7 +785,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 swimon = true;
             else if (name.equals("crime"))
                 crimeon = true;
-            else if (name.equals("track"))
+            else if (name.equals("tracking"))
                 trackon = true;
         } else if (err.endsWith("off.")) {
             Buff tgl = buffs.gettoggle(name);
@@ -795,7 +795,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 swimon = false;
             else if (name.equals("crime"))
                 crimeon = false;
-            else if (name.equals("track"))
+            else if (name.equals("tracking"))
                 trackon = false;
         }
     }
