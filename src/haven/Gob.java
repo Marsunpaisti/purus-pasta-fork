@@ -571,7 +571,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
-        		} else if(Config.hideCrops && type == Type.PLANT) {
+        		} else if(Config.hideCrops && (type == Type.PLANT || type == Type.MULTISTAGE_PLANT)) {
         			// Crops don't have bounding boxes
         			rl.add(new Overlay(new GobHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
         		} else if(Config.hideWalls && type == Type.WALL) {
