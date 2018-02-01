@@ -117,6 +117,6 @@ public class TroughFiller extends Window implements GobSelectCallback {
 	public void stop() {
 		stop = true;
 		reqdestroy();
-		gameui().map.wdgmsg("click", Coord.z, gameui().map.player().rc, 1, 0);
+		gameui().map.wdgmsg("click", Coord.z, new Coord((int)BotUtils.player().rc.x, (int)BotUtils.player().rc.y), 1, 0);
 	}
 }
