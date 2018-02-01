@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.0.2
+	- Latest Amber & Default client merges
+	- Fixed multistage crops not hiding properly
 ### 3.0.1
 	- Latest amber merges
 ### 3.0.0
