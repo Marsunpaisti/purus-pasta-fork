@@ -499,7 +499,7 @@ public class MenuGrid extends Widget {
                     use(ad);
                 } else {
                     if (ad.length > 0 && (ad[0].equals("craft") || ad[0].equals("bp")))
-                        gameui().histbelt.push(r);
+                        gameui().histbelt.push(r.pag);
 
                     if (Config.confirmmagic && r.res.name.startsWith("paginae/seid/")) {
                         Window confirmwnd = new Window(new Coord(225, 100), "Confirm") {
