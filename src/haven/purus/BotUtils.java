@@ -3,6 +3,8 @@ package haven.purus;
 import static haven.OCache.posres;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import haven.Coord;
@@ -33,6 +35,32 @@ public class BotUtils {
 	public static void doClick(Gob gob, int button, int mod) {
 		gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
 				-1);
+	}
+
+	// Finds nearest objects and returns closest one
+	public static Gob findObjectByNames(int radius, String... names) {
+		Coord2d plc = player().rc;
+		double min = radius;
+		Gob nearest = null;
+		synchronized (gui.ui.sess.glob.oc) {
+			for (Gob gob : gui.ui.sess.glob.oc) {
+				double dist = gob.rc.dist(plc);
+				if (dist < min) {
+					boolean matches = false;
+					for (String name : names) {
+						if (isObjectName(gob, name)) {
+							matches = true;
+							break;
+						}
+					}
+					if (matches) {
+						min = dist;
+						nearest = gob;
+					}
+				}
+			}
+		}
+		return nearest;
 	}
 
 	// Find object by ID, returns null if not found
@@ -231,5 +259,65 @@ public class BotUtils {
 		sc = new Coord((int) Math.round(Math.random() * 200 + sz.x / 2 - 100),
 				(int) Math.round(Math.random() * 200 + sz.y / 2 - 100));
 		return sc;
+	}
+
+	// Waits for window to appear
+	public static void waitForWindow(String windowName) {
+		while (gui.getwnd(windowName) == null) {
+			sleep(10);
+		}
+	}
+
+	// Returns witems with specific names from inventory
+	public static List<WItem> getInventoryItemsByNames(Inventory invwdg, List<String> items) {
+		List<WItem> witems = new ArrayList<WItem>();
+		for (WItem wi : getInventoryContents(invwdg)) {
+			String resname = wi.item.resource().name;
+			for (String s : items) {
+				if (resname.equals(s))
+					witems.add(wi);
+			}
+		}
+		return witems;
+	}
+
+	// Returns witems with specific name from inventory
+	public static List<WItem> getInventoryItemsByName(Inventory invwdg, String item) {
+		List<WItem> witems = new ArrayList<WItem>();
+		for (WItem wi : getInventoryContents(invwdg)) {
+			String resname = wi.item.resource().name;
+			if (resname.equals(item))
+				witems.add(wi);
+		}
+		return witems;
+	}
+
+	// Returns all items that inventory contains
+	public static List<WItem> getInventoryContents(Inventory invwdg) {
+		List<WItem> witems = new ArrayList<WItem>();
+		for (Widget witm = invwdg.lchild; witm != null; witm = witm.prev) {
+			if (witm instanceof WItem) {
+				witems.add((WItem) witm);
+			}
+		}
+		return witems;
+	}
+
+	// Logout to char selection
+	public static void logoutChar() {
+		gui.act("lo", "cs");
+	}
+
+	// Returns amount of free inventory slots
+	public static int invFreeSlots() {
+		int takenSlots = 0;
+		for (Widget i = playerInventory().child; i != null; i = i.next) {
+			if (i instanceof WItem) {
+				WItem buf = (WItem) i;
+				takenSlots += buf.size().x * buf.size().y;
+			}
+		}
+		int allSlots = playerInventory().isz.x * playerInventory().isz.y;
+		return allSlots - takenSlots;
 	}
 }

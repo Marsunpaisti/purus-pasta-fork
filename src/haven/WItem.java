@@ -339,4 +339,17 @@ public class WItem extends Widget implements DTarget {
     public void registerDestroyCallback(WItemDestroyCallback cb) {
         this.destroycb = cb;
     }
+    
+    public Coord size() {
+        Indir<Resource> res = item.getres().indir();
+    	if (res.get() != null) {
+			Tex tex = res.get().layer(Resource.imgc).tex();
+			if(tex == null)
+				return new Coord(1, 1);
+			else
+				return tex.sz().div(30);
+		} else {
+			return new Coord(1, 1);
+		}
+    }
 }

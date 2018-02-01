@@ -60,6 +60,7 @@ import haven.automation.SteelRefueler;
 import haven.automation.TrellisDestroy;
 import haven.automation.TrellisHarvest;
 import haven.purus.Farmer;
+import haven.purus.TroughFiller;
 
 public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
@@ -256,6 +257,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/amber/dismount")));
             // Purus Pasta
             p.add(paginafor(Resource.local().load("paginae/purus/farmer")));
+            p.add(paginafor(Resource.local().load("paginae/purus/troughfill")));
         }
     }
 
@@ -488,6 +490,12 @@ public class MenuGrid extends Widget {
         	gui.add(w, new Coord(gui.sz.x/2 - w.sz.x/2, gui.sz.y/2 - w.sz.y/2 - 200));
             synchronized (GobSelectCallback.class) {
                 gameui().map.registerAreaSelect(f);
+            }
+        } else if(ad[1].equals("troughfill")) {
+        	TroughFiller tf = new TroughFiller();
+        	gui.add(tf, new Coord(gui.sz.x / 2 - tf.sz.x / 2, gui.sz.y / 2 - tf.sz.y / 2 - 200));
+            synchronized (GobSelectCallback.class) {
+                gui.map.registerGobSelect(tf);
             }
         }
     }
