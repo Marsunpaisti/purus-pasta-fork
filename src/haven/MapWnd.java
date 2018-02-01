@@ -365,6 +365,7 @@ public class MapWnd extends Window {
                             mark.nm = text;
                             view.file.update(mark);
                             commit();
+                            change2(null);
                         }
                     });
                 }
@@ -428,11 +429,13 @@ public class MapWnd extends Window {
     }
 
     public boolean keydown(KeyEvent ev) {
+        if (super.keydown(ev))
+            return (true);
         if (ev.getKeyCode() == KeyEvent.VK_HOME) {
             recenter();
             return (true);
         }
-        return (super.keydown(ev));
+        return (false);
     }
 
     private UI.Grab drag;

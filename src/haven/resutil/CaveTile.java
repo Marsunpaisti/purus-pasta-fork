@@ -26,18 +26,11 @@
 
 package haven.resutil;
 
-import java.util.Random;
+import java.util.*;
 
-import haven.Coord;
-import haven.Coord3f;
-import haven.MapMesh;
+import haven.*;
 import haven.MapMesh.Scan;
-import haven.Material;
-import haven.MeshBuf;
-import haven.Resource;
-import haven.Surface;
 import haven.Surface.Vertex;
-import haven.Tiler;
 
 public class CaveTile extends Tiler {
     public static final float h = 16;
@@ -76,7 +69,7 @@ public class CaveTile extends Tiler {
 
     @ResName("cave")
     public static class Factory implements Tiler.Factory {
-        public Tiler create(int id, Resource.Tileset set) {
+        public Tiler create(int id, Tileset set) {
             Material wtex = null;
             for (Object rdesc : set.ta) {
                 Object[] desc = (Object[]) rdesc;
@@ -89,7 +82,7 @@ public class CaveTile extends Tiler {
         }
     }
 
-    public CaveTile(int id, Resource.Tileset set, Material wtex) {
+    public CaveTile(int id, Tileset set, Material wtex) {
         super(id);
         this.wtex = wtex;
     }

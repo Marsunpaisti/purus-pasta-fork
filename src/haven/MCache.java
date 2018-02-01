@@ -38,8 +38,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
-import haven.Resource.Tileset;
-
 public class MCache {
     public static final Coord2d tilesz = new Coord2d(11, 11);
     public static final Coord tilesz2 = tilesz.round(); /* XXX: Remove me in due time. */
@@ -577,7 +575,7 @@ public class MCache {
                 if (res == null)
                     return (null);
                 try {
-                    cset = res.layer(Resource.tileset);
+                    cset = res.layer(Tileset.class);
                 } catch (Loading e) {
                     throw (new LoadingMap(e));
                 }

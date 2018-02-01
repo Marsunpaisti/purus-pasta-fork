@@ -29,7 +29,6 @@ package haven;
 import java.util.Arrays;
 import java.util.Map;
 
-import haven.Resource.Tileset;
 import haven.Sprite.Factory;
 import haven.Sprite.Owner;
 

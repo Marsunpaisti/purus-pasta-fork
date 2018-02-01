@@ -26,31 +26,13 @@
 
 package haven.resutil;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Random;
-import java.util.WeakHashMap;
+import haven.*;
 
-import haven.Config;
-import haven.Coord;
-import haven.Coord3f;
-import haven.GLState;
-import haven.MapMesh;
+import java.util.*;
+import java.awt.Color;
+
 import haven.MapMesh.Scan;
-import haven.Material;
-import haven.MeshBuf;
-import haven.Resource;
-import haven.Resource.Tile;
-import haven.Resource.Tileset;
-import haven.SNoise3;
-import haven.States;
-import haven.Surface;
-import haven.Tex;
-import haven.TexGL;
-import haven.TexSI;
-import haven.Tiler;
+import haven.Tileset.Tile;
 
 public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
     public final GLState base;
@@ -252,7 +234,7 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
 
     @ResName("trn")
     public static class Factory implements Tiler.Factory {
-        public TerrainTile create(int id, Resource.Tileset set) {
+        public TerrainTile create(int id, Tileset set) {
             Resource res = set.getres();
             Tileset trans = null;
             Material base = null;
@@ -277,7 +259,7 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
                     var.add(new Var(res.layer(Material.Res.class, mid).get(), thrl, thrh, nz));
                 } else if (p.equals("trans")) {
                     Resource tres = set.getres().pool.load((String) desc[1], (Integer) desc[2]).get();
-                    trans = tres.layer(Resource.tileset);
+                    trans = tres.layer(Tileset.class);
                 }
             }
             return (new TerrainTile(id, new SNoise3(res.name.hashCode()), base, var.toArray(new Var[0]), trans));
@@ -390,7 +372,7 @@ public class TerrainTile extends Tiler implements Tiler.MCons, Tiler.CTrans {
 
         @ResName("trn-r")
         public static class RFactory implements Tiler.Factory {
-            public Tiler create(int id, Resource.Tileset set) {
+            public Tiler create(int id, Tileset set) {
                 TerrainTile base = new Factory().create(id, set);
                 int rth = 20;
                 GLState mat = null;
