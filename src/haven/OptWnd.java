@@ -281,7 +281,7 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 });
-                appender.add(new CheckBox("Hide crops") {
+                /*appender.add(new CheckBox("Hide crops") {
                     {
                         a = Config.hidecrops;
                     }
@@ -291,7 +291,7 @@ public class OptWnd extends Window {
                         Config.hidecrops = val;
                         a = val;
                     }
-                });
+                });*/
                 appender.add(new CheckBox("Show FPS") {
                     {
                         a = Config.showfps;
