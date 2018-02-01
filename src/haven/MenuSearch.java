@@ -129,7 +129,7 @@ public class MenuSearch extends GameUI.Hidewnd {
             if (a != null) {
                 super.change(a);
                 GameUI gui = gameui();
-                gui.histbelt.push(a.pagina);
+               // gui.histbelt.push(a.pagina);  FIXME
                 gui.act(a.pagina.act().ad);
             }
         }
