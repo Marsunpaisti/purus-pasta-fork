@@ -467,7 +467,7 @@ public class Session implements Resource.Resolver {
                             }
                             PMessage msg = new PMessage(MSG_SESS);
                             msg.adduint16(2);
-                            msg.addstring("Hafen/Amber");
+                            msg.addstring("Hafen/Purus-Pasta");
                             msg.adduint16(PVER);
                             msg.addstring(username);
                             msg.adduint16(cookie.length);
