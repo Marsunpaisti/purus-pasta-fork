@@ -301,7 +301,7 @@ public class MenuGrid extends Widget {
                     PagButton btn = null;
                     if((this.cur != null) && (x == gsz.x - 1) && (y == gsz.y - 1)) {
                         btn = bk;
-                    } else if((cur.size() > ((gsz.x * gsz.y) - 1)) && (x == gsz.x - 2) && (y == gsz.y - 1)) {
+                    } else if ((cur.size() - curoff > gsz.x * gsz.y - 1) && (x == gsz.x - 2) && (y == gsz.y - 1)) {
                         btn = next;
                     } else if(i < cur.size()) {
                         btn = cur.get(i++);
