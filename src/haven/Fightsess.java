@@ -195,13 +195,12 @@ public class Fightsess extends Widget {
         {
             Coord cdc = Config.altfightui ? new Coord(gcx, 200) : pcc.add(cmc);
             if (now < fv.atkct) {
-                double cd = fv.atkct - now;
                 double a = (now - fv.atkcs) / (fv.atkct - fv.atkcs);
                 g.chcolor(255, 0, 128, 224);
                 g.fellipse(cdc, Config.altfightui ? new Coord(24, 24) : new Coord(22, 22), Math.PI / 2 - (Math.PI * 2 * Math.min(1.0 - a, 1.0)), Math.PI / 2);
                 g.chcolor();
                 if (Config.showcooldown)
-                    g.atextstroked(Utils.fmt1DecPlace(cd), cdc, 0.5, 0.5, Color.WHITE, Color.BLACK, Text.num11Fnd);
+                    g.atextstroked(Utils.fmt1DecPlace(fv.atkct - now), cdc, 0.5, 0.5, Color.WHITE, Color.BLACK, Text.num11Fnd);
             }
             g.image(cdframe, Config.altfightui ? new Coord(gameui().sz.x / 2, 200).sub(cdframe.sz().div(2)) : cdc.sub(cdframe.sz().div(2)));
         }

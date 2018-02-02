@@ -123,7 +123,7 @@ public class Fightview extends Widget {
                     gameui().syslog.append("Combat: WARNING! tooltip is missing for " + res.name + ". Notify Jorb/Loftar about this.", combatLogMeClr);
                     return;
                 }
-                String cd = Utils.fmt1DecPlace(atkct - System.currentTimeMillis() / 1000.0);
+                String cd = Utils.fmt1DecPlace(atkct - lastuse);
                 gameui().syslog.append(String.format("me: %s, ip %d - %d, cd %ss", tt.t, current.ip, current.oip, cd), combatLogMeClr);
             } catch (Loading l) {
             }
