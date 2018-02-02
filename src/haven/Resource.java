@@ -1623,13 +1623,16 @@ public class Resource implements Serializable {
             "%s has invited you to join his party. Do you wish to do so?",
             "%s has requested to spar with you. Do you accept?",
             "Experience points gained: %s",
-            "Here lies %s"
+            "Here lies %s",
+            "Create a level %d artifact"
     };
 
     private static final String[] fmtLocStringsFlower = new String[]{
             "Gild (%s%% chance)",
             "Follow %s",
-            "Travel along %s"
+            "Travel along %s",
+            "Connect %s",
+            "Extend %s"
     };
 
     private static final String[] fmtLocStringsMsg = new String[]{
