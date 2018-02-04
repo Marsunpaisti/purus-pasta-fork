@@ -219,7 +219,7 @@ public class WItem extends Widget implements DTarget {
                 for(GItem.InfoOverlay<?> ol : ols)
                     ol.draw(g);
             }
-            Double meter = item.meter > 0 ? item.meter / 100.0 : itemmeter.get();
+            Double meter = item.meter > 0 ? Double.valueOf(item.meter / 100.0) : itemmeter.get();
             if (Config.itemmeterbar && meter != null && meter > 0) {
                 g.chcolor(220, 60, 60, 255);
                 g.frect(Coord.z, new Coord((int) (sz.x / (100 / (meter * 100))), 4));
