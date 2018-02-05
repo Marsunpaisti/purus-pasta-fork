@@ -309,6 +309,7 @@ public class MenuGrid extends Widget {
             // Purus Pasta
             p.add(paginafor(Resource.local().load("paginae/purus/farmer")));
             p.add(paginafor(Resource.local().load("paginae/purus/troughfill")));
+            p.add(paginafor(Resource.local().load("paginae/purus/study")));
         }
     }
 
@@ -521,6 +522,9 @@ public class MenuGrid extends Widget {
             synchronized (GobSelectCallback.class) {
                 gui.map.registerGobSelect(tf);
             }
+        } else if(ad[1].equals("study")) {
+        	if(ui.gui != null)
+        		ui.gui.toggleStudy();
         }
     }
 

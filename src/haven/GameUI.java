@@ -87,6 +87,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public MinimapWnd minimapWnd;
     public LocalMiniMap mmap;
     public haven.timers.TimersWnd timerswnd;
+    public StudyWnd studywnd;
     public QuickSlotsWdg quickslots;
     public StatusWdg statuswindow;
     public AlignPanel questpanel;
@@ -518,6 +519,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 		ulpanel.add(m, getMeterPos(x, y));
 		ulpanel.pack();
 	}
+	
+	public void toggleStudy() {
+		studywnd.show(!studywnd.visible);
+	}
 
     private void updcmeters() {
         int i = 0;
@@ -662,6 +667,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             hand.add(new DraggedItem(g, lc));
             updhand();
         } else if (place == "chr") {
+        	studywnd = add(new StudyWnd());
+        	studywnd.hide();
             chrwdg = add((CharWnd) child, new Coord(300, 50));
             chrwdg.hide();
             if(Config.hungermeter)

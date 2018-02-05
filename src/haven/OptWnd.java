@@ -1384,6 +1384,7 @@ public class OptWnd extends Window {
                 Utils.delpref("chatvis");
                 Utils.delpref("menu-visible");
                 Utils.delpref("fbelt_vertical");
+                Utils.delpref("haven.study.position");
             }
         };
         uis.add(resetWndBtn, new Coord(620 / 2 - resetWndBtn.sz.x / 2 , 320));
