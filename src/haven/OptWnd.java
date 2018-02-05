@@ -521,6 +521,21 @@ public class OptWnd extends Window {
                 Utils.setprefd("sfxfirevol", vol);
             }
         });
+        appender.setVerticalMargin(0);
+        appender.add(new Label("Clapping sound volume"));
+        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
+        appender.add(new HSlider(200, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.sfxclapvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.sfxclapvol = vol;
+                Utils.setprefd("sfxclapvol", vol);
+            }
+        });
     }
 
     private void initDisplay() {

@@ -81,6 +81,8 @@ public class AudioSprite {
                 stream = new Audio.VolAdjust(stream, 0.2);
             else if (Config.sfxquernvol != 1.0 && "sfx/terobjs/quern".equals(res.name))
                 stream = new Audio.VolAdjust(stream, Config.sfxquernvol);
+            else if(Config.sfxclapvol != 1.0 && "sfx/borka/clap".equals(res.name))
+            	stream = new Audio.VolAdjust(stream, Config.sfxclapvol);
 
             this.clip = new ActAudio.PosClip(new Audio.Monitor(stream) {
                 protected void eof() {
