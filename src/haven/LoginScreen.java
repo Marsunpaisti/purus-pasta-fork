@@ -396,7 +396,6 @@ public class LoginScreen extends Widget {
 	        				stringBuf = stringBuf+(char)i;
 	        			} else { // Here we have one full line of textif(stringBuf.contains("state hafen ")) {
 	        				if(stringBuf.contains("state hafen ")) {
-	        					System.out.println(stringBuf.substring(12));
 	        					if(stringBuf.substring(12).equals("up")) {
 		        					statusbtn.change("Server is up M8", Color.GREEN);
 		        					serverStatus = true;
