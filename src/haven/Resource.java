@@ -1663,13 +1663,16 @@ public class Resource implements Serializable {
             "%s has invited you to join his party. Do you wish to do so?",
             "%s has requested to spar with you. Do you accept?",
             "Experience points gained: %s",
-            "Here lies %s"
+            "Here lies %s",
+            "Create a level %d artifact"
     };
 
     private static final String[] fmtLocStringsFlower = new String[]{
             "Gild (%s%% chance)",
             "Follow %s",
-            "Travel along %s"
+            "Travel along %s",
+            "Connect %s",
+            "Extend %s"
     };
 
     private static final String[] fmtLocStringsMsg = new String[]{
@@ -1719,8 +1722,13 @@ public class Resource implements Serializable {
         String ll = map.get(s);
         if (ll != null) {
             int vi = s.indexOf("%s");
-            if (key.startsWith(s.substring(0, vi)) && key.endsWith(s.substring(vi + 2)))
-                return String.format(ll, key.substring(vi, key.length() - (s.length() - vi - 2)));
+
+            String sufix = s.substring(vi + 2);
+            if (sufix.startsWith("%%"))                // fix for strings with escaped percentage sign
+                sufix = sufix.substring(1);
+
+            if (key.startsWith(s.substring(0, vi)) && key.endsWith(sufix))
+                return String.format(ll, key.substring(vi, key.length() - sufix.length()));
         }
         return null;
     }

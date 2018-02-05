@@ -1,3 +1,14 @@
+Version 1.66.4
+    Fixed:
+        * Actions selected in the search window not being added to the craft history bar.
+        * Cooldown value in combat log.
+
+    Misc:
+        * Added treatments for nasty laceration.
+        * Don't show next button in the menu grid if not needed.
+        * Localization improvements.
+
+
 Version 1.66.3
     Misc:
         * Upstream code merge.

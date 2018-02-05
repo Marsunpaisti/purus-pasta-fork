@@ -4,7 +4,7 @@ import static haven.Inventory.invsq;
 
 public class CraftHistoryBelt extends Widget {
     private static final int SIZE = 8;
-    private MenuGrid.PagButton[] belt = new MenuGrid.PagButton[SIZE];
+    private MenuGrid.Pagina[] belt = new MenuGrid.Pagina[SIZE];
     private UI.Grab dragging;
     private Coord dc;
     private static final Coord vsz = new Coord(34, 450);
@@ -37,7 +37,7 @@ public class CraftHistoryBelt extends Widget {
             Coord c = beltc(i);
             g.image(invsq, c);
             if (belt[slot] != null)
-                g.image(belt[slot].img(), c.add(1, 1));
+                g.image(belt[slot].img, c.add(1, 1));
         }
     }
 
@@ -46,7 +46,7 @@ public class CraftHistoryBelt extends Widget {
         int slot = beltslot(c);
         if (slot != -1) {
             if (button == 1 && belt[slot] != null) {
-                String[] ad = belt[slot].pag.act().ad;
+                String[] ad = belt[slot].act().ad;
                 gameui().act(ad);
             } else if (button == 1 && belt[slot] == null) {
                 if (ui.modshift) {
@@ -89,8 +89,8 @@ public class CraftHistoryBelt extends Widget {
         super.mousemove(c);
     }
 
-    public void push(MenuGrid.PagButton pagina) {
-        for (MenuGrid.PagButton p : belt) {
+    public void push(MenuGrid.Pagina pagina) {
+        for (MenuGrid.Pagina p : belt) {
             if (p == pagina)
                 return;
         }
