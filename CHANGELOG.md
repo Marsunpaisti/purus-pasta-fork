@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.1.0
+	- Added study window
+	- Added audio slider for clapping sounds
+	- Fixed crop stages displaying in weird places
 ### 3.0.2
 	- Latest Amber & Default client merges
 	- Fixed multistage crops not hiding properly
