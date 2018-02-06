@@ -500,8 +500,7 @@ public class Config {
                 "gfx/invobjs/toadbutter"
         });
         put("paginae/wound/sealfinger", new String[]{
-                "gfx/invobjs/hartshornsalve",
-                "gfx/invobjs/toadbutter"
+                "gfx/invobjs/hartshornsalve"
         });
     }};
 
