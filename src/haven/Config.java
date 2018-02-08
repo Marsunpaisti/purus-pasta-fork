@@ -446,13 +446,15 @@ public class Config {
                 "gfx/invobjs/gauze",
                 "gfx/invobjs/stingingpoultice",
                 "gfx/invobjs/rootfill",
-                "gfx/invobjs/herbs/waybroad"
+                "gfx/invobjs/herbs/waybroad",
+                "gfx/invobjs/honeybroadaid"
         });
         put("paginae/wound/fellslash", new String[]{
                 "gfx/invobjs/gauze"
         });
         put("paginae/wound/nicksnknacks", new String[]{
-                "gfx/invobjs/herbs/yarrow"
+                "gfx/invobjs/herbs/yarrow",
+                "gfx/invobjs/honeybroadaid"
         });
         put("paginae/wound/punchsore", new String[]{
                 "gfx/invobjs/mudointment",
@@ -460,7 +462,8 @@ public class Config {
         });
         put("paginae/wound/scrapesncuts", new String[]{
                 "gfx/invobjs/herbs/yarrow",
-                "gfx/invobjs/mudointment"
+                "gfx/invobjs/mudointment",
+                "gfx/invobjs/honeybroadaid"
         });
         put("paginae/wound/severemauling", new String[]{
                 "gfx/invobjs/hartshornsalve"
@@ -481,6 +484,7 @@ public class Config {
         });
         put("paginae/wound/blackeye", new String[]{
                 "gfx/invobjs/hartshornsalve",
+                "gfx/invobjs/honeybroadaid",
                 "gfx/invobjs/toadbutter"
         });
         put("paginae/wound/bladekiss", new String[]{
