@@ -61,8 +61,8 @@ public class InventoryBelt extends Widget implements DTarget {
         Coord dc = dropul ? ul.add(sqsz.div(2)).div(sqsz) : cc.div(sqsz);
         // convert single row coordinate into multi-row
         if (dc.x >= isz.x) {
+            dc.y = dc.x / isz.x;
             dc.x = dc.x % isz.x;
-            dc.y = 1;
         }
         wdgmsg("drop", dc);
         return(true);
