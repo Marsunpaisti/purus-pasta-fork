@@ -117,7 +117,6 @@ public class Config {
     public static boolean showanimalrad = Utils.getprefb("showanimalrad", true);
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
     public static boolean showboundingboxes = Utils.getprefb("showboundingboxes", false);
-    public static boolean alarmonforagables = Utils.getprefb("alarmonforagables", true);
     public static double alarmonforagablesvol = Utils.getprefd("alarmonforagablesvol", 0.8);
     public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.7);
     public static boolean alarmlocres = Utils.getprefb("alarmlocres", false);
@@ -349,10 +348,16 @@ public class Config {
         put("gfx/kritter/nidbane/nidbane", Resource.loadtex("gfx/icons/spooky"));
     }};
 
-    public final static Set<String> foragables = new HashSet<String>(Arrays.asList(
-            "gfx/terobjs/herbs/flotsam", "gfx/terobjs/herbs/chimingbluebell", "gfx/terobjs/herbs/edelweiss",
-            "gfx/terobjs/herbs/bloatedbolete", "gfx/terobjs/herbs/glimmermoss", "gfx/terobjs/herbs/camomile",
-            "gfx/terobjs/herbs/clay-cave"));
+    public final static HashMap<String, CheckListboxItem> alarmitems = new HashMap<String, CheckListboxItem>(8) {{
+        put("gfx/terobjs/herbs/flotsam", new CheckListboxItem("Peculiar Flotsam"));
+        put("gfx/terobjs/herbs/chimingbluebell", new CheckListboxItem("Chiming Bluebell"));
+        put("gfx/terobjs/herbs/edelweiss", new CheckListboxItem("Edelweiß"));
+        put("gfx/terobjs/herbs/bloatedbolete", new CheckListboxItem("Bloated Bolete"));
+        put("gfx/terobjs/herbs/glimmermoss", new CheckListboxItem("Glimmermoss"));
+        put("gfx/terobjs/herbs/camomile", new CheckListboxItem("Camomile"));
+        put("gfx/terobjs/herbs/clay-cave", new CheckListboxItem("Cave Clay"));
+        put("gfx/terobjs/herbs/mandrake", new CheckListboxItem("Mandrake Root"));
+    }};
 
     public final static Set<String> locres = new HashSet<String>(Arrays.asList(
             "gfx/terobjs/saltbasin",
@@ -511,6 +516,7 @@ public class Config {
 
     static {
         Utils.loadprefchklist("disableanim", Config.disableanim);
+        Utils.loadprefchklist("alarmitems", Config.alarmitems);
 
         String p;
         if ((p = getprop("haven.authck", null)) != null)

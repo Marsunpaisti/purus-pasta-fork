@@ -485,7 +485,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.GARDENPOT;
         else if (name.endsWith("/mussels"))
             type = Type.MUSSEL;
-        else if (Config.foragables.contains(name))
+        else if (Config.alarmitems.containsKey(name) && Config.alarmitems.get(name).selected)
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
             type = Type.LOC_RESOURCE;

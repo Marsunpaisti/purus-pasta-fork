@@ -1515,31 +1515,6 @@ public class OptWnd extends Window {
                 Utils.setprefd("studyalarmvol", vol);
             }
         });
-        appender.setVerticalMargin(0);
-        appender.add(new CheckBox("Alarm on rare curios (bluebells, glimmers, ...)") {
-            {
-                a = Config.alarmonforagables;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("alarmonforagables", val);
-                Config.alarmonforagables = val;
-                a = val;
-            }
-        });
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmonforagablesvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmonforagablesvol = vol;
-                Utils.setprefd("alarmonforagablesvol", vol);
-            }
-        });
         appender.add(new CheckBox("Alarm on trolls") {
             {
                 a = Config.alarmtroll;
@@ -1629,6 +1604,31 @@ public class OptWnd extends Window {
                 Utils.setprefd("alarmlocresvol", vol);
             }
         });
+
+        soundalarms.add(new Label("Alarm on"), new Coord(470, 0));
+        CheckListbox itemslist = new CheckListbox(145, 18) {
+            @Override
+            protected void itemclick(CheckListboxItem itm, int button) {
+                super.itemclick(itm, button);
+                Utils.setprefchklst("alarmitems", Config.alarmitems);
+            }
+        };
+        for (CheckListboxItem itm : Config.alarmitems.values())
+            itemslist.items.add(itm);
+        soundalarms.add(itemslist, new Coord(470, 15));
+        soundalarms.add(new HSlider(145, 0, 1000, 0) {
+            protected void attach(UI ui) {
+                super.attach(ui);
+                val = (int) (Config.alarmonforagablesvol * 1000);
+            }
+
+            public void changed() {
+                double vol = val / 1000.0;
+                Config.alarmonforagablesvol = vol;
+                Utils.setprefd("alarmonforagablesvol", vol);
+            }
+        }, new Coord(470, 340));
+
         soundalarms.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         soundalarms.pack();
     }

@@ -288,7 +288,7 @@ public class LocalMiniMap extends Widget {
                     if (sgobs.contains(gob.id))
                         continue;
 
-                    if (Config.alarmonforagables && gob.type == Gob.Type.FU_YE_CURIO) {
+                    if (gob.type == Gob.Type.FU_YE_CURIO) {
                         sgobs.add(gob.id);
                         Audio.play(foragablesfx, Config.alarmonforagablesvol);
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
