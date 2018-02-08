@@ -1590,7 +1590,7 @@ public class OptWnd extends Window {
             }
         });
         appender.setVerticalMargin(0);
-        appender.add(new Label("Alarm on bears & lynx"));
+        appender.add(new Label("Alarm on bears, lynx, mammoths"));
         appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
         appender.add(new HSlider(200, 0, 1000, 0) {
             protected void attach(UI ui) {
@@ -1602,21 +1602,6 @@ public class OptWnd extends Window {
                 double vol = val / 1000.0;
                 Config.alarmbearsvol = vol;
                 Utils.setprefd("alarmbearsvol", vol);
-            }
-        });
-        appender.setVerticalMargin(0);
-        appender.add(new Label("Alarm on mammoths"));
-        appender.setVerticalMargin(VERTICAL_AUDIO_MARGIN);
-        appender.add(new HSlider(200, 0, 1000, 0) {
-            protected void attach(UI ui) {
-                super.attach(ui);
-                val = (int) (Config.alarmmammothvol * 1000);
-            }
-
-            public void changed() {
-                double vol = val / 1000.0;
-                Config.alarmmammothvol = vol;
-                Utils.setprefd("alarmmammothvol", vol);
             }
         });
         appender.setVerticalMargin(0);

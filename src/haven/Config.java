@@ -119,12 +119,11 @@ public class Config {
     public static boolean showboundingboxes = Utils.getprefb("showboundingboxes", false);
     public static boolean alarmonforagables = Utils.getprefb("alarmonforagables", true);
     public static double alarmonforagablesvol = Utils.getprefd("alarmonforagablesvol", 0.8);
-    public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.8);
+    public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.7);
     public static boolean alarmlocres = Utils.getprefb("alarmlocres", false);
     public static double alarmlocresvol = Utils.getprefd("alarmlocresvol", 0.8);
     public static boolean alarmtroll = Utils.getprefb("alarmtroll", false);
     public static double alarmtrollvol = Utils.getprefd("alarmtrollvol", 0.8);
-    public static double alarmmammothvol = Utils.getprefd("alarmmammothvol", 0.8);
     public static boolean showcooldown = Utils.getprefb("showcooldown", false);
     public static boolean nodropping = Utils.getprefb("nodropping", false);
     public static boolean nodropping_all = Utils.getprefb("nodropping_all", false);
