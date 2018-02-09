@@ -197,6 +197,7 @@ public class Config {
     public static boolean hideBushes = Utils.getprefb("hideBushes", true);
     public static boolean hideDFrames = Utils.getprefb("hideDFrames", false);
     public static boolean hideDCatchers = Utils.getprefb("hideDCatchers", false);
+    public static boolean disableAllAnimations = Utils.getprefb("disableAllAnimations", false);
     public static int hidered = Utils.getprefi("hidered", 51);
     public static int hidegreen = Utils.getprefi("hidegreen", 102);
     public static int hideblue = Utils.getprefi("hideblue", 255);

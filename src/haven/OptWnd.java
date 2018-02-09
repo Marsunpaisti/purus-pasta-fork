@@ -270,6 +270,17 @@ public class OptWnd extends Window {
                         a = val;
                     }
                 });
+                appender.add(new CheckBox("Disable ALL animations") {
+                    {
+                        a = Config.disableAllAnimations;
+                    }
+
+                    public void set(boolean val) {
+                        Utils.setprefb("disableAllAnimations", val);
+                        Config.disableAllAnimations = val;
+                        a = val;
+                    }
+                });
                 appender.add(new CheckBox("Simple foragables (req. logout)") {
                     {
                         a = Config.simpleforage;
