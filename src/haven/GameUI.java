@@ -46,6 +46,7 @@ import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.BotUtils;
+import haven.purus.ItemClickCallback;
 import haven.resutil.FoodInfo;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
@@ -102,6 +103,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private ErrorSysMsgCallback errmsgcb;
     public LivestockManager livestockwnd;
     public GameUI gui = null;
+    public ItemClickCallback itemClickCallback;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -1476,6 +1478,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             FoodInfo.showbaseq = Utils.parsebool(args[1]);
             msg("q10 FEP values in tooltips are now " + (FoodInfo.showbaseq ? "enabled" : "disabled"));
         });
+    }
+    
+    public void registerItemCallback(ItemClickCallback itemClickCallback) {
+    	this.itemClickCallback = itemClickCallback;
+    }
+    
+    public void unregisterItemCallback() {
+    	this.itemClickCallback = null;
     }
 
     public Map<String, Console.Command> findcmds() {

@@ -19,6 +19,7 @@ import haven.HavenPanel;
 import haven.Inventory;
 import haven.ItemInfo;
 import haven.Loading;
+import haven.ResDrawable;
 import haven.Resource;
 import haven.WItem;
 import haven.Widget;
@@ -48,7 +49,7 @@ public class BotUtils {
 				if (dist < min) {
 					boolean matches = false;
 					for (String name : names) {
-						if (isObjectName(gob, name)) {
+						if (gob.getres() != null && gob.getres().name.equals(name)) {
 							matches = true;
 							break;
 						}
@@ -209,7 +210,7 @@ public class BotUtils {
 				if (dist < min) {
 					boolean matches = false;
 					for (String name : names) {
-						if (isObjectName(gob, name)) {
+						if (true) {
 							if (gob.getStage() == stage) {
 								matches = true;
 								break;
@@ -306,6 +307,14 @@ public class BotUtils {
 	// Logout to char selection
 	public static void logoutChar() {
 		gui.act("lo", "cs");
+	}
+	
+	// Returns true if stockpile is full, might not work for all stockpiles
+	public static boolean stockpileIsFull(Gob gob) {
+		if(gob.getattr(ResDrawable.class).sdt.peekrbuf(0)==31)
+			return true;
+		else
+			return false;	
 	}
 
 	// Returns amount of free inventory slots

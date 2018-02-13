@@ -36,6 +36,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.java.accessibility.util.GUIInitializedListener;
+
 import haven.ItemInfo.AttrCache;
 import haven.automation.WItemDestroyCallback;
 import haven.res.ui.tt.Wear;
@@ -292,6 +294,10 @@ public class WItem extends Widget implements DTarget {
 
     public boolean mousedown(Coord c, int btn) {
         if (btn == 1) {
+        	if(ui.gui.itemClickCallback != null) {
+        		ui.gui.itemClickCallback.itemClick(this);
+        		return true;
+        	}
             if (ui.modctrl && ui.modmeta)
                 wdgmsg("drop-identical", this.item);
             else if (ui.modctrl && ui.modshift) {
