@@ -1,5 +1,12 @@
 ## Changelog
 
+### 3.2.0
+	- Added option to disable all animations
+	- Added Barrel Filler
+	- Added Stockpile Filler
+	- Fixed plant stages showing on gates
+	- Fixed farming bot window button placement
+	- Latest merges from Amber & Default client
 ### 3.1.0
 	- Added study window
 	- Added audio slider for clapping sounds
