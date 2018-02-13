@@ -59,6 +59,7 @@ import haven.automation.Shoo;
 import haven.automation.SteelRefueler;
 import haven.automation.TrellisDestroy;
 import haven.automation.TrellisHarvest;
+import haven.purus.BarrelFiller;
 import haven.purus.Farmer;
 import haven.purus.TroughFiller;
 
@@ -310,6 +311,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/purus/farmer")));
             p.add(paginafor(Resource.local().load("paginae/purus/troughfill")));
             p.add(paginafor(Resource.local().load("paginae/purus/study")));
+            p.add(paginafor(Resource.local().load("paginae/purus/barrelfill")));
         }
     }
 
@@ -525,6 +527,12 @@ public class MenuGrid extends Widget {
         } else if(ad[1].equals("study")) {
         	if(ui.gui != null)
         		ui.gui.toggleStudy();
+        } else if(ad[1].equals("barrelfill")) {
+        	BarrelFiller bf = new BarrelFiller();
+        	gui.add(bf, new Coord(gui.sz.x / 2 - bf.sz.x / 2, gui.sz.y / 2 - bf.sz.y / 2 - 200));
+            synchronized (GobSelectCallback.class) {
+                gui.map.registerGobSelect(bf);
+            }
         }
     }
 
