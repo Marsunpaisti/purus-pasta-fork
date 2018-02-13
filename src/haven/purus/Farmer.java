@@ -32,6 +32,8 @@ public class Farmer extends Window implements AreaSelectCallback {
 				}
 			}
 		};
+		add(carrotBtn, new Coord(20, y));
+		y += 35;
 
 		Button onionBtn = new Button(140, "Yellow Onion") {
 			@Override
@@ -234,9 +236,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 		};
 		add(trelPlantBtn, new Coord(20, y));
 		y += 35;
-
-		add(carrotBtn, new Coord(20, y));
-		y += 35;
+		
 		Button areaSelBtn = new Button(140, "Select Area") {
 			@Override
 			public void click() {
