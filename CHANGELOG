@@ -1,3 +1,12 @@
+Version 1.67.0
+    Fixed:
+        * Troll belt.
+
+    Misc:
+        * Updated wound treatments lists.
+        * Allow selecting foregables for which to sound the 'aww yeah' alarm.
+
+
 Version 1.66.4
     Fixed:
         * Actions selected in the search window not being added to the craft history bar.

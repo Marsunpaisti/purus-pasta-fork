@@ -319,6 +319,7 @@ public class Resource implements Serializable {
         }
 
         public String toString() {
+        	Thread.currentThread().dumpStack();
             return ("#<Resource " + res.name + ">");
         }
 

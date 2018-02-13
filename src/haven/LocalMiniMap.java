@@ -296,7 +296,7 @@ public class LocalMiniMap extends Widget {
                     if (sgobs.contains(gob.id))
                         continue;
 
-                    if (Config.alarmonforagables && gob.type == Gob.Type.FU_YE_CURIO) {
+                    if (gob.type == Gob.Type.FU_YE_CURIO) {
                         sgobs.add(gob.id);
                         Audio.play(voiveljet, Config.alarmonforagablesvol);
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
@@ -316,7 +316,7 @@ public class LocalMiniMap extends Widget {
                         Audio.play(trollsfx, Config.alarmtrollvol);
                     } else if (gob.type == Gob.Type.MAMMOTH && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(mammothsfx, Config.alarmmammothvol);
+                        Audio.play(mammothsfx, Config.alarmbearsvol);
                     } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
