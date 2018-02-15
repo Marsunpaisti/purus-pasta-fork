@@ -73,7 +73,7 @@ public class FoodInfo extends ItemInfo.Tip {
         }
     }
 
-    public BufferedImage longtip() {
+    public BufferedImage tipimg() {
         String infoStr = Resource.getLocString(Resource.BUNDLE_LABEL, "Energy: $col[128,128,255]{%s%%}, Hunger: $col[255,192,128]{%s%%}");
         String chanceStr = Resource.getLocString(Resource.BUNDLE_LABEL, "$i{($col[192,192,255]{%d%%} chance)}");
 
