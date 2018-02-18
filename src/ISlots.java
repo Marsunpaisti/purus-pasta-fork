@@ -12,9 +12,11 @@ import haven.Resource;
 import haven.Text;
 import haven.Utils;
 
-import haven.res.gfx.invobjs.gems.gemstone.Gemstone;
+import haven.GSprite.ImageSprite;
 import haven.res.lib.tspec.Spec;
 import haven.res.ui.tt.defn.DefName;
+
+import haven.Resource.Image;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -120,7 +122,7 @@ public class ISlots extends Tip implements NumberInfo {
         }
 
         private BufferedImage img() {
-            return this.spr instanceof Gemstone ? ((Gemstone) this.spr).img : this.res.layer(Resource.imgc).img;
+            return this.spr instanceof ImageSprite ? ((ImageSprite)this.spr).image() : ((Image)this.res.layer(Resource.imgc)).img;
         }
 
 
