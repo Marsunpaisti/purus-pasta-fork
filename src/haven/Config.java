@@ -470,7 +470,8 @@ public class Config {
                 "gfx/invobjs/honeybroadaid"
         });
         put("paginae/wound/severemauling", new String[]{
-                "gfx/invobjs/hartshornsalve"
+                "gfx/invobjs/hartshornsalve",
+                "gfx/invobjs/opium"
         });
         put("paginae/wound/swollenbump", new String[]{
                 "gfx/invobjs/coldcompress",
@@ -483,8 +484,7 @@ public class Config {
                 "gfx/invobjs/mudointment"
         });
         put("paginae/wound/wretchedgore", new String[]{
-                "gfx/invobjs/stitchpatch",
-                "gfx/invobjs/opium"
+                "gfx/invobjs/stitchpatch"
         });
         put("paginae/wound/blackeye", new String[]{
                 "gfx/invobjs/hartshornsalve",
