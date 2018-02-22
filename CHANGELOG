@@ -1,3 +1,8 @@
+Version 1.67.2
+    Fixed:
+        * Wear & armor tooltips
+
+
 Version 1.67.1
     Fixed:
         * Crash when viewing barter-stands with price set to gems.
