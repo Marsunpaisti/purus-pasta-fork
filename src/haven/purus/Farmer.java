@@ -3,26 +3,36 @@ package haven.purus;
 import java.awt.Color;
 
 import haven.Button;
+import haven.CheckBox;
+import haven.Config;
 import haven.Coord;
+import haven.Gob;
 import haven.MCache;
+import haven.Utils;
 import haven.Widget;
 import haven.Window;
 import haven.automation.AreaSelectCallback;
+import haven.automation.GobSelectCallback;
 
-public class Farmer extends Window implements AreaSelectCallback {
+public class Farmer extends Window implements AreaSelectCallback, GobSelectCallback {
 
-	Coord a, b;
-
+	private Coord a, b;
+	private boolean container = false, replant = true;
+	private CheckBox replantChkbox, fillContainerChkbox;
+	private Gob barrel;
+	
 	public Farmer() {
-		super(new Coord(180, 475), "Farming Bots");
+		super(new Coord(180, 500), "Farming Bots");
 		int y = 0;
 		Button carrotBtn = new Button(140, "Carrot") {
 			@Override
 			public void click() {
-				if (a != null && b != null) {
+				if(container) {
+					BotUtils.sysMsg("Choose replant for carrots!", Color.WHITE);
+				} else if (a != null && b != null) {
 					gameui().map.unregisterAreaSelect();
 					// Start carrot farmer and close this window
-					SeedCropFarmer SCF = new SeedCropFarmer(b, a, "gfx/terobjs/plants/carrot", "gfx/invobjs/carrot", 4);
+					SeedCropFarmer SCF = new SeedCropFarmer(b, a, "gfx/terobjs/plants/carrot", "gfx/invobjs/carrot", 4, container, barrel);
 					gameui().add(SCF,
 							new Coord(gameui().sz.x / 2 - SCF.sz.x / 2, gameui().sz.y / 2 - SCF.sz.y / 2 - 200));
 					new Thread(SCF).start();
@@ -38,10 +48,12 @@ public class Farmer extends Window implements AreaSelectCallback {
 		Button onionBtn = new Button(140, "Yellow Onion") {
 			@Override
 			public void click() {
-				if (a != null && b != null) {
+				if(container) {
+					BotUtils.sysMsg("Choose replant for onions!", Color.WHITE);
+				} else if (a != null && b != null) {
 					// Start yellow onion farmer and close this window
 					SeedCropFarmer bf =
-							new SeedCropFarmer(a, b, "gfx/terobjs/plants/yellowonion", "gfx/invobjs/yellowonion", 3);
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/yellowonion", "gfx/invobjs/yellowonion", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -57,10 +69,12 @@ public class Farmer extends Window implements AreaSelectCallback {
 		Button redOnionBtn = new Button(140, "Red Onion") {
 			@Override
 			public void click() {
-				if (a != null && b != null) {
+				if(container) {
+					BotUtils.sysMsg("Choose replant for onions!", Color.WHITE);
+				} else if (a != null && b != null) {
 					// Start yellow onion farmer and close this window
 					SeedCropFarmer bf =
-							new SeedCropFarmer(a, b, "gfx/terobjs/plants/redonion", "gfx/invobjs/redonion", 3);
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/redonion", "gfx/invobjs/redonion", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -76,9 +90,11 @@ public class Farmer extends Window implements AreaSelectCallback {
 		Button beetBtn = new Button(140, "Beetroot") {
 			@Override
 			public void click() {
-				if (a != null && b != null) {
+				if(container) {
+					BotUtils.sysMsg("Choose replant for beetroots!", Color.WHITE);
+				} else if (a != null && b != null) {
 					// Start beetroot onion farmer and close this window
-					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/beet", "gfx/invobjs/beet", 3);
+					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/beet", "gfx/invobjs/beet", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -98,7 +114,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 					System.out.println(a + "" + b);
 					// Start barley farmer and close this window
 					SeedCropFarmer bf =
-							new SeedCropFarmer(a, b, "gfx/terobjs/plants/barley", "gfx/invobjs/seed-barley", 3);
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/barley", "gfx/invobjs/seed-barley", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -117,7 +133,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 				if (a != null && b != null) {
 					// Start yellow onion farmer and close this window
 					SeedCropFarmer bf =
-							new SeedCropFarmer(a, b, "gfx/terobjs/plants/wheat", "gfx/invobjs/seed-wheat", 3);
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/wheat", "gfx/invobjs/seed-wheat", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -135,7 +151,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 			public void click() {
 				if (a != null && b != null) {
 					// Start flax farmer and close this window
-					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/flax", "gfx/invobjs/seed-flax", 3);
+					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/flax", "gfx/invobjs/seed-flax", 3, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -154,7 +170,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 				if (a != null && b != null) {
 					// Start poppy farmer and close this window
 					SeedCropFarmer bf =
-							new SeedCropFarmer(a, b, "gfx/terobjs/plants/poppy", "gfx/invobjs/seed-poppy", 4);
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/poppy", "gfx/invobjs/seed-poppy", 4, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -172,7 +188,7 @@ public class Farmer extends Window implements AreaSelectCallback {
 			public void click() {
 				if (a != null && b != null) {
 					// Start hemp farmer and close this window
-					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/hemp", "gfx/invobjs/seed-hemp", 4);
+					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/hemp", "gfx/invobjs/seed-hemp", 4, container, barrel);
 
 					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
 					new Thread(bf).start();
@@ -245,11 +261,58 @@ public class Farmer extends Window implements AreaSelectCallback {
 			}
 		};
 		add(areaSelBtn, new Coord(20, y));
+		y += 35;
+		replantChkbox = new CheckBox("Replant") {
+            {
+                a = replant;
+            }
+
+            public void set(boolean val) {
+            	a = val;
+            	replant = val;
+            	container = !val;
+            	fillContainerChkbox.a = !val;
+            }
+		};
+		add(replantChkbox, new Coord(20, y));
+		
+		fillContainerChkbox = new CheckBox("Fill container") {
+            {
+                a = container;
+            }
+
+            public void set(boolean val) {
+            	a = val;
+            	container = val;
+            	replant = !val;
+            	replantChkbox.a = !val;
+            }
+		};
+		add(fillContainerChkbox, new Coord(85, y));
+		y += 15;
+		
+		Button contSelBtn = new Button(140, "Select Container") {
+			@Override
+			public void click() {
+				BotUtils.sysMsg("Alt + click a barrel", Color.WHITE);
+				registerGobSelect();
+			}
+		};
+		add(contSelBtn, new Coord(20, y));
+		y += 35;
+		
+	}
+	
+	private void registerGobSelect() {
+		synchronized (GobSelectCallback.class) {
+    		BotUtils.gui.map.registerGobSelect(this);
+    	}
 	}
 
 	public void areaselect(Coord a, Coord b) {
 		this.a = a.mul(MCache.tilesz2);
 		this.b = b.mul(MCache.tilesz2).add(11, 11);
+		BotUtils.sysMsg("Area selected!", Color.WHITE);	
 	}
 
 	@Override
@@ -258,5 +321,16 @@ public class Farmer extends Window implements AreaSelectCallback {
 			reqdestroy();
 		else
 			super.wdgmsg(sender, msg, args);
+	}
+
+	@Override
+	public void gobselect(Gob gob) {
+		if (gob.getres().basename().contains("barrel")) {
+			barrel = gob;
+			BotUtils.sysMsg("Barrel selected!", Color.WHITE);
+		} else {
+			BotUtils.sysMsg("Please choose a barrel as a container!", Color.WHITE);
+		}
+		gameui().map.unregisterGobSelect();
 	}
 }
