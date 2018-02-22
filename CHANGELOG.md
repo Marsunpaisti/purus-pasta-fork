@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.3.0
+	- Added option to put seeds in barrel instead of planting with Farmer bot
+	- Fixed stockpile filler window design
+	- Latest merges from Amber & Default client
 ### 3.2.0
 	- Added option to disable all animations
 	- Added Barrel Filler
