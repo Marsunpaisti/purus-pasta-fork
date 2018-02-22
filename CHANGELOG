@@ -1,3 +1,15 @@
+Version 1.67.1
+    Fixed:
+        * Crash when viewing barter-stands with price set to gems.
+        * Wound treatments for wretched gore and sever mauling.
+
+    Misc:
+        * Added sound effect for seals.
+        * Added peer into to the menu list.
+        * Added cattail to the icons list.
+        * Upstream code merge.
+
+
 Version 1.67.0
     Fixed:
         * Troll belt.
