@@ -26,7 +26,7 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 	private boolean terobjCallback = false;
 
 	public StockpileFiller() {
-		super(new Coord(270, 500), "Stockpile Filler");
+		super(new Coord(270, 200), "Stockpile Filler");
 
 		Widget inf = add(new Widget(new Coord(245, 30)) {
 			public void draw(GOut g) {
@@ -40,7 +40,7 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 		Frame.around(this, Collections.singletonList(inf));
 		Label infolbl = inf.add(new Label("Alt + Click to select stockpiles"), new Coord(5, 0));
 		int y = 40;
-		Button invobjBtn = new Button(140, "Choose stockpile item from inventory") {
+		Button invobjBtn = new Button(140, "Choose item from inventory") {
 			@Override
 			public void click() {
 				BotUtils.sysMsg("Click the stockpile item in inventory", Color.GREEN);
@@ -49,7 +49,7 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 		};
 		add(invobjBtn, new Coord(20, y));
 		y += 35;
-		Button terobjBtn = new Button(140, "Choose stockpile item from ground") {
+		Button terobjBtn = new Button(140, "Choose item from ground") {
 			@Override
 			public void click() {
 				terobjCallback = true;
