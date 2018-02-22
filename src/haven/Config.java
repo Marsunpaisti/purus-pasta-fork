@@ -294,7 +294,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(40) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(41) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -336,9 +336,10 @@ public class Config {
         put("irrbloss", new CheckListboxItem("Irrlight"));
         put("opiumdragon", new CheckListboxItem("Opium Dragon"));
         put("snapdragon", new CheckListboxItem("Uncommon Snapdragon"));
+        put("cattail", new CheckListboxItem("Cattail"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(16) {{
+    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(18) {{
         put("Pick", new CheckListboxItem("Pick", Resource.BUNDLE_FLOWER));
         put("Harvest", new CheckListboxItem("Harvest", Resource.BUNDLE_FLOWER));
         put("Eat", new CheckListboxItem("Eat", Resource.BUNDLE_FLOWER));
@@ -356,6 +357,7 @@ public class Config {
         put("Slice up", new CheckListboxItem("Slice up", Resource.BUNDLE_FLOWER));
         put("Chip stone", new CheckListboxItem("Chip stone", Resource.BUNDLE_FLOWER));
         put("Study", new CheckListboxItem("Study", Resource.BUNDLE_FLOWER));
+        put("Peer into", new CheckListboxItem("Peer into", Resource.BUNDLE_FLOWER));
     }};
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(16) {{
@@ -499,7 +501,8 @@ public class Config {
                 "gfx/invobjs/honeybroadaid"
         });
         put("paginae/wound/severemauling", new String[]{
-                "gfx/invobjs/hartshornsalve"
+                "gfx/invobjs/hartshornsalve",
+                "gfx/invobjs/opium"
         });
         put("paginae/wound/swollenbump", new String[]{
                 "gfx/invobjs/coldcompress",
@@ -512,8 +515,7 @@ public class Config {
                 "gfx/invobjs/mudointment"
         });
         put("paginae/wound/wretchedgore", new String[]{
-                "gfx/invobjs/stitchpatch",
-                "gfx/invobjs/opium"
+                "gfx/invobjs/stitchpatch"
         });
         put("paginae/wound/blackeye", new String[]{
                 "gfx/invobjs/hartshornsalve",

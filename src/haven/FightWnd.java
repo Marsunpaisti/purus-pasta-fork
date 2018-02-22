@@ -32,14 +32,18 @@ import static haven.Window.wbox;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,8 +54,9 @@ public class FightWnd extends Widget {
     public List<Action> acts = new ArrayList<Action>();
     public final Action[] order;
     private final Text[] saves;
-    private final CharWnd.LoadingTextBox info;
+    private final ImageInfoBox info;
     private Tex count;
+    private final Map<Indir<Resource>, Object[]> actrawinfo = new HashMap<>();
     private Dropbox<Pair<Text, Integer>> schoolsDropdown;
 
     private static final Set<String> attacks = new HashSet<>(Arrays.asList(
@@ -107,7 +112,15 @@ public class FightWnd extends Widget {
     private int filter = 0;
 
 
-    public class Action {
+    public static interface IconInfo {
+        public void draw(BufferedImage img, Graphics g);
+    }
+
+    private static final OwnerContext.ClassResolver<FightWnd> actxr = new OwnerContext.ClassResolver<FightWnd>()
+            .add(Glob.class, wdg -> wdg.ui.sess.glob)
+            .add(Session.class, wdg -> wdg.ui.sess);
+    public static final Text.Foundry namef = new Text.Foundry(Text.serif.deriveFont(java.awt.Font.BOLD, 16f)).aa(true);
+    public class Action implements ItemInfo.ResOwner {
         public final Indir<Resource> res;
         private final int id;
         public int a, u;
@@ -147,6 +160,65 @@ public class FightWnd extends Widget {
                 recount();
             }
         }
+
+        public Resource resource() {return(res.get());}
+
+        private List<ItemInfo> info = null;
+        public List<ItemInfo> info() {
+            if(info == null) {
+                Object[] rawinfo = actrawinfo.get(this.res);
+                if(rawinfo != null)
+                    info = ItemInfo.buildinfo(this, rawinfo);
+                else
+                    info = Arrays.asList(new ItemInfo.Name(this, res.get().layer(Resource.tooltip).t));
+            }
+            return(info);
+        }
+        public <T> T context(Class<T> cl) {return(actxr.context(cl, FightWnd.this));}
+
+        public BufferedImage rendericon() {
+            BufferedImage ret = res.get().layer(Resource.imgc).img;
+            Graphics g = null;
+            for(ItemInfo inf : info()) {
+                if(inf instanceof IconInfo) {
+                    if(g == null) {
+                        BufferedImage buf = TexI.mkbuf(PUtils.imgsz(ret));
+                        g = buf.getGraphics();
+                        ret = buf;
+                    }
+                    ((IconInfo)inf).draw(ret, g);
+                }
+            }
+            if(g != null)
+                g.dispose();
+            return(ret);
+        }
+
+        private Tex icon = null;
+        public Tex icon() {
+            if(icon == null)
+                icon = new TexI(rendericon());
+            return(icon);
+        }
+
+        public BufferedImage renderinfo(int width) {
+            ItemInfo.Layout l = new ItemInfo.Layout();
+            l.width = width;
+            List<ItemInfo> info = info();
+            l.cmp.add(rendericon(), Coord.z);
+            ItemInfo.Name nm = ItemInfo.find(ItemInfo.Name.class, info);
+            l.cmp.add(namef.render(nm.str.text).img, new Coord(0, l.cmp.sz.y + 10));
+            l.cmp.sz = l.cmp.sz.add(0, 10);
+            for(ItemInfo inf : info) {
+                if((inf != nm) && (inf instanceof ItemInfo.Tip)) {
+                    l.add((ItemInfo.Tip)inf);
+                }
+            }
+            Resource.Pagina pag = res.get().layer(Resource.pagina);
+            if(pag != null)
+                l.add(new ItemInfo.Pagina(this, pag.text));
+            return(l.render());
+        }
     }
 
     private void recount() {
@@ -154,6 +226,68 @@ public class FightWnd extends Widget {
         for (Action act : acts)
             u += act.u;
         count = Text.num12boldFnd.render(String.format("= %d/%d", u, maxact), (u > maxact) ? Color.RED : Color.WHITE).tex();
+    }
+
+    public static class ImageInfoBox extends Widget {
+        private Tex img;
+        private Indir<Tex> loading;
+        private final Scrollbar sb;
+
+        public ImageInfoBox(Coord sz) {
+            super(sz);
+            sb = adda(new Scrollbar(sz.y, 0, 1), sz.x, 0, 1, 0);
+        }
+
+        public void drawbg(GOut g) {
+            g.chcolor(0, 0, 0, 128);
+            g.frect(Coord.z, sz);
+            g.chcolor();
+        }
+
+        public Coord marg() {return(new Coord(10, 10));}
+
+        public void tick(double dt) {
+            if(loading != null) {
+                try {
+                    set(loading.get());
+                    loading = null;
+                } catch(Loading l) {
+                }
+            }
+            super.tick(dt);
+        }
+
+        public void draw(GOut g) {
+            drawbg(g);
+            if(img != null)
+                g.image(img, marg().sub(0, sb.val));
+            super.draw(g);
+        }
+
+        public void set(Tex img) {
+            this.img = img;
+            if(img != null) {
+                sb.max = img.sz().y + (marg().y * 2) - sz.y;
+                sb.val = 0;
+            } else {
+                sb.max = sb.val = 0;
+            }
+        }
+        public void set(Indir<Tex> loading) {
+            this.loading = loading;
+        }
+
+        public boolean mousewheel(Coord c, int amount) {
+            sb.ch(amount * 20);
+            return(true);
+        }
+
+        public void resize(Coord sz) {
+            super.resize(sz);
+            sb.c = new Coord(sz.x - sb.sz.x, 0);
+            sb.resize(sz.y);
+            set(img);
+        }
     }
 
     private static final Tex[] add = {Resource.loadtex("gfx/hud/buttons/addu"),
@@ -224,9 +358,12 @@ public class FightWnd extends Widget {
             g.chcolor((idx % 2 == 0) ? CharWnd.every : CharWnd.other);
             g.frect(Coord.z, g.sz);
             g.chcolor();
+            if(act.ru == null)
+                act.ru = attrf.render(String.format("%d/%d", act.u, act.a));
+
             try {
                 if (act.ri == null)
-                    act.ri = new TexI(PUtils.convolvedown(act.res.get().layer(Resource.imgc).img, new Coord(itemh, itemh), CharWnd.iconfilter));
+                    act.ri = new TexI(PUtils.convolvedown(act.rendericon(), new Coord(itemh, itemh), CharWnd.iconfilter));
                 g.image(act.ri, Coord.z);
             } catch (Loading l) {
                 g.image(WItem.missing.layer(Resource.imgc).tex(), Coord.z, new Coord(itemh, itemh));
@@ -240,14 +377,10 @@ public class FightWnd extends Widget {
         }
 
         public void change(final Action act) {
-            if (act != null)
-                info.settext(new Indir<String>() {
-                    public String get() {
-                        return (act.rendertext());
-                    }
-                });
-            else if (sel != null)
-                info.settext("");
+            if(act != null)
+                info.set(() -> new TexI(act.renderinfo(info.sz.x - 20)));
+            else if(sel != null)
+                info.set((Tex)null);
             super.change(act);
         }
 
@@ -707,9 +840,7 @@ public class FightWnd extends Widget {
             }
         };
 
-        info = add(new CharWnd.LoadingTextBox(new Coord(255, 152), "", CharWnd.ifnd), new Coord(0, 35).add(wbox.btloff()));
-
-        info.bg = new Color(0, 0, 0, 128);
+        info = add(new ImageInfoBox(new Coord(223, 152)), new Coord(5, 35).add(wbox.btloff()));
         Frame.around(this, Collections.singletonList(info));
 
         add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.BUNDLE_LABEL,"Martial Arts & Combat Schools")).tex()), 0, 0);
@@ -829,6 +960,10 @@ public class FightWnd extends Widget {
             }
             this.acts = acts;
             actlist.loading = true;
+        } else if(nm == "tt") {
+            Indir<Resource> res = ui.sess.getres((Integer)args[0]);
+            Object[] rawinfo = (Object[])args[1];
+            actrawinfo.put(res, rawinfo);
         } else if(nm == "used") {
             int a = 0;
             for(Action act : acts)
