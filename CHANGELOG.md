@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.3.1
+	- Fixed NPE on farming bot
 ### 3.3.0
 	- Added option to put seeds in barrel instead of planting with Farmer bot
 	- Fixed stockpile filler window design
