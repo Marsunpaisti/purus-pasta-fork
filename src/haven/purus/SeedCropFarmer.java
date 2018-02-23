@@ -176,25 +176,27 @@ public class SeedCropFarmer extends Window implements Runnable {
 			cropsHarvested++;
 			lblProg.settext(cropsHarvested + "/" + totalCrops);
 		}
-		if (BotUtils.getItemAtHand() != null)
-			BotUtils.dropItem(0);
-		BotUtils.pfRightClick(barrel, 0);
-		BotUtils.waitForWindow("Barrel");
-
-		while (BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).size() != 0) {
-			if (stopThread)
-				break;
-			GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).get(0).item;
-			BotUtils.takeItem(item);
-
-			gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
-					barrel.rc.floor(posres), 0, -1);
-			int i = 0;
-			while (BotUtils.getItemAtHand() != null) {
-				if (i == 60000)
+		if(container) {
+			if (BotUtils.getItemAtHand() != null)
+				BotUtils.dropItem(0);
+			BotUtils.pfRightClick(barrel, 0);
+			BotUtils.waitForWindow("Barrel");
+	
+			while (BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).size() != 0) {
+				if (stopThread)
 					break;
-				BotUtils.sleep(10);
-				i++;
+				GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).get(0).item;
+				BotUtils.takeItem(item);
+	
+				gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
+						barrel.rc.floor(posres), 0, -1);
+				int i = 0;
+				while (BotUtils.getItemAtHand() != null) {
+					if (i == 60000)
+						break;
+					BotUtils.sleep(10);
+					i++;
+				}
 			}
 		}
 		BotUtils.sysMsg(cropName.substring(cropName.lastIndexOf("/") + 1).substring(0, 1).toUpperCase()
