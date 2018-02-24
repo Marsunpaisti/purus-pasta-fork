@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.3.2
+	- Revert debugline
 ### 3.3.1
 	- Fixed NPE on farming bot
 ### 3.3.0
