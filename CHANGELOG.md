@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.3.3
+	- Fixed armor crafting menu bug
 ### 3.3.2
 	- Revert debugline
 ### 3.3.1
