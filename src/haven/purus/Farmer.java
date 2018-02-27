@@ -312,7 +312,8 @@ public class Farmer extends Window implements AreaSelectCallback, GobSelectCallb
 	public void areaselect(Coord a, Coord b) {
 		this.a = a.mul(MCache.tilesz2);
 		this.b = b.mul(MCache.tilesz2).add(11, 11);
-		BotUtils.sysMsg("Area selected!", Color.WHITE);	
+		BotUtils.sysMsg("Area selected!", Color.WHITE);
+		BotUtils.gui.map.unregisterAreaSelect();
 	}
 
 	@Override
