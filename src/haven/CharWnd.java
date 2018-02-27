@@ -271,6 +271,9 @@ public class CharWnd extends Window {
         public double glut, lglut, gmod;
         public String lbl;
 
+        private double lglut1 = 100, lglut2 = 100, lglut3 = 100;
+        public long prevTime, glutTime, finishedTime;
+        
         public GlutMeter() {
             super(frame.sz());
         }
@@ -293,17 +296,30 @@ public class CharWnd extends Window {
             this.lbl = Resource.getLocString(Resource.BUNDLE_LABEL, (String) args[a++]);
             this.bg = (Color) args[a++];
             this.fg = (Color) args[a++];
-            rtip = null;
+            if (lglut < lglut1) {
+    			if (lglut3 > 1) {
+    				lglut3 = lglut2;
+    				lglut2 = lglut1;
+    				prevTime = glutTime;
+    			}
+    			lglut1 = lglut;
+      			glutTime = System.currentTimeMillis();
+    			if (lglut3 < 1) {
+    				finishedTime = System.currentTimeMillis()+(long)((lglut1)*(glutTime - prevTime)/(lglut2-lglut1));
+    			}
+    		} else if (lglut > lglut1) {
+    			lglut3 = lglut2 = 100;
+    			lglut1 = lglut;
+    			glutTime = System.currentTimeMillis();
+    			finishedTime = -1;
+    		}
         }
 
-        private Tex rtip = null;
-
         public Object tooltip(Coord c, Widget prev) {
-            if (rtip == null) {
-                rtip = RichText.render(String.format(
-                        Resource.getLocString(Resource.BUNDLE_LABEL, "%s: %d%%\nFood efficacy: %d%%"), lbl, Math.round((lglut) * 100), Math.round(gmod * 100)), -1).tex();
-            }
-            return (rtip);
+        	String add = "";
+        	if(finishedTime>System.currentTimeMillis())
+        		add = "\nNext level: " + Utils.timeLeft(finishedTime);
+			return RichText.render(String.format("%s: %.3f%%\nFood efficacy: %d%%"+add, lbl, lglut * 100, Math.round(gmod * 100)), -1).tex();
         }
     }
 
