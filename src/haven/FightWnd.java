@@ -464,8 +464,7 @@ public class FightWnd extends Widget {
     }
 
     public static final String[] keys = {"1", "2", "3", "4", "5", "\u21e71", "\u21e72", "\u21e73", "\u21e74", "\u21e75"};
-    public static final String[] keysf = {"F1", "F2", "F3", "F4", "F5"};
-    public static final String[] keysff = {"F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"};
+    public static final String[] keysf = {"F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"};
 
     public class BView extends Widget implements DropTarget {
         private int subp = -1;
@@ -527,7 +526,7 @@ public class FightWnd extends Widget {
         final Tex[] keysfftex = new Tex[10];
         {
         	for(int i = 0; i < 10; i++) {
-        		keysfftex[i] = Text.render(FightWnd.keysff[i]).tex();
+        		keysfftex[i] = Text.render(FightWnd.keysf[i]).tex();
         	}
         }
 

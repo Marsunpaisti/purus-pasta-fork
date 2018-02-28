@@ -87,7 +87,7 @@ public class Fightsess extends Widget {
                 keysftex[i] = keystex[i];
             else
                 keysftex[i] = Text.renderstroked(FightWnd.keysf[i - 5], Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
-            keysfftex[i] = Text.renderstroked(FightWnd.keysff[i], Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
+            keysfftex[i] = Text.renderstroked(FightWnd.keysf[i], Color.WHITE, Color.BLACK, Text.num12boldFnd).tex();
         }
     }
 
