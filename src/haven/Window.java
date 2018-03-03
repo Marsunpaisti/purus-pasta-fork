@@ -32,6 +32,8 @@ import static haven.PUtils.rasterimg;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import haven.resutil.Curiosity;
+
 public class Window extends Widget implements DTarget {
     public static final Tex bg = Resource.loadtex("gfx/hud/wnd/lg/bg");
     public static final Tex bgl = Resource.loadtex("gfx/hud/wnd/lg/bgl");
@@ -109,6 +111,9 @@ public class Window extends Widget implements DTarget {
         chcap(Resource.getLocString(Resource.BUNDLE_WINDOW, cap));
 	resize2(sz);
         setfocustab(true);
+        if(cap.equals("Study Desk")) {
+        	add(new Label("Total LP:"), 120, -12);
+        }
     }
 
     public Window(Coord sz, String cap, boolean lg) {
@@ -134,6 +139,19 @@ public class Window extends Widget implements DTarget {
     }
 
     protected void drawframe(GOut g) {
+    	// Study Table total LP
+    	if(cap.text.equals("Study Desk")) {
+    		totalLP = 0;
+    		for(Widget wdg = this.lchild; wdg!=null; wdg = wdg.prev) {
+    			if(wdg instanceof Inventory) {
+    				for(WItem item:((Inventory)wdg).wmap.values()) {
+    					Curiosity ci = ItemInfo.find(Curiosity.class, item.item.info());
+    					totalLP += ci.exp;
+    				}
+    			}
+    		}
+			g.aimage(texpt.get().tex(), new Coord(sz.x - 41, 27), 1.0, 0.0);
+    	}
         Coord mdo, cbr;
         g.image(cl, tlo);
         mdo = tlo.add(cl.sz().x, 0);
@@ -169,6 +187,18 @@ public class Window extends Widget implements DTarget {
             g.image(bm, mdo, Coord.z, cbr);
         g.image(br, tlo.add(wsz.sub(br.sz())));
     }
+    
+    private int totalLP;
+    
+	private final Text.UText<?> texpt = new Text.UText<Integer>(Text.std) {
+		public Integer value() {
+			return (totalLP);
+		}
+
+		public String text(Integer v) {
+			return (Utils.thformat(v));
+		}
+	};
 
     public void draw(GOut g) {
         Coord bgc = new Coord();
