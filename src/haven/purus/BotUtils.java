@@ -37,6 +37,15 @@ public class BotUtils {
 		gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
 				-1);
 	}
+	
+	int getAmount(WItem item) {
+		int ret = -1;
+		for(ItemInfo o:item.item.info()) {
+			if(o instanceof GItem.Amount)
+				ret = ((GItem.Amount) o).itemnum();
+		}
+		return ret;
+	}
 
 	// Finds nearest objects and returns closest one
 	public static Gob findObjectByNames(int radius, String... names) {
