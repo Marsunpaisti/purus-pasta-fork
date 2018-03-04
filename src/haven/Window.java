@@ -31,6 +31,8 @@ import static haven.PUtils.rasterimg;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import haven.resutil.Curiosity;
 
@@ -111,9 +113,6 @@ public class Window extends Widget implements DTarget {
         chcap(Resource.getLocString(Resource.BUNDLE_WINDOW, cap));
 	resize2(sz);
         setfocustab(true);
-        if(cap.equals("Study Desk")) {
-        	add(new Label("Total LP:"), 120, -12);
-        }
     }
 
     public Window(Coord sz, String cap, boolean lg) {
@@ -137,20 +136,46 @@ public class Window extends Widget implements DTarget {
 
     public void cdraw(GOut g) {
     }
+    
+    // Input time as minutes
+    String sensibleTimeFormat(Double time) {
+    	StringBuilder sb = new StringBuilder();
+    	int days = new Double(time/1440).intValue();
+    	time -= days*1440;
+    	int hours = new Double(time/60).intValue();
+    	time -= hours*60;
+    	int minutes = time.intValue();
+    	if(days>0) {
+    		sb.append(days + "d ");
+    	}
+    	sb.append(hours + "h ");
+    	sb.append(minutes + "m");
+    	return sb.toString();
+    }
 
     protected void drawframe(GOut g) {
-    	// Study Table total LP
+    	// Study Table total LP and durations of curiosities
     	if(cap.text.equals("Study Desk")) {
-    		totalLP = 0;
+    		int sizeY = 250;
+    		int totalLP = 0;
+    		HashMap<String, Double> studyTimes = new HashMap<String, Double>();
     		for(Widget wdg = this.lchild; wdg!=null; wdg = wdg.prev) {
     			if(wdg instanceof Inventory) {
     				for(WItem item:((Inventory)wdg).wmap.values()) {
     					Curiosity ci = ItemInfo.find(Curiosity.class, item.item.info());
     					totalLP += ci.exp;
+    					studyTimes.put(item.item.getname(), studyTimes.get(item.item.getname()) == null ? item.item.studytime : studyTimes.get(item.item.getname())+item.item.studytime);
     				}
     			}
     		}
-			g.aimage(texpt.get().tex(), new Coord(sz.x - 41, 27), 1.0, 0.0);
+    		g.image(Text.labelFnd.render("Total LP: " + String.format("%,d", totalLP)).tex(), new Coord(30, 271));
+			int y = 285;
+			for(Entry<String, Double> entry : studyTimes.entrySet()) {
+				g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue())).tex(), new Coord(30, y));
+				y += 15;
+				sizeY += 15;
+			}
+    		resize(230, sizeY);
     	}
         Coord mdo, cbr;
         g.image(cl, tlo);
@@ -187,18 +212,6 @@ public class Window extends Widget implements DTarget {
             g.image(bm, mdo, Coord.z, cbr);
         g.image(br, tlo.add(wsz.sub(br.sz())));
     }
-    
-    private int totalLP;
-    
-	private final Text.UText<?> texpt = new Text.UText<Integer>(Text.std) {
-		public Integer value() {
-			return (totalLP);
-		}
-
-		public String text(Integer v) {
-			return (Utils.thformat(v));
-		}
-	};
 
     public void draw(GOut g) {
         Coord bgc = new Coord();
