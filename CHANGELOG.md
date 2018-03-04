@@ -1,5 +1,11 @@
 ## Changelog
 
+### 3.4.0
+	- Added total LP display for study desks
+	- Added remaining amount of curios to study desks
+	- Added timer to display remaining time until lower hunger level
+	- Fixed area select bug
+	- Latest merges from Amber & Default client
 ### 3.3.3
 	- Fixed armor crafting menu bug
 ### 3.3.2
