@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.4.1
+	- Fix study table sprite bug
 ### 3.4.0
 	- Added total LP display for study desks
 	- Added remaining amount of curios to study desks
