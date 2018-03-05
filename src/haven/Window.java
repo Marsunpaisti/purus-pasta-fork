@@ -155,27 +155,31 @@ public class Window extends Widget implements DTarget {
 
     protected void drawframe(GOut g) {
     	// Study Table total LP and durations of curiosities
-    	if(cap.text.equals("Study Desk")) {
-    		int sizeY = 250;
-    		int totalLP = 0;
-    		HashMap<String, Double> studyTimes = new HashMap<String, Double>();
-    		for(Widget wdg = this.lchild; wdg!=null; wdg = wdg.prev) {
-    			if(wdg instanceof Inventory) {
-    				for(WItem item:((Inventory)wdg).wmap.values()) {
-    					Curiosity ci = ItemInfo.find(Curiosity.class, item.item.info());
-    					totalLP += ci.exp;
-    					studyTimes.put(item.item.getname(), studyTimes.get(item.item.getname()) == null ? item.item.studytime : studyTimes.get(item.item.getname())+item.item.studytime);
-    				}
-    			}
-    		}
-    		g.image(Text.labelFnd.render("Total LP: " + String.format("%,d", totalLP)).tex(), new Coord(30, 271));
-			int y = 285;
-			for(Entry<String, Double> entry : studyTimes.entrySet()) {
-				g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue())).tex(), new Coord(30, y));
-				y += 15;
-				sizeY += 15;
-			}
-    		resize(230, sizeY);
+    	try {
+	    	if(cap.text.equals("Study Desk")) {
+	    		int sizeY = 250;
+	    		int totalLP = 0;
+	    		HashMap<String, Double> studyTimes = new HashMap<String, Double>();
+	    		for(Widget wdg = this.lchild; wdg!=null; wdg = wdg.prev) {
+	    			if(wdg instanceof Inventory) {
+	    				for(WItem item:((Inventory)wdg).wmap.values()) {
+	    					Curiosity ci = ItemInfo.find(Curiosity.class, item.item.info());
+	    					totalLP += ci.exp;
+	    					studyTimes.put(item.item.getname(), studyTimes.get(item.item.getname()) == null ? item.item.studytime : studyTimes.get(item.item.getname())+item.item.studytime);
+	    				}
+	    			}
+	    		}
+	    		g.image(Text.labelFnd.render("Total LP: " + String.format("%,d", totalLP)).tex(), new Coord(30, 271));
+				int y = 285;
+				for(Entry<String, Double> entry : studyTimes.entrySet()) {
+					g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue())).tex(), new Coord(30, y));
+					y += 15;
+					sizeY += 15;
+				}
+	    		resize(230, sizeY);
+	    	}
+    	} catch(Loading l) {
+    		
     	}
         Coord mdo, cbr;
         g.image(cl, tlo);
