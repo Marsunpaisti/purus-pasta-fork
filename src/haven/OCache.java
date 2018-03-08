@@ -113,7 +113,7 @@ public class OCache implements Iterable<Gob> {
                 copy.add(g);
             for (Gob g : copy) {
                 g.ctick(dt);
-                if (Config.showdmgop || Config.showdmgmy) {
+                if (Config.showdmgop) {
                     Gob.Overlay dmgol = g.findol(DamageSprite.ID);
                     if (dmgol != null)
                         g.ols.remove(dmgol);
@@ -565,7 +565,7 @@ public class OCache implements Iterable<Gob> {
             sdt = new MessageBuf(sdt);
             if (ol == null) {
                 g.ols.add(ol = new Gob.Overlay(olid, resid, sdt));
-                if (sdt.rt == 7 && isfight && (Config.showdmgop && !g.isplayer() || Config.showdmgmy && g.isplayer()))
+                if (sdt.rt == 7 && isfight && Config.showdmgop)
                     setdmgoverlay(g, resid, new MessageBuf(sdt));
             } else if (!ol.sdt.equals(sdt)) {
                 if (ol.spr instanceof Gob.Overlay.CUpd) {
@@ -574,7 +574,7 @@ public class OCache implements Iterable<Gob> {
                 } else {
                     g.ols.remove(ol);
                     g.ols.add(ol = new Gob.Overlay(olid, resid, sdt));
-                    if (sdt.rt == 7 && isfight && (Config.showdmgop && !g.isplayer() || Config.showdmgmy && g.isplayer()))
+                    if (sdt.rt == 7 && isfight && Config.showdmgop)
                         setdmgoverlay(g, resid, new MessageBuf(sdt));
                 }
             }

@@ -100,7 +100,6 @@ public class Config {
     public static Coord chatsz = Utils.getprefc("chatsz", new Coord(683, 111));
     public static boolean autostudy = Utils.getprefb("autostudy", false);
     public static boolean showdmgop = Utils.getprefb("showdmgop", true);
-    public static boolean showdmgmy = Utils.getprefb("showdmgmy", true);
     public static boolean hidegobs = Utils.getprefb("hidegobs", false);
     public static boolean qualitybg = Utils.getprefb("qualitybg", true);
     public static int qualitybgtransparency = Utils.getprefi("qualitybgtransparency", 5);
