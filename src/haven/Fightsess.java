@@ -302,7 +302,7 @@ public class Fightsess extends Widget {
     }
 
     private void drawOpening(GOut g, Buff buff, Coord bc) {
-        if (Config.combaltopenings) {
+       /* if (Config.combaltopenings) {
             try {
                 Resource res = buff.res.get();
                 Color clr = openings.get(res.name);
@@ -337,9 +337,9 @@ public class Fightsess extends Widget {
                 g.chcolor();
             } catch (Loading l) {
             }
-        } else {
+        } else {*/
             buff.draw(g.reclip(bc, buff.sz));
-        }
+       /* } */
     }
 
     private Widget prevtt = null;
