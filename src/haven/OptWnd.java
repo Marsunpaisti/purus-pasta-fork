@@ -932,7 +932,7 @@ public class OptWnd extends Window {
         appender.setVerticalMargin(VERTICAL_MARGIN);
         appender.setHorizontalMargin(HORIZONTAL_MARGIN);
 
-        appender.add(new CheckBox("Display damage received by opponents") {
+        appender.add(new CheckBox("Display damage") {
             {
                 a = Config.showdmgop;
             }
@@ -940,17 +940,6 @@ public class OptWnd extends Window {
             public void set(boolean val) {
                 Utils.setprefb("showdmgop", val);
                 Config.showdmgop = val;
-                a = val;
-            }
-        });
-        appender.add(new CheckBox("Display damage received by me") {
-            {
-                a = Config.showdmgmy;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showdmgmy", val);
-                Config.showdmgmy = val;
                 a = val;
             }
         });
