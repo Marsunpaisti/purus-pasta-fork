@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.4.2
+	- Latest merges from Amber & Default client
 ### 3.4.1
 	- Fix study table sprite bug
 ### 3.4.0
