@@ -27,7 +27,8 @@ public class LeashAnimal implements Runnable {
                 if (res != null && (res.name.startsWith("gfx/kritter/horse/") ||
                         res.name.equals("gfx/kritter/sheep/sheep") ||
                         res.name.equals("gfx/kritter/cattle/cattle") ||
-                        res.name.equals("gfx/kritter/boar/boar"))) {
+                        res.name.equals("gfx/kritter/boar/boar") || 
+                        res.name.equals("gfx/kritter/goat/wildgoat"))) {
                     if (animal == null)
                         animal = gob;
                     else if (gob.rc.dist(gui.map.player().rc) < animal.rc.dist(gui.map.player().rc))
@@ -37,7 +38,7 @@ public class LeashAnimal implements Runnable {
         }
 
         if (animal == null) {
-            gui.error("No horse/auroch/mouflon/boar found");
+            gui.error("No horse/auroch/mouflon/boar/goat found");
             return;
         }
 
