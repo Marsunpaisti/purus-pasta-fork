@@ -1,3 +1,12 @@
+Version 1.67.4
+    New:
+        * Added goats to the livestock manager.
+
+    Misc:
+        * Re-enable alternative openings option.
+        * Revert last ko l10n update due to reverted combat.
+
+
 Version 1.67.3
     New:
         * Option to use F1-F10 for combat (Clenda).
