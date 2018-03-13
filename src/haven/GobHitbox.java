@@ -67,6 +67,8 @@ public class GobHitbox extends Sprite {
     private static final BBox bboxLog = new BBox(new Coord(-10, -2), new Coord(10, 2));
     private static final BBox bboxCalf = new BBox(new Coord(-9, -3), new Coord(9, 3));
     private static final BBox bboxLamb = new BBox(new Coord(-6, -2), new Coord(6, 2));
+    private static final BBox bboxGoat = new BBox(new Coord(-6, -2), new Coord(6, 2));
+    private static final BBox bboxPig = new BBox(new Coord(-6, -3), new Coord(6, 3));
     private static final BBox bboxCattle  = new BBox(new Coord(-12, -4), new Coord(12, 4));
     private static final BBox bboxHorse = new BBox(new Coord(-8, -4), new Coord(8, 4));
     private static final BBox bboxSmelter = new BBox(new Coord(-12, -12), new Coord(12, 20));
@@ -91,7 +93,7 @@ public class GobHitbox extends Sprite {
 
         String name = res.name;
 
-        // calves, lambs, cattle
+        // calves, lambs, cattle, goat
         if (name.equals("gfx/kritter/cattle/calf"))
             return bboxCalf;
         else if (name.equals("gfx/kritter/sheep/lamb"))
@@ -100,6 +102,10 @@ public class GobHitbox extends Sprite {
             return bboxCattle;
         else if (name.startsWith("gfx/kritter/horse/"))
             return bboxHorse;
+        else if (name.startsWith("gfx/kritter/goat/"))
+            return bboxGoat;
+        else if (name.startsWith("gfx/kritter/pig/"))
+            return bboxPig;
 
         // rlink-ed gobs.
         // modifying RenderLink is a bad idea
