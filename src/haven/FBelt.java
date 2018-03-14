@@ -50,7 +50,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             for (int i = 0; i < 12; i++) {
                 try {
                     Indir<Resource> res = belt[i];
-                    if (res != null && res.get().name.startsWith("paginae/amber"))
+                    if (res != null && (res.get().name.startsWith("paginae/amber") || res.get().name.startsWith("paginae/purus")))
                         resnames[i] = res.get().name;
                 } catch (Exception e) {
                 }
@@ -193,7 +193,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
                 Resource res = (Resource) thing;
                 if (res.layer(Resource.action) != null) {
                     belt[slot] = res.indir();
-                    if (res.name.startsWith("paginae/amber"))
+                    if (res.name.startsWith("paginae/amber") || res.name.startsWith("paginae/purus"))
                         saveLocally();
                     else
                         gameui().wdgmsg("setbelt", getServerSlot(slot), res.name);
@@ -211,7 +211,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             if (act == null) {
                 gameui().wdgmsg("belt", getServerSlot(slot), 1, ui.modflags());
             } else {
-                if (res.name.startsWith("paginae/amber"))
+                if (res.name.startsWith("paginae/amber") || res.name.startsWith("paginae/purus"))
                     gameui().menu.use(act.ad);
                 else
                     gameui().act(act.ad);
@@ -232,7 +232,7 @@ public class FBelt extends Widget implements DTarget, DropTarget {
 
         Indir<Resource> ires = belt[slot];
         try {
-            if (ires == null || ires.get().name.startsWith("paginae/amber"))
+            if (ires == null || ires.get().name.startsWith("paginae/amber") || ires.get().name.startsWith("paginae/purus"))
                 return;
         } catch (Exception e) {
         }
