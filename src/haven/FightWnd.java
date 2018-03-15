@@ -691,35 +691,29 @@ public class FightWnd extends Widget {
         }
 
         public boolean dropthing(Coord c, Object thing) {
-            if(thing instanceof Action) {
-                Action act = (Action)thing;
+            if (thing instanceof Action) {
+                Action act = (Action) thing;
                 int s = citem(c);
-                if(s < 0)
-                    return(false);
-                if(order[s] != act) {
-                    if(order[s] != null) {
-                        int cp = findorder(act);
-                        if(cp >= 0) {
-                            order[cp] = order[s];
+                if (s < 0)
+                    return (false);
+                if (order[s] != act) {
+                    int cp = findorder(act);
+                    if (cp >= 0)
+                        order[cp] = order[s];
+                    if (order[s] != null) {
+                        if (cp >= 0) {
                             animate(cp, itemc(s).sub(itemc(cp)));
                         } else {
                             order[s].u(0);
                         }
-                    } else {
-                        for (int i = 0; i < order.length; i++) {
-                            if (order[i] != null && order[i].id == act.id) {
-                                order[i] = null;
-                                break;
-                            }
-                        }
                     }
                     order[s] = act;
-                    if(act.u < 1)
+                    if (act.u < 1)
                         act.u(1);
                 }
-                return(true);
+                return (true);
             }
-            return(false);
+            return (false);
         }
 
         public void tick(double dt) {
