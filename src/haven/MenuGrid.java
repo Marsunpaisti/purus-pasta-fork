@@ -196,6 +196,7 @@ public class MenuGrid extends Widget {
             this.res = res;
             state(State.ENABLED);
         }
+        
         public Resource res() {
             return(res.get());
         }
@@ -314,6 +315,8 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/purus/study")));
             p.add(paginafor(Resource.local().load("paginae/purus/barrelfill")));
             p.add(paginafor(Resource.local().load("paginae/purus/stockpilefill")));
+            // PBot Scripts
+            p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
     }
 
@@ -541,6 +544,12 @@ public class MenuGrid extends Widget {
             synchronized (GobSelectCallback.class) {
         		gui.map.registerGobSelect(spf);
         	}
+        } else if(ad[1].equals("PBotList")) {
+            if (gui.PBotScriptlist.show(!gui.PBotScriptlist.visible)) {
+            	gui.PBotScriptlist.raise();
+            	gui.fitwdg(gui.PBotScriptlist);
+                setfocus(gui.PBotScriptlist);
+            }
         }
     }
 

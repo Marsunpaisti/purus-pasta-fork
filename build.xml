@@ -89,8 +89,16 @@
 		<jar basedir="build/custom-res" destfile="build/lib/pasta-res.jar"/>
 		<delete dir="build/custom-res"/>
 	</target>
+	
+  <target name="scripts" depends="build-env">
+    <mkdir dir="build/scripts"/>
+  	<copy todir="build/scripts">
+  		<fileset dir="scripts/" includes="*">
+  	      </fileset>
+  	</copy>
+  </target>
   
-  <target name="jars" depends="build-env, jar, res-jar, l10n-jar, custom-jar">
+  <target name="jars" depends="build-env, jar, res-jar, l10n-jar, custom-jar, scripts">
     <copy todir="build/lib">
       <fileset dir="lib">
 	<include name="jogl.jar" />

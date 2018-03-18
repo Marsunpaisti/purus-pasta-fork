@@ -1,0 +1,5 @@
+// Test script
+print("Hello World!");
+var PBot = Java.type("haven.purus.pbot.PBotAPI");
+var ikkuna = PBot.getWindow("Cupboard");
+PBot.setFocus(ikkuna);

@@ -47,6 +47,8 @@ import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.BotUtils;
 import haven.purus.ItemClickCallback;
+import haven.purus.pbot.PBotAPI;
+import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
@@ -58,6 +60,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public Avaview portrait;
     public MenuGrid menu;
     public MenuSearch menuSearch;
+    public PBotScriptlist PBotScriptlist;
     public MapView map;
     public Fightview fv;
     private List<Widget> meters = new LinkedList<Widget>();
@@ -243,7 +246,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         menuSearch = new MenuSearch();
         add(menuSearch, 300, 300);
         menuSearch.hide();
+        PBotScriptlist = new PBotScriptlist();
+        add(PBotScriptlist, 300, 300);
+        PBotScriptlist.hide();
         BotUtils.gui = this;
+        PBotAPI.gui = this;
     }
     
     @Override
@@ -364,7 +371,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             super(sz, cap, lg);
         }
 
-        Hidewnd(Coord sz, String cap) {
+        protected Hidewnd(Coord sz, String cap) {
             super(sz, cap);
         }
 
@@ -950,6 +957,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     }
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
+    	System.out.println("############");
+    	System.out.println(sender);
+    	System.out.println(msg);
+    	for(Object o :args)
+    		System.out.println(o);
         if ((sender == chrwdg) && (msg == "close")) {
             chrwdg.hide();
         } else if((polities.contains(sender)) && (msg == "close")) {

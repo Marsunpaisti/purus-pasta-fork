@@ -55,6 +55,7 @@ import haven.automation.MusselPicker;
 import haven.automation.SteelRefueler;
 import haven.pathfinder.PFListener;
 import haven.pathfinder.Pathfinder;
+import haven.purus.pbot.PBotAPI;
 import haven.resutil.BPRadSprite;
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
@@ -100,6 +101,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public Object[] lastItemactClickArgs;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
     public boolean farmSelect = false;
+    public boolean PBotAPISelect = false;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1948,6 +1950,17 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 }
             }
     	}
+    	if(button == 1 && PBotAPISelect) {
+    		synchronized (this) {
+                if (selection == null) {
+                    selection = new Selector();
+                } else if (selection != null) {
+                    selection.destroy();
+                    selection = null;
+                    PBotAPISelect = false;
+                }
+            }
+    	}
         if (miningOverlay != null && button == 1) {
             miningOverlay.destroy();
             disol(18);
@@ -2258,6 +2271,11 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         areaselcb.areaselect(ol.getc1(), ol.getc2());
                     wdgmsg("sel", sc, ec, modflags);
                     sc = null;
+                    if(PBotAPISelect) {
+                    	PBotAPI.areaSelect(ol.getc1(), ol.getc2());
+                    	PBotAPISelect = false;
+                        selection.destroy();
+                        selection = null;}
                 }
                 return (true);
             }
