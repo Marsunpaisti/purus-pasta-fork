@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.5.0
+	- Added Purus Pasta Botting API, PBot
+	- Fixed paginae not attaching to F1-F12 belt
 ### 3.4.2
 	- Latest merges from Amber & Default client
 ### 3.4.1
