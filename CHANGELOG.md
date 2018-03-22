@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.5.1
+	- Fixed doAct in PBot API
+	- Latest merges from Amber & Default client
 ### 3.5.0
 	- Added Purus Pasta Botting API, PBot
 	- Fixed paginae not attaching to F1-F12 belt
