@@ -605,7 +605,7 @@ public class PBotAPI {
 	 * @param act Act to choose
 	 */
 	public static void doAct(String act) {
-		gui.map.wdgmsg("act", act);
+		gui.menu.wdgmsg("act", act);
 	}
 	
 	/**
