@@ -117,7 +117,7 @@ public class SeedCropFarmer extends Window implements Runnable {
 			while (BotUtils.getItemAtHand() == null) {
 				Inventory inv = BotUtils.playerInventory();
 				for (Widget w = inv.child; w != null; w = w.next) {
-					if (w instanceof GItem && ((GItem) w).resource().name.equals(seedName) && BotUtils.getAmount((GItem)w)>=5) {
+					if (w instanceof GItem && ((GItem) w).resource().name.equals(seedName) && (!seedName.contains("seed") || BotUtils.getAmount((GItem)w)>=5)) {
 						item = (GItem) w;
 						break;
 					}
@@ -130,9 +130,11 @@ public class SeedCropFarmer extends Window implements Runnable {
 				BotUtils.sleep(10);
 
 			// Plant the seed from hand
-			int amount = BotUtils.getAmount(BotUtils.getItemAtHand());
+			int amount = 0;
+			if(seedName.contains("seed"))
+					BotUtils.getAmount(BotUtils.getItemAtHand());
 			BotUtils.mapInteractClick(0);
-			while (BotUtils.findNearestStageCrop(5, 0, cropName) == null || (BotUtils.getItemAtHand() != null && amount == BotUtils.getAmount(BotUtils.getItemAtHand()))) {
+			while (BotUtils.findNearestStageCrop(5, 0, cropName) == null || (BotUtils.getItemAtHand() != null && (seedName.contains("seed") && amount == BotUtils.getAmount(BotUtils.getItemAtHand())))) {
 				BotUtils.sleep(10);
 			}
 			
