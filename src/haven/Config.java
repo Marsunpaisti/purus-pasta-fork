@@ -117,7 +117,6 @@ public class Config {
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
     public static boolean showboundingboxes = Utils.getprefb("showboundingboxes", false);
     public static double alarmonforagablesvol = Utils.getprefd("alarmonforagablesvol", 0.8);
-    public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.7);
     public static boolean alarmlocres = Utils.getprefb("alarmlocres", false);
     public static double alarmlocresvol = Utils.getprefd("alarmlocresvol", 0.8);
     public static boolean alarmtroll = Utils.getprefb("alarmtroll", false);

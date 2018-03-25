@@ -298,22 +298,22 @@ public class LocalMiniMap extends Widget {
                         Audio.play(swagsfx, Config.alarmlocresvol);
                     } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(bearsfx, Config.alarmbearsvol);
+                        Audio.play(bearsfx, 0.7);
                     } else if (gob.type == Gob.Type.LYNX && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(lynxfx, Config.alarmbearsvol);
+                        Audio.play(lynxfx, 0.8);
                     } else if (gob.type == Gob.Type.WALRUS && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(walrusfx, Config.alarmbearsvol);
+                        Audio.play(walrusfx, 0.7);
                     } else if (gob.type == Gob.Type.SEAL && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(sealsfx, Config.alarmbearsvol);
+                        Audio.play(sealsfx, 0.8);
                     } else if (gob.type == Gob.Type.TROLL && gob.knocked == Boolean.FALSE && Config.alarmtroll) {
                         sgobs.add(gob.id);
                         Audio.play(trollsfx, Config.alarmtrollvol);
                     } else if (gob.type == Gob.Type.MAMMOTH && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(mammothsfx, Config.alarmbearsvol);
+                        Audio.play(mammothsfx, 0.7);
                     } else if (gob.type == Gob.Type.EAGLE && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
                         Audio.play(eaglesfx);
