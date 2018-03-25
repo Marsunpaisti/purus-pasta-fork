@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.5.2
+	- Farmer replants and merges seeds when using container
 ### 3.5.1
 	- Fixed doAct in PBot API
 	- Latest merges from Amber & Default client
