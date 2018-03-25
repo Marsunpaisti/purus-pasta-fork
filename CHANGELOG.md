@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.5.3
+	- Fix farmer not working on beetroots
 ### 3.5.2
 	- Farmer replants and merges seeds when using container
 ### 3.5.1
