@@ -38,13 +38,18 @@ public class BotUtils {
 				-1);
 	}
 	
-	int getAmount(WItem item) {
+	public static int getAmount(GItem item) {
 		int ret = -1;
-		for(ItemInfo o:item.item.info()) {
+		for(ItemInfo o:item.info()) {
 			if(o instanceof GItem.Amount)
 				ret = ((GItem.Amount) o).itemnum();
 		}
 		return ret;
+	}
+	
+	// Returns null if not found
+	public static Coord getFreeInvSlot(Inventory inventory) {
+		return inventory.getFreeSlot();
 	}
 
 	// Finds nearest objects and returns closest one
@@ -316,6 +321,11 @@ public class BotUtils {
 	// Logout to char selection
 	public static void logoutChar() {
 		gui.act("lo", "cs");
+	}
+	
+	// Drops item from  hand to given slot in given inventory
+	public static void dropItemToInventory(Coord coord, Inventory inventory) {
+		inventory.wdgmsg("drop", coord);
 	}
 	
 	// Returns true if stockpile is full, might not work for all stockpiles
