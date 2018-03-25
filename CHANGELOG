@@ -1,3 +1,19 @@
+Version 1.67.5
+    New: 
+        * Added hitbox for pig and goat (ported from Clenda's client).
+        * Added goat to the Shoo command (ported from Clenda's client).
+        * Added goat to the LeashAnimal command (ported from Clenda's client).
+        * Added lizards and snails to icons list.
+        * Added sound effect for eagles.
+
+    Fixed:
+        * Nanny avatar in livestock manager.
+
+    Misc:
+        * Changed key binding for taking screenshots and saving them locally to Ctrl+S.
+        * Upstream code merge.
+
+
 Version 1.67.4
     New:
         * Added goats to the livestock manager.
