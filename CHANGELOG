@@ -1,3 +1,12 @@
+Version 1.67.6
+    Fixed:
+        * (hopefully) issues with ore dropping.
+
+    Misc:
+        * JVM argument for specifying whether to dump l10n strings.
+        * Better handling of bounding boxes for rlink-ed resources.
+
+
 Version 1.67.5
     New: 
         * Added hitbox for pig and goat (ported from Clenda's client).
