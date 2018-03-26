@@ -63,7 +63,7 @@ public class Resource implements Serializable {
     public static final String BUNDLE_ACTION = "action";
     public static final String BUNDLE_INGREDIENT = "ingredient";
     private final static Map<String, Map<String, String>> l10nBundleMap;
-    public static final boolean L10N_DEBUG = false;
+    public static final boolean L10N_DEBUG = System.getProperty("dumpstr") != null;
 
     private Collection<Layer> layers = new LinkedList<Layer>();
     public final String name;
