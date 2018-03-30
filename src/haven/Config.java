@@ -62,6 +62,7 @@ public class Config {
     public static int mainport = 1870;
     public static int authport = 1871;
     public static boolean hidesky = Utils.getprefb("hidesky", false);
+    public static URL screenurl = geturl("http://game.havenandhearth.com/mt/ss");
     public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);
@@ -131,7 +132,6 @@ public class Config {
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
     public static boolean showboundingboxes = Utils.getprefb("showboundingboxes", false);
     public static double alarmonforagablesvol = Utils.getprefd("alarmonforagablesvol", 0.8);
-    public static double alarmbearsvol = Utils.getprefd("alarmbearsvol", 0.7);
     public static boolean alarmlocres = Utils.getprefb("alarmlocres", false);
     public static double alarmlocresvol = Utils.getprefd("alarmlocresvol", 0.8);
     public static boolean alarmtroll = Utils.getprefb("alarmtroll", false);
@@ -198,7 +198,7 @@ public class Config {
     public static int hidered = Utils.getprefi("hidered", 51);
     public static int hidegreen = Utils.getprefi("hidegreen", 102);
     public static int hideblue = Utils.getprefi("hideblue", 255);
-
+    public static String confid = "PurusPasta";
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
@@ -293,7 +293,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(41) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(44) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -336,6 +336,9 @@ public class Config {
         put("opiumdragon", new CheckListboxItem("Opium Dragon"));
         put("snapdragon", new CheckListboxItem("Uncommon Snapdragon"));
         put("cattail", new CheckListboxItem("Cattail"));
+        put("forestsnail", new CheckListboxItem("Forest Snail"));
+        put("forestlizard", new CheckListboxItem("Forest Lizard"));
+        put("mole", new CheckListboxItem("Mole"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(18) {{
@@ -378,7 +381,7 @@ public class Config {
         put("gfx/kritter/nidbane/nidbane", Resource.loadtex("gfx/icons/spooky"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> alarmitems = new HashMap<String, CheckListboxItem>(8) {{
+    public final static HashMap<String, CheckListboxItem> alarmitems = new HashMap<String, CheckListboxItem>(9) {{
         put("gfx/terobjs/herbs/flotsam", new CheckListboxItem("Peculiar Flotsam"));
         put("gfx/terobjs/herbs/chimingbluebell", new CheckListboxItem("Chiming Bluebell"));
         put("gfx/terobjs/herbs/edelweiss", new CheckListboxItem("Edelweiß"));
@@ -387,6 +390,7 @@ public class Config {
         put("gfx/terobjs/herbs/camomile", new CheckListboxItem("Camomile"));
         put("gfx/terobjs/herbs/clay-cave", new CheckListboxItem("Cave Clay"));
         put("gfx/terobjs/herbs/mandrake", new CheckListboxItem("Mandrake Root"));
+        put("gfx/terobjs/herbs/seashell", new CheckListboxItem("Rainbow Shell"));
     }};
 
     public final static Set<String> locres = new HashSet<String>(Arrays.asList(
@@ -622,6 +626,16 @@ public class Config {
             Utils.setpref("logins", "[" + jsonobjs + "]");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static URL geturl(String url) {
+        if (url.equals(""))
+            return null;
+        try {
+            return new URL(url);
+        } catch(java.net.MalformedURLException e) {
+            throw(new RuntimeException(e));
         }
     }
 

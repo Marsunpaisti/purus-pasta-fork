@@ -49,6 +49,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public double studytime = 0.0;
     public boolean drop = false;
     private double dropTimer = 0;
+    private boolean postProcessed = false;
 
     @RName("item")
     public static class $_ implements Factory {
@@ -174,6 +175,10 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         if (spr == null) {
             try {
                 spr = this.spr = GSprite.create(this, res.get(), sdt.clone());
+                if (!postProcessed) {
+                    dropItMaybe();
+                    postProcessed = true;
+                }
             } catch (Loading l) {
             }
         }
@@ -266,27 +271,15 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
         return null;
     }
 
-    @Override
-    protected void added() {
+    private void dropItMaybe() {
         Resource curs = ui.root.getcurs(Coord.z);
         if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
-            final GItem self = this;
-            Defer.later(new Defer.Callable<Void>() {
-                public Void call() {
-                    try {
-                        String name = self.resource().basename();
-                        if (Config.dropMinedStones && Config.mineablesStone.contains(name) ||
-                                Config.dropMinedOre && Config.mineablesOre.contains(name) ||
-                                Config.dropMinedOrePrecious && Config.mineablesOrePrecious.contains(name) ||
-                                Config.dropMinedCurios && Config.mineablesCurios.contains(name))
-                            self.wdgmsg("drop", Coord.z);
-                    } catch (Loading e) {
-                        Defer.later(this);
-                    }
-                    return null;
-                }
-            });
+            String name = this.resource().basename();
+            if (Config.dropMinedStones && Config.mineablesStone.contains(name) ||
+                    Config.dropMinedOre && Config.mineablesOre.contains(name) ||
+                    Config.dropMinedOrePrecious && Config.mineablesOrePrecious.contains(name) ||
+                    Config.dropMinedCurios && Config.mineablesCurios.contains(name))
+                this.wdgmsg("drop", Coord.z);
         }
-
     }
 }
