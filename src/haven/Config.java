@@ -353,7 +353,7 @@ public class Config {
         put("gfx/kritter/nidbane/nidbane", Resource.loadtex("gfx/icons/spooky"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> alarmitems = new HashMap<String, CheckListboxItem>(8) {{
+    public final static HashMap<String, CheckListboxItem> alarmitems = new HashMap<String, CheckListboxItem>(9) {{
         put("gfx/terobjs/herbs/flotsam", new CheckListboxItem("Peculiar Flotsam"));
         put("gfx/terobjs/herbs/chimingbluebell", new CheckListboxItem("Chiming Bluebell"));
         put("gfx/terobjs/herbs/edelweiss", new CheckListboxItem("Edelweiß"));
@@ -362,6 +362,7 @@ public class Config {
         put("gfx/terobjs/herbs/camomile", new CheckListboxItem("Camomile"));
         put("gfx/terobjs/herbs/clay-cave", new CheckListboxItem("Cave Clay"));
         put("gfx/terobjs/herbs/mandrake", new CheckListboxItem("Mandrake Root"));
+        put("gfx/terobjs/herbs/seashell", new CheckListboxItem("Rainbow Shell"));
     }};
 
     public final static Set<String> locres = new HashSet<String>(Arrays.asList(
