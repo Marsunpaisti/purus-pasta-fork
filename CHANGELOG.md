@@ -2,7 +2,7 @@
 
 ### 3.6.0
 	- New features to PBot API, related to stockpile placement
-	- Latest marges from Amber & Default client
+	- Latest merges from Amber & Default client
 ### 3.5.3
 	- Fix farmer not working on beetroots
 ### 3.5.2
