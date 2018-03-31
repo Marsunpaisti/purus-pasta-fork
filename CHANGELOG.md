@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.6.1
+	- Add spinning
 ### 3.6.0
 	- New features to PBot API, related to stockpile placement
 	- Latest merges from Amber & Default client
