@@ -822,7 +822,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         private double a = 0.0;
         private Matrix4f update = null;
         private final Location xl = new Location(Matrix4f.id, "gobx"), rot = new Location(Matrix4f.id, "gob");
-
+        
         public void tick() {
             try {
                 Coord3f c = getc();
@@ -833,6 +833,10 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                     xl.update(Transform.makexlate(new Matrix4f(), this.c = c));
                 if (this.a != Gob.this.a)
                     rot.update(Transform.makerot(new Matrix4f(), Coord3f.zu, (float) -(this.a = Gob.this.a)));
+                if(getres()!=null&&getres().name.contains("borka"))
+                	rot.update(Transform.makerot(new Matrix4f(), Coord3f.xu, (float) -5));
+                else if(getres()!=null&&getres().name.contains("kritter"))
+                	rot.update(Transform.makerot(new Matrix4f(), Coord3f.zu, (float) -(this.a = Gob.this.a--)));
             } catch (Loading l) {
             }
         }
