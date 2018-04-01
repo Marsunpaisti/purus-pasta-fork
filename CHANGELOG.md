@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.6.2
+	- Reverted spinning
+	- Latest merges from Amber & Default client
 ### 3.6.1
 	- Add spinning
 ### 3.6.0
