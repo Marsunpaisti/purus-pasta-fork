@@ -106,7 +106,6 @@ public class Config {
     public static boolean showweather = Utils.getprefb("showweather", true);
     public static boolean simplecrops = Utils.getprefb("simplecrops", false);
     public static boolean simpleforage = Utils.getprefb("simpleforage", false);
-    //public static boolean hidecrops = Utils.getprefb("hidecrops", false);
     public static boolean showfps = Utils.getprefb("showfps", false);
     public static boolean autohearth = Utils.getprefb("autohearth", false);
     public static boolean showplayerpaths = Utils.getprefb("showplayerpaths", false);
@@ -118,7 +117,6 @@ public class Config {
     public static boolean hidegobs = Utils.getprefb("hidegobs", false);
     public static boolean qualitybg = Utils.getprefb("qualitybg", true);
     public static int qualitybgtransparency = Utils.getprefi("qualitybgtransparency", 5);
-    public static boolean showwearbars = Utils.getprefb("showwearbars", true);
     public static boolean tilecenter = Utils.getprefb("tilecenter", false);
     public static boolean userazerty = Utils.getprefb("userazerty", false);
     public static boolean hlightcuropp = Utils.getprefb("hlightcuropp", false);
@@ -148,12 +146,10 @@ public class Config {
     public static boolean showdframestatus = Utils.getprefb("showdframestatus", true);
     public static boolean enableorthofullzoom = Utils.getprefb("enableorthofullzoom", false);
     public static boolean partycircles =  Utils.getprefb("partycircles", false);
-    public static boolean noquests =  Utils.getprefb("noquests", false);
     public static boolean alarmbram =  Utils.getprefb("alarmbram", false);
     public static double alarmbramvol = Utils.getprefd("alarmbramvol", 1.0);
     public static double sfxwhipvol = Utils.getprefd("sfxwhipvol", 0.9);
     public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
-    //public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
     public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);
@@ -456,7 +452,7 @@ public class Config {
         put("/idle", new CheckListboxItem("Idle animals"));
     }};
 
-    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(20) {{
+    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(21) {{
         put("paginae/wound/antburn", new String[]{
                 "gfx/invobjs/herbs/yarrow"
         });
@@ -543,6 +539,9 @@ public class Config {
         });
         put("paginae/wound/sealfinger", new String[]{
                 "gfx/invobjs/hartshornsalve"
+        });
+        put("paginae/wound/coalcough", new String[]{
+                "gfx/invobjs/opium"
         });
     }};
 
