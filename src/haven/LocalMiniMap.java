@@ -193,25 +193,28 @@ public class LocalMiniMap extends Widget {
                     if (res == null)
                         continue;
 
+                    String basename = res.basename();
+
                     GobIcon icon = gob.getattr(GobIcon.class);
                     if (icon != null || Config.additonalicons.containsKey(res.name)) {
                         if (Gob.Type.MOB.has(gob.type) || gob.type == Gob.Type.BAT) {
-                            dangergobs.add(gob);
-                            continue;
+                            dangergobs.add(0, gob);
+                        } else {
+                            CheckListboxItem itm = Config.icons.get(basename);
+                            if (itm == null || !itm.selected) {
+                                Tex tex;
+                                if (icon != null)
+                                    tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
+                                else
+                                    tex = Config.additonalicons.get(res.name);
+                                g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
+                            }
                         }
-
-                        CheckListboxItem itm = Config.icons.get(res.basename());
-                        if (itm == null || !itm.selected) {
-                            Tex tex;
-                            if (icon != null)
-                                tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
-                            else
-                                tex = Config.additonalicons.get(res.name);
-                            g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
-                        }
+                    } else if (gob.type == Gob.Type.PLAYER && gob.id != mv.player().id) {
+                        dangergobs.add(gob);
+                        continue;
                     }
 
-                    String basename = res.basename();
                     if (gob.type == Gob.Type.BOULDER) {
                         CheckListboxItem itm = Config.boulders.get(basename.substring(0, basename.length() - 1));
                         if (itm != null && itm.selected)
@@ -224,67 +227,6 @@ public class LocalMiniMap extends Widget {
                         CheckListboxItem itm = Config.trees.get(basename);
                         if (itm != null && itm.selected)
                             g.image(treeicn, p2c(gob.rc).add(delta).sub(treeicn.sz().div(2)));
-                    }
-                } catch (Loading l) {
-                }
-            }
-
-            for (Gob gob : dangergobs) {
-                try {
-                    GobIcon icon = gob.getattr(GobIcon.class);
-                    if (icon != null) {
-                        Tex tex;
-                        if (icon != null)
-                            tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
-                        else
-                            tex = Config.additonalicons.get(gob.getres().name);
-                        g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
-                    }
-                } catch (Loading l) {
-                }
-            }
-            
-            for (Gob gob : oc) {
-                try {
-                    Resource res = gob.getres();
-                    if (res == null)
-                        continue;
-
-                    if (gob.type == Gob.Type.PLAYER && gob.id != mv.player().id) {
-                        if (ui.sess.glob.party.memb.containsKey(gob.id))
-                            continue;
-
-                        Coord pc = p2c(gob.rc).add(delta);
-
-                        KinInfo kininfo = gob.getattr(KinInfo.class);
-                        if (pc.x >= 0 && pc.x <= sz.x && pc.y >= 0 && pc.y < sz.y) {
-                            g.chcolor(Color.BLACK);
-                            g.fcircle(pc.x, pc.y, 5, 16);
-                            g.chcolor(kininfo != null ? BuddyWnd.gc[kininfo.group] : Color.WHITE);
-                            g.fcircle(pc.x, pc.y, 4, 16);
-                            g.chcolor();
-                        }
-
-                        if (sgobs.contains(gob.id))
-                            continue;
-
-                        boolean enemy = false;
-                        if (Config.alarmunknown && kininfo == null) {
-                            sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmunknownvol);
-                            enemy = true;
-                        } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
-                            sgobs.add(gob.id);
-                            Audio.play(alarmplayersfx, Config.alarmredvol);
-                            enemy = true;
-                        }
-
-                        if (Config.autologout && enemy)
-                            gameui().act("lo");
-                        else if (Config.autohearth && enemy)
-                            gameui().act("travel", "hearth");
-
-                        continue;
                     }
 
                     if (sgobs.contains(gob.id))
@@ -321,7 +263,57 @@ public class LocalMiniMap extends Widget {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
                     }
-                } catch (Exception e) { // fail silently
+                } catch (Loading l) {
+                }
+            }
+
+            for (Gob gob : dangergobs) {
+                try {
+                    if (gob.type == Gob.Type.PLAYER) {
+                        if (ui.sess.glob.party.memb.containsKey(gob.id))
+                            continue;
+
+                        Coord pc = p2c(gob.rc).add(delta);
+
+                        KinInfo kininfo = gob.getattr(KinInfo.class);
+                        if (pc.x >= 0 && pc.x <= sz.x && pc.y >= 0 && pc.y < sz.y) {
+                            g.chcolor(Color.BLACK);
+                            g.fcircle(pc.x, pc.y, 5, 16);
+                            g.chcolor(kininfo != null ? BuddyWnd.gc[kininfo.group] : Color.WHITE);
+                            g.fcircle(pc.x, pc.y, 4, 16);
+                            g.chcolor();
+                        }
+
+                        if (sgobs.contains(gob.id))
+                            continue;
+
+                        boolean enemy = false;
+                        if (Config.alarmunknown && kininfo == null) {
+                            sgobs.add(gob.id);
+                            Audio.play(alarmplayersfx, Config.alarmunknownvol);
+                            enemy = true;
+                        } else if (Config.alarmred && kininfo != null && kininfo.group == 2) {
+                            sgobs.add(gob.id);
+                            Audio.play(alarmplayersfx, Config.alarmredvol);
+                            enemy = true;
+                        }
+
+                        if (Config.autologout && enemy)
+                            gameui().act("lo");
+                        else if (Config.autohearth && enemy)
+                            gameui().act("travel", "hearth");
+                    } else {
+                        GobIcon icon = gob.getattr(GobIcon.class);
+                        if (icon != null) {
+                            Tex tex;
+                            if (icon != null)
+                                tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
+                            else
+                                tex = Config.additonalicons.get(gob.getres().name);
+                            g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
+                        }
+                    }
+                } catch (Loading l) {
                 }
             }
         }
