@@ -1141,24 +1141,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Hide quests panel") {
-            {
-                a = Config.noquests;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("noquests", val);
-                Config.noquests = val;
-                try {
-                    if (val)
-                        gameui().questpanel.hide();
-                    else
-                        gameui().questpanel.show();
-                } catch (NullPointerException npe) { // ignored
-                }
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Show Craft/Build history toolbar") {
             {
                 a = Config.histbelt;
