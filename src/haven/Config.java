@@ -139,7 +139,6 @@ public class Config {
     public static double alarmbramvol = Utils.getprefd("alarmbramvol", 1.0);
     public static double sfxwhipvol = Utils.getprefd("sfxwhipvol", 0.9);
     public static boolean showarchvector =  Utils.getprefb("showarchvector", false);
-    //public static boolean showcddelta =  Utils.getprefb("showcddelta", false);
     public static boolean disabledrinkhotkey =  Utils.getprefb("disabledrinkhotkey", false);
     public static boolean autologout =  Utils.getprefb("autologout", false);
     public static int combatkeys =  Utils.getprefi("combatkeys", 0);

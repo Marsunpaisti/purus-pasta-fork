@@ -919,17 +919,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        /*appender.add(new CheckBox("Show attack cooldown delta") {
-            {
-                a = Config.showcddelta;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showcddelta", val);
-                Config.showcddelta = val;
-                a = val;
-            }
-        });*/
         appender.add(new CheckBox("Log combat actions to system log") {
             {
                 a = Config.logcombatactions;
