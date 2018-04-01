@@ -247,22 +247,21 @@ public class WItem extends Widget implements DTarget {
             if (cnt != null && cnt.content > 0)
                 drawamountbar(g, cnt.content, cnt.isseeds);
 
-            if (Config.showwearbars) {
-                try {
-                    for (ItemInfo info : item.info()) {
-                        if (info instanceof Wear) {
-                            double d = ((Wear) info).d;
-                            double m = ((Wear) info).m;
-                            double p = (m - d) / m;
-                            int h = (int) (p * (double) sz.y);
-                            g.chcolor(wearclr[p == 1.0 ? 3 : (int) (p / 0.25)]);
-                            g.frect(new Coord(sz.x - 3, sz.y - h), new Coord(3, h));
-                            g.chcolor();
-                            break;
-                        }
+
+            try {
+                for (ItemInfo info : item.info()) {
+                    if (info instanceof Wear) {
+                        double d = ((Wear) info).d;
+                        double m = ((Wear) info).m;
+                        double p = (m - d) / m;
+                        int h = (int) (p * (double) sz.y);
+                        g.chcolor(wearclr[p == 1.0 ? 3 : (int) (p / 0.25)]);
+                        g.frect(new Coord(sz.x - 3, sz.y - h), new Coord(3, h));
+                        g.chcolor();
+                        break;
                     }
-                } catch (Exception e) { // fail silently if info is not ready
                 }
+            } catch (Exception e) { // fail silently if info is not ready
             }
         } else {
             g.image(missing.layer(Resource.imgc).tex(), Coord.z, sz);

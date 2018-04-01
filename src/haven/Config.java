@@ -104,7 +104,6 @@ public class Config {
     public static boolean hidegobs = Utils.getprefb("hidegobs", false);
     public static boolean qualitybg = Utils.getprefb("qualitybg", true);
     public static int qualitybgtransparency = Utils.getprefi("qualitybgtransparency", 5);
-    public static boolean showwearbars = Utils.getprefb("showwearbars", true);
     public static boolean tilecenter = Utils.getprefb("tilecenter", false);
     public static boolean userazerty = Utils.getprefb("userazerty", false);
     public static boolean hlightcuropp = Utils.getprefb("hlightcuropp", false);

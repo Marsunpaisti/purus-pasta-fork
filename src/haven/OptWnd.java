@@ -597,17 +597,6 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Show wear bars") {
-            {
-                a = Config.showwearbars;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("showwearbars", val);
-                Config.showwearbars = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Show animal radius") {
             {
                 a = Config.showanimalrad;
