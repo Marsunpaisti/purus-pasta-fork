@@ -40,6 +40,8 @@ public class BotUtils {
 	
 	public static int getAmount(GItem item) {
 		int ret = -1;
+		if(item.info() == null)
+			return -1;
 		for(ItemInfo o:item.info()) {
 			if(o instanceof GItem.Amount)
 				ret = ((GItem.Amount) o).itemnum();
