@@ -1,3 +1,12 @@
+Version 1.67.7
+    Misc:
+        * Added aggro radius to wild goats.
+        * Added mole to icons list.
+        * Add seashell to alarms list.
+        * Add treatments for coaler's cough.
+        * Ignore auto flower menu settings for eatable curios and spitroast.
+
+
 Version 1.67.6
     Fixed:
         * (hopefully) issues with ore dropping.
