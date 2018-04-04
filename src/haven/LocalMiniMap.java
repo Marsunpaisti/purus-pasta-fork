@@ -210,7 +210,7 @@ public class LocalMiniMap extends Widget {
                                 g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
                             }
                         }
-                    } else if (gob.type == Gob.Type.PLAYER && player != null & gob.id != player.id) {
+                    } else if (gob.type == Gob.Type.PLAYER && player != null && gob.id != player.id) {
                         dangergobs.add(gob);
                         continue;
                     }
