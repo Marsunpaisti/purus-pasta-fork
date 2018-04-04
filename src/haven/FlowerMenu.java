@@ -41,6 +41,7 @@ public class FlowerMenu extends Widget {
     private static String nextAutoSel;
     private static long nextAutoSelTimeout;
     public static String lastSel;
+    private boolean ignoreAutoSetting;
     
     @RName("sm")
     public static class $_ implements Factory {
@@ -109,7 +110,7 @@ public class FlowerMenu extends Widget {
                 p.a = s;
                 if (s == 1.0) {
                     CheckListboxItem itm = Config.flowermenus.get(p.name);
-                    if (itm != null && itm.selected && !ui.modmeta ||
+                    if (itm != null && itm.selected && !ui.modmeta && !ignoreAutoSetting ||
                             p.name.equals(nextAutoSel) && System.currentTimeMillis() - nextAutoSelTimeout < 2000) {
                         nextAutoSel = null;
                         choose(p);
@@ -183,6 +184,8 @@ public class FlowerMenu extends Widget {
         for (int i = 0; i < options.length; i++) {
             add(opts[i] = new Petal(options[i]));
             opts[i].num = i;
+            if (options[i].equals("Study") || options[i].equals("Turn"))    // eatable curios & spitroasting
+                ignoreAutoSetting = true;
         }
     }
 
