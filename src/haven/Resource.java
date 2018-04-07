@@ -1791,7 +1791,7 @@ public class Resource implements Serializable {
             BufferedWriter out = null;
             try {
                 map.put(key, val);
-                key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=");
+                key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=").replace("\n", "\\n");
                 if (key.startsWith("\\ "))
                     key = "\\u0020" + key.substring(2);
                 if (key.endsWith("\\ "))
