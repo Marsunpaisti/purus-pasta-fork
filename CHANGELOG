@@ -1,3 +1,12 @@
+Version 1.67.9
+    Fixed:
+        * Crash when running on certain Intel drivers and 32-bit VMs.
+        * Peer into auto-selection not working.
+
+    Misc:
+        * Upstream code merge.
+
+
 Version 1.67.8
     Fixed: 
         * Crash when teleporting.
