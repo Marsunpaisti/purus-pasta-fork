@@ -1628,11 +1628,7 @@ public class Resource implements Serializable {
     };
 
     private static final String[] fmtLocStringsFlower = new String[]{
-            "Gild (%s%% chance)",
-            "Follow %s",
-            "Travel along %s",
-            "Connect %s",
-            "Extend %s"
+            "Gild (%s%% chance)"
     };
 
     private static final String[] fmtLocStringsMsg = new String[]{

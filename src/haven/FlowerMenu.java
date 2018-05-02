@@ -64,7 +64,7 @@ public class FlowerMenu extends Widget {
         public Petal(String name) {
             super(Coord.z);
             this.name = name;
-            text = ptf.render(Resource.getLocString(Resource.BUNDLE_FLOWER, name), name.startsWith("Travel ") ? Color.GREEN : Color.YELLOW);
+            text = ptf.render(Resource.getLocString(Resource.BUNDLE_FLOWER, name), Color.YELLOW);
             resize(text.sz().x + 25, ph);
         }
 
