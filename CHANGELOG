@@ -1,6 +1,16 @@
+Version 1.68.3
+    Fixed:
+        * Fix tree fruits not displaying properly.
+
+    Misc:
+        * Add flower menu option for `scale`
+        * Add cave moth to icons list
+
+
 Version 1.68.2
     Misc:
         * Upstream code merge.
+
 
 Version 1.68.1
     Fixed:
