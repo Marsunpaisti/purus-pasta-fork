@@ -1,3 +1,8 @@
+Version 1.68.4
+    Fixed:
+        * Last livestock manager entry not being displayed.
+
+
 Version 1.68.3
     Fixed:
         * Fix tree fruits not displaying properly.
