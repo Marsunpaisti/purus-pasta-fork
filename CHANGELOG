@@ -1,3 +1,11 @@
+Version 1.68.5
+    Misc:
+        * Added mistletoe and thorny thistle to icons list.
+        * Made player alaram shorter.
+        * Small update to ru l10n.
+        * Upstream code merge.
+
+
 Version 1.68.4
     Fixed:
         * Last livestock manager entry not being displayed.
