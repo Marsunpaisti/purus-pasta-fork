@@ -38,9 +38,7 @@ import java.io.*;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.*;
@@ -922,6 +920,21 @@ public class Utils {
 	if(term) out.println();
     }
 
+    public static void dumparr(short[] arr, PrintStream out, boolean term) {
+	if(arr == null) {
+	    out.print("null");
+	} else {
+	    out.print('[');
+	    boolean f = true;
+	    for(int i : arr) {
+		if(!f) out.print(", "); f = false;
+		out.print(i);
+	    }
+	    out.print(']');
+	}
+	if(term) out.println();
+    }
+
     public static String titlecase(String str) {
         return (Character.toTitleCase(str.charAt(0)) + str.substring(1));
     }
@@ -1251,6 +1264,18 @@ public class Utils {
     public static ShortBuffer wsbuf(int n) {
         return (ShortBuffer.wrap(new short[n]));
     }
+    public static FloatBuffer wbufcp(FloatBuffer a) {
+	a.rewind();
+	FloatBuffer ret = wfbuf(a.remaining());
+	ret.put(a).rewind();
+	return(ret);
+    }
+    public static IntBuffer wbufcp(IntBuffer a) {
+	a.rewind();
+	IntBuffer ret = wibuf(a.remaining());
+	ret.put(a).rewind();
+	return(ret);
+    }
 
     public static float[] c2fa(Color c) {
         return (new float[]{
@@ -1430,6 +1455,28 @@ public class Utils {
                 throw ((RuntimeException) e.getCause());
             throw (new RuntimeException(e.getCause()));
         }
+    }
+
+    public static Object invoke(Method mth, Object ob, Object... args) {
+	try {
+	    return(mth.invoke(ob, args));
+	} catch(IllegalAccessException e) {
+	    throw(new RuntimeException(e));
+	} catch(InvocationTargetException e) {
+	    if(e.getCause() instanceof RuntimeException)
+		throw((RuntimeException)e.getCause());
+	    throw(new RuntimeException(e.getCause()));
+	}
+    }
+
+    public static <R> Function<Object[], R> smthfun(Class<?> cl, String name, Class<R> rtype, Class<?>...args) throws NoSuchMethodException {
+	Method mth = cl.getDeclaredMethod(name, args);
+	if(!rtype.isAssignableFrom(mth.getReturnType()))
+	    throw(new NoSuchMethodException("unexpected return type: " + mth.getReturnType()));
+	int mod = mth.getModifiers();
+	if(((mod & Modifier.STATIC) == 0) || ((mod & Modifier.PUBLIC) == 0))
+	    throw(new NoSuchMethodException("expected public static method"));
+	return(iargs -> rtype.cast(invoke(mth, null, iargs)));
     }
 
     public static String urlencode(String in) {

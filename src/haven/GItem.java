@@ -40,7 +40,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public int meter = 0;
     public int num = -1;
     private GSprite spr;
-    private Object[] rawinfo;
+    private ItemInfo.Raw rawinfo;
     private List<ItemInfo> info = Collections.emptyList();
     private QBuff quality;
     public Tex metertex;
@@ -216,7 +216,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             info = null;
             if (rawinfo != null)
                 quality = null;
-            rawinfo = args;
+            rawinfo = new ItemInfo.Raw(args);
         } else if (name == "meter") {
             meter = (int)((Number)args[0]).doubleValue();
             metertex = Text.renderstroked(String.format("%d%%", meter), Color.WHITE, Color.BLACK, num10Fnd).tex();
