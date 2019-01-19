@@ -289,7 +289,7 @@ public class Config {
         put("almondtree", new CheckListboxItem("Almond"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(44) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(47) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -335,9 +335,12 @@ public class Config {
         put("forestsnail", new CheckListboxItem("Forest Snail"));
         put("forestlizard", new CheckListboxItem("Forest Lizard"));
         put("mole", new CheckListboxItem("Mole"));
+        put("cavemoth", new CheckListboxItem("Cave Moth"));
+        put("thornythistle", new CheckListboxItem("Thorny Thistle"));
+        put("mistletoe", new CheckListboxItem("Mistletoe"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(18) {{
+    public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(19) {{
         put("Pick", new CheckListboxItem("Pick", Resource.BUNDLE_FLOWER));
         put("Harvest", new CheckListboxItem("Harvest", Resource.BUNDLE_FLOWER));
         put("Eat", new CheckListboxItem("Eat", Resource.BUNDLE_FLOWER));
@@ -354,8 +357,9 @@ public class Config {
         put("Harvest wax", new CheckListboxItem("Harvest wax", Resource.BUNDLE_FLOWER));
         put("Slice up", new CheckListboxItem("Slice up", Resource.BUNDLE_FLOWER));
         put("Chip stone", new CheckListboxItem("Chip stone", Resource.BUNDLE_FLOWER));
-        put("Study", new CheckListboxItem("Study", Resource.BUNDLE_FLOWER));
         put("Peer into", new CheckListboxItem("Peer into", Resource.BUNDLE_FLOWER));
+        put("Break", new CheckListboxItem("Break", Resource.BUNDLE_FLOWER));
+        put("Scale", new CheckListboxItem("Scale", Resource.BUNDLE_FLOWER));
     }};
 
     public final static Map<String, Tex> additonalicons = new HashMap<String, Tex>(16) {{
@@ -452,7 +456,7 @@ public class Config {
         put("/idle", new CheckListboxItem("Idle animals"));
     }};
 
-    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(21) {{
+    public final static HashMap<String, String[]> cures = new HashMap<String, String[]>(22) {{
         put("paginae/wound/antburn", new String[]{
                 "gfx/invobjs/herbs/yarrow"
         });
@@ -511,7 +515,8 @@ public class Config {
         put("paginae/wound/unfaced", new String[]{
                 "gfx/invobjs/toadbutter",
                 "gfx/invobjs/leech",
-                "gfx/invobjs/mudointment"
+                "gfx/invobjs/mudointment",
+                "gfx/invobjs/kelpcream"
         });
         put("paginae/wound/wretchedgore", new String[]{
                 "gfx/invobjs/stitchpatch"
@@ -538,10 +543,14 @@ public class Config {
                 "gfx/invobjs/toadbutter"
         });
         put("paginae/wound/sealfinger", new String[]{
-                "gfx/invobjs/hartshornsalve"
+                "gfx/invobjs/hartshornsalve",
+                "gfx/invobjs/kelpcream"
         });
         put("paginae/wound/coalcough", new String[]{
                 "gfx/invobjs/opium"
+        });
+        put("paginae/wound/beesting", new String[]{
+                "gfx/invobjs/kelpcream"
         });
     }};
 

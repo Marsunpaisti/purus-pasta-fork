@@ -158,6 +158,51 @@ public class Resource implements Serializable {
 
     public static interface Resolver {
 	    public Indir<Resource> getres(int id);
+
+        public class ResourceMap implements Resource.Resolver {
+            public final Resource.Resolver bk;
+            public final Map<Integer, Integer> map;
+
+            public ResourceMap(Resource.Resolver bk, Map<Integer, Integer> map) {
+                this.bk = bk;
+                this.map = map;
+            }
+
+            public ResourceMap(Resource.Resolver bk, Message data) {
+                this(bk, decode(data));
+            }
+
+            public ResourceMap(Resource.Resolver bk, Object[] args) {
+                this(bk, decode(args));
+            }
+
+            public static Map<Integer, Integer> decode(Message sdt) {
+                if(sdt.eom())
+                    return(Collections.emptyMap());
+                int n = sdt.uint8();
+                Map<Integer, Integer> ret = new HashMap<>();
+                for(int i = 0; i < n; i++)
+                    ret.put(sdt.uint16(), sdt.uint16());
+                return(ret);
+            }
+
+            public static Map<Integer, Integer> decode(Object[] args) {
+                if(args.length == 0)
+                    return(Collections.emptyMap());
+                Map<Integer, Integer> ret = new HashMap<>();
+                for(int a = 0; a < args.length; a += 2)
+                    ret.put((Integer)args[a], (Integer)args[a + 1]);
+                return(ret);
+            }
+
+            public Indir<Resource> getres(int id) {
+                return(bk.getres(map.get(id)));
+            }
+
+            public String toString() {
+                return(map.toString());
+            }
+        }
     }
 
     private Resource(Pool pool, String name, int ver) {
@@ -1668,11 +1713,7 @@ public class Resource implements Serializable {
     };
 
     private static final String[] fmtLocStringsFlower = new String[]{
-            "Gild (%s%% chance)",
-            "Follow %s",
-            "Travel along %s",
-            "Connect %s",
-            "Extend %s"
+            "Gild (%s%% chance)"
     };
 
     private static final String[] fmtLocStringsMsg = new String[]{
@@ -1831,7 +1872,7 @@ public class Resource implements Serializable {
             BufferedWriter out = null;
             try {
                 map.put(key, val);
-                key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=");
+                key = key.replace(" ", "\\ ").replace(":", "\\:").replace("=", "\\=").replace("\n", "\\n");
                 if (key.startsWith("\\ "))
                     key = "\\u0020" + key.substring(2);
                 if (key.endsWith("\\ "))

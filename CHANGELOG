@@ -1,3 +1,83 @@
+Version 1.68.5
+    Misc:
+        * Added mistletoe and thorny thistle to icons list.
+        * Made player alaram shorter.
+        * Small update to ru l10n.
+        * Upstream code merge.
+
+
+Version 1.68.4
+    Fixed:
+        * Last livestock manager entry not being displayed.
+
+
+Version 1.68.3
+    Fixed:
+        * Fix tree fruits not displaying properly.
+
+    Misc:
+        * Add flower menu option for `scale`
+        * Add cave moth to icons list
+
+
+Version 1.68.2
+    Misc:
+        * Upstream code merge.
+
+
+Version 1.68.1
+    Fixed:
+        * Missing truffle snout column in livestock manager.
+
+    Misc:
+        * Added Break option to menu list.
+        * Upstream code merge.
+
+
+Version 1.68.0
+    Misc:
+        * Upstream code merge.
+
+
+Version 1.67.12
+    Misc:
+        * Upstream code merge.
+        * Updated wound treatments.
+
+
+Version 1.67.11
+    Misc:
+        * Upstream code merge.
+
+
+Version 1.67.10
+    Misc:
+        * Upstream code merge.
+
+
+Version 1.67.9
+    Fixed:
+        * Crash when running on certain Intel drivers and 32-bit VMs.
+        * Peer into auto-selection not working.
+
+    Misc:
+        * Upstream code merge.
+
+
+Version 1.67.8
+    Fixed: 
+        * Crash when teleporting.
+
+
+Version 1.67.7
+    Misc:
+        * Added aggro radius to wild goats.
+        * Added mole to icons list.
+        * Add seashell to alarms list.
+        * Add treatments for coaler's cough.
+        * Ignore auto flower menu settings for eatable curios and spitroast.
+
+
 Version 1.67.6
     Fixed:
         * (hopefully) issues with ore dropping.
