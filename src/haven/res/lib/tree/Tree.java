@@ -1,13 +1,6 @@
 package haven.res.lib.tree;
 
-import haven.Config;
-import haven.Location;
-import haven.Matrix4f;
-import haven.Message;
-import haven.RenderList;
-import haven.Resource;
-import haven.States;
-import haven.StaticSprite;
+import haven.*;
 
 public class Tree extends StaticSprite {
     private final Location scale;

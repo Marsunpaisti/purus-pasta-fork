@@ -26,16 +26,11 @@
 
 package haven;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
     private List<Buddy> buddies = new ArrayList<Buddy>();
