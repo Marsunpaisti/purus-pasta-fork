@@ -245,7 +245,7 @@ public class LocalMiniMap extends Widget {
                         Audio.play(foragablesfx, Config.alarmonforagablesvol);
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
                         sgobs.add(gob.id);
-                        Audio.play(swagsfx, Config.alarmlocresvol);
+                        Audio.play(voiveljet, Config.alarmlocresvol);
                     } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
                         Audio.play(bearsfx, 0.7);
@@ -322,7 +322,7 @@ public class LocalMiniMap extends Widget {
                         Audio.play(voiveljet, Config.alarmonforagablesvol);
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
                         sgobs.add(gob.id);
-                        Audio.play(swagsfx, Config.alarmlocresvol);
+                        Audio.play(voiveljet, Config.alarmlocresvol);
                     } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
                         Audio.play(bearsfx, 0.7);
