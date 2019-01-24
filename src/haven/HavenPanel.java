@@ -59,6 +59,7 @@ import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 
 import com.jogamp.opengl.util.awt.Screenshot;
+import haven.purus.BreakNotify;
 
 public class HavenPanel extends GLCanvas implements Runnable, Console.Directory {
     UI ui;
@@ -320,6 +321,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             }
         });
         inited = true;
+		BreakNotify.start();
     }
 
     UI newui(Session sess) {
