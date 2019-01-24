@@ -230,7 +230,6 @@ public class SeedCropFarmer extends Window implements Runnable {
 					+ " Farmer finished!", Color.white);
 			this.destroy();
 		} catch(Resource.Loading l) {
-			System.out.println("LOADING + " + l);
 		}
 	}
 
