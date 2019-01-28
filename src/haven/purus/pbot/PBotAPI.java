@@ -183,7 +183,7 @@ public class PBotAPI {
 	
 	/**
 	 * Left click to somewhere with pathfinder
-	 * @param x X-Coordinat
+	 * @param x X-Coordinate
 	 * @param y Y-Coordinate
 	 */
 	public static void pfLeftClick(int x, int y) {
