@@ -117,6 +117,9 @@
 	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt"/>
 	    	<zipfileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar" prefix="lib/"/>
 	    </zip>
+		 <exec executable="sh" >
+			 <arg line="./deploy.sh" />
+		 </exec>
 	</target>
 
   <target name="deftgt" depends="jars" />
