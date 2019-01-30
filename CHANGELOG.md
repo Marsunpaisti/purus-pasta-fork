@@ -1,5 +1,11 @@
 ## Changelog
 
+### 3.7.0
+	- Added break notifier window
+	- Fix #resource error on farmbot
+	- Display player path while using pathfinder
+	- Replace some curiosity alarms
+	- Latest merges from Amber & Default Client
 ### 3.6.2
 	- Reverted spinning
 	- Latest merges from Amber & Default client
