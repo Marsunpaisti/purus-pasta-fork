@@ -1,3 +1,9 @@
+Version 1.69.0
+    Misc:
+        * Removed coal8 and coal11 helpers.
+        * Fix crash when chopping trees.
+
+
 Version 1.68.5
     Misc:
         * Added mistletoe and thorny thistle to icons list.
