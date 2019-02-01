@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.8.0
+	- Added custom keybindings
+	- Added no -option to breakwindow
 ### 3.7.1
 	- Fix tree crash
 ### 3.7.0
