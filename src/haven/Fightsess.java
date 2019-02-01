@@ -26,6 +26,8 @@
 
 package haven;
 
+import haven.purus.KeyBindings;
+
 import java.awt.Color;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -444,7 +446,7 @@ public class Fightsess extends Widget {
     }
 
     public boolean globtype(char key, KeyEvent ev) {
-        if (ev.getKeyCode() == KeyEvent.VK_TAB && ev.isControlDown()) {
+        if(KeyBindings.cycleAggro.isThis(ev)) {
             Fightview.Relation cur = fv.current;
             if (cur != null) {
                 fv.lsrel.remove(cur);

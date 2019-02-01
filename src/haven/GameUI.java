@@ -47,6 +47,8 @@ import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.BotUtils;
 import haven.purus.ItemClickCallback;
+import haven.purus.KeyBindingWnd;
+import haven.purus.KeyBindings;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
@@ -107,6 +109,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public LivestockManager livestockwnd;
     public GameUI gui = null;
     public ItemClickCallback itemClickCallback;
+    public KeyBindingWnd keyBindingWnd;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -251,6 +254,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         PBotScriptlist.hide();
         BotUtils.gui = this;
         PBotAPI.gui = this;
+
+        keyBindingWnd = KeyBindings.initWnd();
+        keyBindingWnd.hide();
+        add(keyBindingWnd, 300, 300);
     }
     
     @Override
@@ -1000,7 +1007,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 return super.globtype(key, ev);
 
             // ctrl + tab is used to rotate opponents
-            if (key == 9 && ev.isControlDown())
+            if (KeyBindings.cycleAggro.isThis(ev))
                 return true;
 
             if (key == gkey) {
@@ -1016,7 +1023,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public class MainMenu extends Widget {
         public MainMenu() {
             super(menubg.sz());
-            add(new MenuButton("rbtn-inv", 9, Resource.getLocString(Resource.BUNDLE_LABEL, "Inventory ($col[255,255,0]{Tab})")) {
+            add(new MenuButton("rbtn-inv", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Inventory ($col[255,255,0]{Tab})")) {
                 public void click() {
                     if ((invwnd != null) && invwnd.show(!invwnd.visible)) {
                         invwnd.raise();
@@ -1024,7 +1031,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-equ", 5, Resource.getLocString(Resource.BUNDLE_LABEL, "Equipment ($col[255,255,0]{Ctrl+E})")) {
+            add(new MenuButton("rbtn-equ", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Equipment ($col[255,255,0]{Ctrl+E})")) {
                 public void click() {
                     if ((equwnd != null) && equwnd.show(!equwnd.visible)) {
                         equwnd.raise();
@@ -1032,7 +1039,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-chr", 20, Resource.getLocString(Resource.BUNDLE_LABEL, "Character Sheet ($col[255,255,0]{Ctrl+T})")) {
+            add(new MenuButton("rbtn-chr", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Character Sheet ($col[255,255,0]{Ctrl+T})")) {
                 public void click() {
                     if ((chrwdg != null) && chrwdg.show(!chrwdg.visible)) {
                         chrwdg.raise();
@@ -1040,7 +1047,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-bud", 2, Resource.getLocString(Resource.BUNDLE_LABEL, "Kith & Kin ($col[255,255,0]{Ctrl+B})")) {
+            add(new MenuButton("rbtn-bud", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Kith & Kin ($col[255,255,0]{Ctrl+B})")) {
                 public void click() {
                     if (zerg.show(!zerg.visible)) {
                         zerg.raise();
@@ -1049,7 +1056,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-opt", 15, Resource.getLocString(Resource.BUNDLE_LABEL, "Options ($col[255,255,0]{Ctrl+O})")) {
+            add(new MenuButton("rbtn-opt", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Options ($col[255,255,0]{Ctrl+O})")) {
                 public void click() {
                     if (opts.show(!opts.visible)) {
                         opts.raise();
@@ -1058,7 +1065,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                     }
                 }
             }, 0, 0);
-            add(new MenuButton("rbtn-dwn", 83, Resource.getLocString(Resource.BUNDLE_LABEL, "Menu Search ($col[255,255,0]{Shift+S})")) {
+            add(new MenuButton("rbtn-dwn", -1, Resource.getLocString(Resource.BUNDLE_LABEL, "Menu Search ($col[255,255,0]{Shift+S})")) {
                 public void click() {
                     if (menuSearch.show(!menuSearch.visible)) {
                         menuSearch.raise();
@@ -1189,6 +1196,48 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_U) {
             TexGL.disableall = !TexGL.disableall;
             return true;
+        } else if(KeyBindings.toggleInventory.isThis(ev)) {
+            if ((invwnd != null) && invwnd.show(!invwnd.visible)) {
+                invwnd.raise();
+                fitwdg(invwnd);
+            }
+            return true;
+        } else if(KeyBindings.toggleCharactersheet.isThis(ev)) {
+            if ((chrwdg != null) && chrwdg.show(!chrwdg.visible)) {
+                chrwdg.raise();
+                fitwdg(chrwdg);
+            }
+        } else if(KeyBindings.toggleEquipment.isThis(ev)) {
+            if ((equwnd != null) && equwnd.show(!equwnd.visible)) {
+                equwnd.raise();
+                fitwdg(equwnd);
+            }
+        } else if(KeyBindings.toggleKin.isThis(ev)) {
+            if (zerg.show(!zerg.visible)) {
+                zerg.raise();
+                fitwdg(zerg);
+                setfocus(zerg);
+            }
+        } else if(KeyBindings.toggleMenuSearch.isThis(ev)) {
+            if (menuSearch.show(!menuSearch.visible)) {
+                menuSearch.raise();
+                fitwdg(menuSearch);
+                setfocus(menuSearch);
+            }
+        } else if(KeyBindings.toggleOptions.isThis(ev)) {
+            if (opts.show(!opts.visible)) {
+                opts.raise();
+                fitwdg(opts);
+                setfocus(opts);
+            }
+        } else if(KeyBindings.crawlSpeed.isThis(ev)) {
+            Speedget.SpeedToSet = 0;
+        } else if(KeyBindings.walkSpeed.isThis(ev)) {
+            Speedget.SpeedToSet = 1;
+        } else if(KeyBindings.runSpeed.isThis(ev)) {
+            Speedget.SpeedToSet = 2;
+        } else if(KeyBindings.sprintSpeed.isThis(ev)) {
+            Speedget.SpeedToSet = 3;
         }
         return (super.globtype(key, ev));
     }

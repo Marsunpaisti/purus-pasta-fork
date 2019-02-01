@@ -277,7 +277,7 @@ public class Utils {
         }
     }
 
-    static void setprefchklst(String prefname, Map<String, CheckListboxItem> val) {
+    public static void setprefchklst(String prefname, Map<String, CheckListboxItem> val) {
         try {
             String jsonarr = "";
             Iterator it = val.entrySet().iterator();
@@ -328,7 +328,7 @@ public class Utils {
         }
     }
 
-    static int getprefi(String prefname, int def) {
+    public static int getprefi(String prefname, int def) {
         try {
             return (prefs().getInt(prefname, def));
         } catch (SecurityException e) {
@@ -336,14 +336,14 @@ public class Utils {
         }
     }
 
-    static void setprefi(String prefname, int val) {
+    public static void setprefi(String prefname, int val) {
         try {
             prefs().putInt(prefname, val);
         } catch (SecurityException e) {
         }
     }
 
-    static double getprefd(String prefname, double def) {
+    public static double getprefd(String prefname, double def) {
         try {
             return (prefs().getDouble(prefname, def));
         } catch (SecurityException e) {
@@ -351,14 +351,14 @@ public class Utils {
         }
     }
 
-    static void setprefd(String prefname, double val) {
+    public static void setprefd(String prefname, double val) {
         try {
             prefs().putDouble(prefname, val);
         } catch (SecurityException e) {
         }
     }
 
-    static boolean getprefb(String prefname, boolean def) {
+    public static boolean getprefb(String prefname, boolean def) {
         try {
             return (prefs().getBoolean(prefname, def));
         } catch (SecurityException e) {
@@ -373,7 +373,7 @@ public class Utils {
         }
     }
 
-    static Coord getprefc(String prefname, Coord def) {
+    public static Coord getprefc(String prefname, Coord def) {
         try {
             String val = prefs().get(prefname, null);
             if (val == null)
@@ -387,14 +387,14 @@ public class Utils {
         }
     }
 
-    static void setprefc(String prefname, Coord val) {
+    public static void setprefc(String prefname, Coord val) {
         try {
             prefs().put(prefname, val.x + "x" + val.y);
         } catch (SecurityException e) {
         }
     }
 
-    static byte[] getprefb(String prefname, byte[] def) {
+    public static byte[] getprefb(String prefname, byte[] def) {
         try {
             return (prefs().getByteArray(prefname, def));
         } catch (SecurityException e) {
@@ -402,7 +402,7 @@ public class Utils {
         }
     }
 
-    static void setprefb(String prefname, byte[] val) {
+    public static void setprefb(String prefname, byte[] val) {
         try {
             prefs().putByteArray(prefname, val);
         } catch (SecurityException e) {

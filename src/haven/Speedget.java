@@ -34,6 +34,7 @@ public class Speedget extends Widget {
     public static final Coord tsz;
     public int cur, max;
     public boolean runonloginset;
+    public static int SpeedToSet = -1;
 
     static {
         String[] names = {"crawl", "walk", "run", "sprint"};
@@ -71,6 +72,11 @@ public class Speedget extends Widget {
         if (Config.runonlogin && !runonloginset && max > 1) {
             set(2);
             runonloginset = true;
+        }
+
+        if(SpeedToSet > -1) {
+            set(SpeedToSet);
+            SpeedToSet = -1;
         }
 
         int x = 0;
