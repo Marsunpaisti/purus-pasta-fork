@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.7.1
+	- Fix tree crash
 ### 3.7.0
 	- Added break notifier window
 	- Fix #resource error on farmbot
