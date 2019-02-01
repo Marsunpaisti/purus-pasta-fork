@@ -9,10 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 public class BreakNotify {
 
+	private static ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+	private static Runnable run;
 
-	public static void start() {
-		ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
-		Runnable run = new Runnable() {
+
+	public static void start() { run = new Runnable() {
 			@Override
 			public void run() {
 				BreakWnd bw = new BreakWnd();
@@ -21,7 +22,7 @@ public class BreakNotify {
 				bw.raise();
 			}
 		};
-		ses.scheduleAtFixedRate(run, 30, 30, TimeUnit.MINUTES);
+		ses.schedule(run,30, TimeUnit.MINUTES);
 	}
 
 	private static class BreakWnd extends Window {
@@ -32,6 +33,7 @@ public class BreakNotify {
 			add(new Button(60, "Yes, I will") {
 				@Override
 				public void click() {
+					ses.schedule(run,30, TimeUnit.MINUTES);
 					parent.reqdestroy();
 				}
 			}, new Coord(629 / 2 - 60, 50));
@@ -43,6 +45,7 @@ public class BreakNotify {
 		public void wdgmsg (Widget sender, String msg, Object...args){
 			if(sender == cbtn) {
 				ui.destroy(this);
+				ses.schedule(run,30, TimeUnit.MINUTES);
 			} else {
 				super.wdgmsg(sender, msg, args);
 			}
