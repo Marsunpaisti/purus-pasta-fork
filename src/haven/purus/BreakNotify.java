@@ -37,6 +37,13 @@ public class BreakNotify {
 					parent.reqdestroy();
 				}
 			}, new Coord(629 / 2 - 60, 50));
+
+			add(new Button(60, "No") {
+				@Override
+				public void click() {
+					parent.reqdestroy();
+				}
+			}, new Coord(629 / 2 - 60, 80));
 			pack();
 			this.c = new Coord(HavenPanel.w / 2 - sz.x / 2, HavenPanel.h / 2 - sz.y / 2);
 		}
