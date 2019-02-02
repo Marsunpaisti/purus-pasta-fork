@@ -242,6 +242,7 @@ public class MapWnd extends Window {
             new Pair<>("Ancient Windthrow", "windthrow"),
             new Pair<>("Clay Pit", "claypit"),
             new Pair<>("Crystal Rock", "crystalpatch"),
+            new Pair<>("Fairy Stone", "fairystone"),
             new Pair<>("Geyser", "geyser"),
             new Pair<>("Great Cave Organ", "caveorgan"),
             new Pair<>("Guano Pile", "guanopile"),
