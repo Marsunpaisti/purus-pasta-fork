@@ -1226,6 +1226,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 menuSearch.raise();
                 fitwdg(menuSearch);
                 setfocus(menuSearch);
+                menuSearch.ignoreFirst = true;
+                return (true);
             }
             return true;
         } else if(KeyBindings.toggleOptions.isThis(ev)) {

@@ -1,5 +1,7 @@
 package haven;
 
+import haven.purus.KeyBindings;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,7 @@ import java.util.Set;
 public class MenuSearch extends GameUI.Hidewnd {
     private TextEntry search;
     private ActionsList list;
+    public boolean ignoreFirst = false; // Ugly hack for ugly client
 
     public MenuSearch() {
         super(new Coord(228, 280), "Search...");
@@ -17,6 +20,11 @@ public class MenuSearch extends GameUI.Hidewnd {
         search = new TextEntry(210, "") {
             @Override
             public boolean type(char c, KeyEvent ev) {
+                if(ignoreFirst) {
+                    ignoreFirst = false;
+                    if(!KeyBindings.toggleMenuSearch.isCurAltMod() && !KeyBindings.toggleMenuSearch.isCurCtrlMod())
+                        return true;
+                }
                 if (!parent.visible)
                     return false;
                 if (c == '\n' && list.acts.size() > 0) {
