@@ -9,7 +9,7 @@ public class KeyBindings {
 
 	public static KeyBinding toggleInventory = new KeyBinding("toggleInventory", KeyEvent.VK_TAB, false, false, false, "Inventory");
 	public static KeyBinding toggleEquipment = new KeyBinding("toggleEquipment", KeyEvent.VK_E, true, false, false, "Equipment");
-	public static KeyBinding toggleMenuSearch = new KeyBinding("toggleMenuSearch", KeyEvent.VK_S, true, false, false, "Menu search");
+	public static KeyBinding toggleMenuSearch = new KeyBinding("toggleMenuSearch", KeyEvent.VK_S, false, true, false, "Menu search");
 	public static KeyBinding toggleKin = new KeyBinding("toggleKin", KeyEvent.VK_B, true, false, false, "Kith & Kin");
 	public static KeyBinding toggleCharactersheet = new KeyBinding("toggleCharactersheet", KeyEvent.VK_C, true, false, false, "Character sheet");
 	public static KeyBinding toggleOptions = new KeyBinding("toggleOptions", KeyEvent.VK_O, true, false, false, "Options");

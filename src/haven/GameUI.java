@@ -1207,37 +1207,46 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 chrwdg.raise();
                 fitwdg(chrwdg);
             }
+            return true;
         } else if(KeyBindings.toggleEquipment.isThis(ev)) {
             if ((equwnd != null) && equwnd.show(!equwnd.visible)) {
                 equwnd.raise();
                 fitwdg(equwnd);
             }
+            return true;
         } else if(KeyBindings.toggleKin.isThis(ev)) {
             if (zerg.show(!zerg.visible)) {
                 zerg.raise();
                 fitwdg(zerg);
                 setfocus(zerg);
             }
+            return true;
         } else if(KeyBindings.toggleMenuSearch.isThis(ev)) {
             if (menuSearch.show(!menuSearch.visible)) {
                 menuSearch.raise();
                 fitwdg(menuSearch);
                 setfocus(menuSearch);
             }
+            return true;
         } else if(KeyBindings.toggleOptions.isThis(ev)) {
             if (opts.show(!opts.visible)) {
                 opts.raise();
                 fitwdg(opts);
                 setfocus(opts);
             }
+            return true;
         } else if(KeyBindings.crawlSpeed.isThis(ev)) {
             Speedget.SpeedToSet = 0;
+            return true;
         } else if(KeyBindings.walkSpeed.isThis(ev)) {
             Speedget.SpeedToSet = 1;
+            return true;
         } else if(KeyBindings.runSpeed.isThis(ev)) {
             Speedget.SpeedToSet = 2;
+            return true;
         } else if(KeyBindings.sprintSpeed.isThis(ev)) {
             Speedget.SpeedToSet = 3;
+            return true;
         }
         return (super.globtype(key, ev));
     }
