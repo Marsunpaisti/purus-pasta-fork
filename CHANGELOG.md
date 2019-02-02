@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.8.1
+	- Fix some keybindings
 ### 3.8.0
 	- Added custom keybindings
 	- Added no -option to breakwindow
