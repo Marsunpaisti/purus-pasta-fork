@@ -1,3 +1,15 @@
+Version 1.69.2
+    New:
+        * Volume slider for bees.
+
+    Fixed:
+        * Crash when using world map.
+        * "disable item dropping over water" not working with oceans.
+
+    Misc:
+        * Added some of the new trees and boulders.
+
+
 Version 1.69.1
     Misc:
         * Added some of the new trees/bushes/boulders/etc.
