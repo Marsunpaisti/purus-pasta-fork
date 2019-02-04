@@ -171,7 +171,7 @@ public class Config {
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(15) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(16) {{
         put("basalt", new CheckListboxItem("Basalt"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
@@ -187,6 +187,7 @@ public class Config {
         put("flint", new CheckListboxItem("Flint"));
         put("hornblende", new CheckListboxItem("Hornblende"));
         put("olivine", new CheckListboxItem("Olivine"));
+        put("alabaster", new CheckListboxItem("Alabaster"));
     }};
 
     public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(23) {{
@@ -215,7 +216,7 @@ public class Config {
         put("gorse", new CheckListboxItem("Gorse"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> trees = new HashMap<String, CheckListboxItem>(51) {{
+    public final static HashMap<String, CheckListboxItem> trees = new HashMap<String, CheckListboxItem>(52) {{
         put("alder", new CheckListboxItem("Alder"));
         put("corkoak", new CheckListboxItem("Corkoak"));
         put("plumtree", new CheckListboxItem("Plum Tree"));
@@ -267,6 +268,7 @@ public class Config {
         put("treeheath", new CheckListboxItem("Tree Heath"));
         put("lotetree", new CheckListboxItem("Lote Tree"));
         put("sorbtree", new CheckListboxItem("Sorb"));
+        put("persimmontree", new CheckListboxItem("Persimmon"));
     }};
 
     public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(47) {{
