@@ -2016,7 +2016,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                         // we came here because Config.nodropping is set, check water tiles
                         int t = glob.map.gettile(player().rc.floor(tilesz));
                         Resource res = glob.map.tilesetr(t);
-                        if (res != null && (res.name.equals("gfx/tiles/water") || res.name.equals("gfx/tiles/deep"))) {
+                        if (res != null &&
+                                (res.name.equals("gfx/tiles/water") ||
+                                    res.name.equals("gfx/tiles/deep") ||
+                                    res.name.equals("gfx/tiles/odeeper") ||
+                                    res.name.equals("gfx/tiles/odeep") ||
+                                    res.name.equals("gfx/tiles/owater"))) {
                             nodropping = true;
                         }
                     }
