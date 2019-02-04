@@ -188,8 +188,9 @@ public class CacheMap<K, V> extends AbstractMap<K, V> {
         Reference<? extends V> ref;
         while ((ref = cleanq.poll()) != null) {
             Ref rr = (Ref) ref;
-            remove(rr.key());
+            back.remove(rr.key());
         }
+
     }
 
     public V get(Object k) {
