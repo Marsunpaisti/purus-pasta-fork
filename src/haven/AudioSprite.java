@@ -135,6 +135,10 @@ public class AudioSprite {
                     return(clips.get((int)(Math.random() * clips.size())).stream());
                 }
             };
+
+            if (Config.sfxbeevol != 1.0 && "sfx/kritter/beeswarm".equals(res.name))
+                rep = new Audio.VolAdjust(rep, Config.sfxbeevol);
+
             this.clip = new ActAudio.PosClip(rep);
         }
 
