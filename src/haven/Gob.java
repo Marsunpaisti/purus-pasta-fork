@@ -26,15 +26,10 @@
 
 package haven;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Random;
-
 import haven.resutil.BPRadSprite;
+
+import java.awt.*;
+import java.util.*;
 
 public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Coord2d rc;
@@ -74,7 +69,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public enum Type {
         OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
         PLANT(16), MULTISTAGE_PLANT(17),
-        MOB(32), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39),
+        MOB(32), WOLF(33), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39),
         WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), WAGON(600), WALL(602), DREAMCATCHER(603), HOUSE(604);
 
         public final int value;
@@ -475,6 +470,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.TROLL;
         else if (name.endsWith("/bat"))
             type = Type.BAT;
+        else if (name.endsWith("/wolf"))
+            type = Type.WOLF;
         else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine") || name.endsWith("/adder"))
             type = Type.MOB;
         else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))

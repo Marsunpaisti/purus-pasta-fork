@@ -58,6 +58,9 @@ public class LocalMiniMap extends Widget {
 	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
     private static final Resource voiveljet = Resource.local().loadwait("sfx/alarms/voiveljet");
+    private static final Resource wolf1 = Resource.local().loadwait("sfx/alarms/wolf1");
+    private static final Resource wolf2 = Resource.local().loadwait("sfx/alarms/wolf2");
+    private static final Resource wolf3 = Resource.local().loadwait("sfx/alarms/wolf3");
     private static final Resource bearsfx = Resource.local().loadwait("sfx/alarms/bear");
     private static final Resource lynxfx = Resource.local().loadwait("sfx/lynx");
     private static final Resource walrusfx = Resource.local().loadwait("sfx/alarms/walrus");
@@ -246,6 +249,15 @@ public class LocalMiniMap extends Widget {
                     } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
                         sgobs.add(gob.id);
                         Audio.play(voiveljet, Config.alarmlocresvol);
+                    } else if (gob.type == Gob.Type.WOLF && gob.knocked == Boolean.FALSE) {
+                        sgobs.add(gob.id);
+                        double rnd = Math.random();
+                        if(rnd <= 1.0/3)
+                            Audio.play(wolf1, 1.0);
+                        else if(rnd <= 1.0/3*2)
+                            Audio.play(wolf2, 1.0);
+                        else
+                            Audio.play(wolf3, 1.0);
                     } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
                         Audio.play(bearsfx, 0.7);
