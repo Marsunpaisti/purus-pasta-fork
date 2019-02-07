@@ -68,7 +68,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public enum Type {
         OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
         PLANT(16), MULTISTAGE_PLANT(17),
-        MOB(32), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39),
+        MOB(32), BEAR(34), LYNX(35), TROLL(38), WALRUS(39),
         WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68);
 
         public final int value;
@@ -469,7 +469,12 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.TROLL;
         else if (name.endsWith("/bat"))
             type = Type.BAT;
-        else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine") || name.endsWith("/adder"))
+        else if (name.endsWith("/boar") ||
+                name.endsWith("/badger") ||
+                name.endsWith("/wolverine") ||
+                name.endsWith("/adder") ||
+                name.endsWith("/wolf") ||
+                name.endsWith("/wildgoat"))
             type = Type.MOB;
         else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))
             type = Type.WOODEN_SUPPORT;
@@ -489,8 +494,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.MUSSEL;
         else if (name.endsWith("/goldeneagle"))
             type = Type.EAGLE;
-        else if (name.endsWith("/wildgoat"))
-            type = Type.WILDGOAT;
         else if (Config.alarmitems.containsKey(name) && Config.alarmitems.get(name).selected)
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
