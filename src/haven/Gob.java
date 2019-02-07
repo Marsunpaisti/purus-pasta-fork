@@ -556,7 +556,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         Drawable d = getattr(Drawable.class);
         if (d != null) {
             if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
-                GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this);
                 if (bbox != null) {
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
                 }
@@ -565,7 +565,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             }
 
             if (Config.showboundingboxes) {
-                GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this);
                 if (bbox != null)
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, false)), null);
             }
