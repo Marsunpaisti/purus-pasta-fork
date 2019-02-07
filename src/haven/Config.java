@@ -273,7 +273,7 @@ public class Config {
         put("silverfir", new CheckListboxItem("Silver Fir"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(47) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(49) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -322,6 +322,8 @@ public class Config {
         put("cavemoth", new CheckListboxItem("Cave Moth"));
         put("thornythistle", new CheckListboxItem("Thorny Thistle"));
         put("mistletoe", new CheckListboxItem("Mistletoe"));
+        put("waterstrider", new CheckListboxItem("Waterstrider"));
+        put("firefly", new CheckListboxItem("Firefly"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(19) {{
