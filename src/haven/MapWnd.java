@@ -250,6 +250,7 @@ public class MapWnd extends Window {
             new Pair<>("Heart of the Woods", "woodheart"),
             new Pair<>("Ice Spire", "icespire"),
             new Pair<>("Jotun Mussel", "jotunmussel"),
+            new Pair<>("Lilypad Lotus", "lilypadlotus"),
             new Pair<>("Quest Givers", "qst"),
             new Pair<>("Salt Basin", "saltbasin"),
             new Pair<>("Swirling Vortex", "watervortex")
