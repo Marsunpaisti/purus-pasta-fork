@@ -1,3 +1,15 @@
+Version 1.69.3
+    Fixed:
+        * Drying frames incorrectly highlighted when drying fish.
+        * Warning circle not showing around wolves.
+
+    Misc:
+        * Re-enabled geo-location.
+        * Added more trees to the trees list and local resources to alarms.
+        * Add fireflies and waterstriders to icons list.
+        * Preserve :placegrid setting across client restarts.
+
+
 Version 1.69.2
     New:
         * Volume slider for bees.
