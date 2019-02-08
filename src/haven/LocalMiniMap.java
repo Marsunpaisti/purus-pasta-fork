@@ -289,6 +289,15 @@ public class LocalMiniMap extends Widget {
 
             for (Gob gob : dangergobs) {
                 try {
+                    GobIcon icon = gob.getattr(GobIcon.class);
+                    if (icon != null) {
+                        Tex tex;
+                        if (icon != null)
+                            tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
+                        else
+                            tex = Config.additonalicons.get(gob.getres().name);
+                        g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
+                    }
                     if (gob.type == Gob.Type.PLAYER) {
                         if (ui.sess.glob.party.memb.containsKey(gob.id))
                             continue;
@@ -359,16 +368,6 @@ public class LocalMiniMap extends Widget {
                     } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
-                    } else {
-                        GobIcon icon = gob.getattr(GobIcon.class);
-                        if (icon != null) {
-                            Tex tex;
-                            if (icon != null)
-                                tex = gob.knocked == Boolean.TRUE ? icon.texgrey() : icon.tex();
-                            else
-                                tex = Config.additonalicons.get(gob.getres().name);
-                            g.image(tex, p2c(gob.rc).sub(tex.sz().div(2)).add(delta));
-                        }
                     }
                 } catch (Loading l) {
                 }
