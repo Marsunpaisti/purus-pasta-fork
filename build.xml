@@ -59,7 +59,7 @@
       <fileset dir="build/classes-lib" />
       <manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="lib/pasta-res.jar lib/jogl.jar lib/gluegen-rt.jar lib/amber-res.jar lib/builtin-res.jar lib/hafen-res.jar lib/l10n.jar" />
+	<attribute name="Class-Path" value="lib/sqlite-jdbc.jar lib/pasta-res.jar lib/jogl.jar lib/gluegen-rt.jar lib/amber-res.jar lib/builtin-res.jar lib/hafen-res.jar lib/l10n.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -106,6 +106,7 @@
 	<include name="hafen-res.jar" />
 	<include name="builtin-res.jar" />
 	<include name="amber-res.jar" />
+	<include name="sqlite-jdbc.jar" />
       </fileset>
       <fileset dir="lib/jogl-natives" includes="*.jar">
       </fileset>
@@ -115,7 +116,7 @@
 	 <target name="dist" depends="rebuild">
 	    <zip destfile="build/update.zip" update="true">
 	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt"/>
-	    	<zipfileset dir="build/lib" includes="amber-res.jar, l10n.jar, pasta-res.jar" prefix="lib/"/>
+	    	<zipfileset dir="build/lib" includes="sqlite-jdbc.jar, amber-res.jar, l10n.jar, pasta-res.jar" prefix="lib/"/>
 	    </zip>
 		 <exec executable="sh" >
 			 <arg line="./deploy.sh" />
