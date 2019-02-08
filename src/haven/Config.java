@@ -97,6 +97,7 @@ public class Config {
     public static double sfxquernvol = Utils.getprefd("sfxquernvol", 0.9);
     public static double sfxfirevol = Utils.getprefd("sfxfirevol", 1.0);
     public static double sfxclapvol = Utils.getprefd("sfxclapvol", 1.0);
+    public static double sfxbeevol = Utils.getprefd("sfxbeevol", 0.5);
     public static boolean showcraftcap = Utils.getprefb("showcraftcap", true);
     public static boolean showgobhp = Utils.getprefb("showgobhp", false);
     public static boolean showplantgrowstage = Utils.getprefb("showplantgrowstage", false);
@@ -198,7 +199,7 @@ public class Config {
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(14) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(16) {{
         put("basalt", new CheckListboxItem("Basalt"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
@@ -213,9 +214,11 @@ public class Config {
         put("marble", new CheckListboxItem("Marble"));
         put("flint", new CheckListboxItem("Flint"));
         put("hornblende", new CheckListboxItem("Hornblende"));
+        put("olivine", new CheckListboxItem("Olivine"));
+        put("alabaster", new CheckListboxItem("Alabaster"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(22) {{
+    public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(23) {{
         put("arrowwood", new CheckListboxItem("Arrowwood"));
         put("crampbark", new CheckListboxItem("Crampbark"));
         put("sandthorn", new CheckListboxItem("Sandthorn"));
@@ -238,9 +241,10 @@ public class Config {
         put("raspberrybush", new CheckListboxItem("Raspberry"));
         put("caprifole", new CheckListboxItem("Caprifole"));
         put("redcurrant", new CheckListboxItem("Redcurrant"));
+        put("gorse", new CheckListboxItem("Gorse"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> trees = new HashMap<String, CheckListboxItem>(46) {{
+    public final static HashMap<String, CheckListboxItem> trees = new HashMap<String, CheckListboxItem>(54) {{
         put("alder", new CheckListboxItem("Alder"));
         put("corkoak", new CheckListboxItem("Corkoak"));
         put("plumtree", new CheckListboxItem("Plum Tree"));
@@ -287,9 +291,17 @@ public class Config {
         put("planetree", new CheckListboxItem("Plane Tree"));
         put("quincetree", new CheckListboxItem("Quince"));
         put("almondtree", new CheckListboxItem("Almond"));
+        put("terebinth", new CheckListboxItem("Terebinth"));
+        put("chastetree", new CheckListboxItem("Chastetree"));
+        put("treeheath", new CheckListboxItem("Tree Heath"));
+        put("lotetree", new CheckListboxItem("Lote Tree"));
+        put("sorbtree", new CheckListboxItem("Sorb"));
+        put("persimmontree", new CheckListboxItem("Persimmon"));
+        put("medlartree", new CheckListboxItem("Medlar"));
+        put("silverfir", new CheckListboxItem("Silver Fir"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(47) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(49) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -338,6 +350,8 @@ public class Config {
         put("cavemoth", new CheckListboxItem("Cave Moth"));
         put("thornythistle", new CheckListboxItem("Thorny Thistle"));
         put("mistletoe", new CheckListboxItem("Mistletoe"));
+        put("waterstrider", new CheckListboxItem("Waterstrider"));
+        put("firefly", new CheckListboxItem("Firefly"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(19) {{
@@ -404,7 +418,9 @@ public class Config {
             "gfx/terobjs/geyser",
             "gfx/terobjs/claypit",
             "gfx/terobjs/caveorgan",
-            "gfx/terobjs/crystalpatch"));
+            "gfx/terobjs/crystalpatch",
+            "gfx/terobjs/fairystone",
+            "gfx/terobjs/lilypadlotus"));
 
     public final static Set<String> mineablesStone = new HashSet<String>(Arrays.asList(
             "gneiss",

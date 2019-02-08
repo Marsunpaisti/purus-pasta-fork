@@ -504,8 +504,6 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         	type = Type.WALL;
         else if (name.endsWith("/goldeneagle"))
             type = Type.EAGLE;
-        else if (name.endsWith("/wildgoat"))
-            type = Type.WILDGOAT;
         else if (Config.alarmitems.containsKey(name) && Config.alarmitems.get(name).selected)
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
@@ -539,7 +537,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                         empty = false;
                         Resource olres = olires.get();
                         if (olres != null) {
-                            if (olres.name.endsWith("-blood") || olres.name.endsWith("-windweed")) {
+                            if (olres.name.endsWith("-blood") || olres.name.endsWith("-windweed") || olres.name.endsWith("-fishraw")) {
                                 done = false;
                                 break;
                             }
@@ -570,7 +568,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         	// Replace hide stuff with Purus Pasta hide
         	if(Config.hidegobs) {
         		if(Config.hideTrees && type == Type.TREE) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
@@ -578,27 +576,27 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         			// Crops don't have bounding boxes
         			rl.add(new Overlay(new GobHitbox(this, new Coord(-5, -5), new Coord(5, 5), true)), null);
         		} else if(Config.hideWalls && type == Type.WALL) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
         		} else if(Config.hideBushes && type == Type.BUSH) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
         		} else if(Config.hideDFrames && type == Type.DFRAME) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
         		} else if(Config.hideWagons && type == Type.WAGON) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
         		} else if(Config.hideHouses && type == Type.HOUSE) {
-        			GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+        			GobHitbox.BBox bbox = GobHitbox.getBBox(this);
         			if(bbox != null) {
         				rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
         			}
@@ -606,8 +604,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         			d.setup(rl);
         	} else
         		d.setup(rl);
-          /*if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
-                GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+           /* if (Config.hidegobs && (type == Type.TREE || type == Type.BUSH)) {
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this);
                 if (bbox != null) {
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, true)), null);
                 }
@@ -616,7 +614,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             }*/
 
             if (Config.showboundingboxes) {
-                GobHitbox.BBox bbox = GobHitbox.getBBox(this, true);
+                GobHitbox.BBox bbox = GobHitbox.getBBox(this);
                 if (bbox != null)
                     rl.add(new Overlay(new GobHitbox(this, bbox.a, bbox.b, false)), null);
             }

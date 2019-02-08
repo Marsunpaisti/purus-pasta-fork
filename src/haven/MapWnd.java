@@ -251,6 +251,7 @@ public class MapWnd extends Window {
             new Pair<>("Ancient Windthrow", "windthrow"),
             new Pair<>("Clay Pit", "claypit"),
             new Pair<>("Crystal Rock", "crystalpatch"),
+            new Pair<>("Fairy Stone", "fairystone"),
             new Pair<>("Geyser", "geyser"),
             new Pair<>("Great Cave Organ", "caveorgan"),
             new Pair<>("Guano Pile", "guanopile"),
@@ -258,6 +259,7 @@ public class MapWnd extends Window {
             new Pair<>("Heart of the Woods", "woodheart"),
             new Pair<>("Ice Spire", "icespire"),
             new Pair<>("Jotun Mussel", "jotunmussel"),
+            new Pair<>("Lilypad Lotus", "lilypadlotus"),
             new Pair<>("Quest Givers", "qst"),
             new Pair<>("Salt Basin", "saltbasin"),
             new Pair<>("Swirling Vortex", "watervortex")
