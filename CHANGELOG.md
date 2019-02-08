@@ -1,6 +1,11 @@
 ## Changelog
 
 ### 3.8.1
+	- Added alarm for wolves
+	- Fixed server status button
+	- Fixed some icons not showing
+	- Latest merges from Amber & Default client
+### 3.8.1
 	- Fix some keybindings
 ### 3.8.0
 	- Added custom keybindings
