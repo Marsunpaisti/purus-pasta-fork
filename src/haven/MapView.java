@@ -64,7 +64,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public double shake = 0.0;
     public static int plobgran = Utils.getprefi("placegridval", 8);
     private static final Map<String, Class<? extends Camera>> camtypes = new HashMap<String, Class<? extends Camera>>();
-    private String tooltip;
+    public String tooltip;
     private boolean showgrid;
     private TileOutline gridol;
     private Coord lasttc = Coord.z;

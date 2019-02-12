@@ -1052,6 +1052,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_I) {
             Config.resinfo = !Config.resinfo;
             Utils.setprefb("resinfo", Config.resinfo);
+            map.tooltip = null;
             msg("Resource info on shift/shift+ctrl is now turned " + (Config.resinfo ? "on" : "off"), Color.WHITE);
             return true;
         } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_B) {
