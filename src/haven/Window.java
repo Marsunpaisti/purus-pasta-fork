@@ -26,15 +26,16 @@
 
 package haven;
 
-import static haven.PUtils.blurmask2;
-import static haven.PUtils.rasterimg;
+import haven.resutil.Curiosity;
+import haven.resutil.FoodInfo;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import haven.resutil.Curiosity;
+import static haven.PUtils.blurmask2;
+import static haven.PUtils.rasterimg;
 
 public class Window extends Widget implements DTarget {
     public static final Tex bg = Resource.loadtex("gfx/hud/wnd/lg/bg");
@@ -113,6 +114,29 @@ public class Window extends Widget implements DTarget {
         chcap(Resource.getLocString(Resource.BUNDLE_WINDOW, cap));
 	resize2(sz);
         setfocustab(true);
+        if(cap.equals("Table")) {
+            add(new Button(200, "Feast All!") {
+                @Override
+                public void click() {
+                	for(Widget wdg = this.parent.lchild; wdg != null; wdg = wdg.prev) {
+                		if(wdg instanceof Button) {
+                			Button btn = (Button)wdg;
+                			if(btn.text.text.equals("Feast!"))
+                			    btn.click();
+						}
+					}
+                    for(Widget wdg = this.parent.lchild; wdg!=null; wdg = wdg.prev) {
+                        if(wdg instanceof Inventory) {
+                            for(WItem item : ((Inventory) wdg).wmap.values()) {
+                                FoodInfo fi = ItemInfo.find(FoodInfo.class, item.item.info());
+                                if(fi != null)
+                                    item.item.wdgmsg("take", Coord.z);
+                            }
+                        }
+                    }
+                }
+            }, new Coord(0, 375));
+        }
     }
 
     public Window(Coord sz, String cap, boolean lg) {
@@ -177,7 +201,7 @@ public class Window extends Widget implements DTarget {
 					sizeY += 15;
 				}
 	    		resize(230, sizeY);
-	    	}
+            }
     	} catch(Loading l) {
     		
     	}
