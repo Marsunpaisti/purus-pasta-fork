@@ -1,3 +1,12 @@
+Version 1.69.4
+    Fixed:
+        * Fix resource tooltip not disappearing after turning the resource viewer off.
+        * Crash when using shift+click on certain Linux distributions.
+
+    Misc:
+        * Updated stones list.
+
+
 Version 1.69.3
     Fixed:
         * Drying frames incorrectly highlighted when drying fish.
