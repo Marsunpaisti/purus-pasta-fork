@@ -1,0 +1,95 @@
+package haven.purus;
+
+import haven.*;
+
+public class DrinkWater implements Runnable {
+
+	GameUI gui;
+
+	public DrinkWater(GameUI gui) {
+		this.gui = gui;
+	}
+
+	@Override
+	public void run() {
+		drink();
+	}
+
+	private void drink() {
+		WItem drinkFromThis = null;
+		Equipory e = gui.getequipory();
+		WItem l = e.quickslots[6];
+		WItem r = e.quickslots[7];
+		if (canDrinkFrom(l))
+			drinkFromThis = l;
+		if (canDrinkFrom(r))
+			drinkFromThis = r;
+		for (Widget w = gui.lchild; w != null; w = w.prev) {
+			if (w instanceof Window) {
+				Window wnd = (Window) w;
+				for(Widget wdg = wnd.lchild; wdg != null; wdg = wdg.prev) {
+					if(wdg instanceof Inventory) {
+						Inventory inv = (Inventory) wdg;
+						for(WItem item : inv.children(WItem.class)) {
+							if(canDrinkFrom(item))
+								drinkFromThis = item;
+						}
+					}
+				}
+			} else if(w instanceof BeltWnd) { // Alternate belt must be separately enabled
+
+				BeltWnd invBelt = (BeltWnd)w;
+				for(WItem item:invBelt.children(WItem.class)) {
+					if(canDrinkFrom(item))
+						drinkFromThis = item;
+				}
+			}
+		}
+		if(drinkFromThis != null) {
+			drinkFromThis.item.wdgmsg("iact", Coord.z, 3);
+			FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
+			while(menu == null) {
+				sleep(50);
+				menu = gui.ui.root.findchild(FlowerMenu.class);
+			}
+			for(FlowerMenu.Petal opt:menu.opts) {
+				if(opt.name.equals("Drink")) {
+					menu.choose(opt);
+					menu.destroy();
+				}
+			}
+		}
+	}
+
+	private boolean canDrinkFrom(WItem item) {
+		ItemInfo.Contents contents = getContents(item);
+		if (contents != null && contents.sub != null) {
+			for (ItemInfo info : contents.sub) {
+				if (info instanceof ItemInfo.Name) {
+					ItemInfo.Name name = (ItemInfo.Name) info;
+					if (name.str != null && name.str.text.contains("Water"))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void sleep(int timeInMs) {
+		try {
+			Thread.sleep(timeInMs);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private ItemInfo.Contents getContents(WItem item) {
+		try {
+			for (ItemInfo info : item.item.info())
+				if (info instanceof ItemInfo.Contents)
+					return (ItemInfo.Contents) info;
+		} catch (Loading ignored) {
+		}
+		return null;
+	}
+}

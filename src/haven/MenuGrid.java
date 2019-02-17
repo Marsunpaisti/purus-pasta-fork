@@ -59,10 +59,7 @@ import haven.automation.Shoo;
 import haven.automation.SteelRefueler;
 import haven.automation.TrellisDestroy;
 import haven.automation.TrellisHarvest;
-import haven.purus.BarrelFiller;
-import haven.purus.Farmer;
-import haven.purus.StockpileFiller;
-import haven.purus.TroughFiller;
+import haven.purus.*;
 
 public class MenuGrid extends Widget {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
@@ -313,6 +310,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/purus/study")));
             p.add(paginafor(Resource.local().load("paginae/purus/barrelfill")));
             p.add(paginafor(Resource.local().load("paginae/purus/stockpilefill")));
+            p.add(paginafor(Resource.local().load("paginae/purus/drinkWater")));
             // PBot Scripts
             p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
@@ -548,6 +546,8 @@ public class MenuGrid extends Widget {
             	gui.fitwdg(gui.PBotScriptlist);
                 setfocus(gui.PBotScriptlist);
             }
+        } else if(ad[1].equals("drinkWater")) {
+            new Thread(new DrinkWater(gui)).start();
         }
     }
 
