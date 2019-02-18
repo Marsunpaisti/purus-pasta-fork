@@ -26,6 +26,7 @@
 
 package haven;
 
+import haven.res.ui.tt.Wear;
 import haven.resutil.Curiosity;
 import haven.resutil.FoodInfo;
 
@@ -179,7 +180,7 @@ public class Window extends Widget implements DTarget {
     	sb.append(minutes + "m");
     	return sb.toString();
     }
-
+    private static HashMap<String, Long> recentlyTakenCutlery = new HashMap<>();
     protected void drawframe(GOut g) {
     	// Study Table total LP and durations of curiosities
     	try {
@@ -205,6 +206,22 @@ public class Window extends Widget implements DTarget {
 					sizeY += 15;
 				}
 	    		resize(230, sizeY);
+            } else if(cap.text.equals("Table")) {
+	    	    for(Widget w = this.lchild; w != null; w = w.prev) {
+	    	        if(w instanceof Inventory) {
+	    	            for(WItem item:((Inventory) w).wmap.values()) {
+	    	                for(ItemInfo ii:item.item.info())
+	    	                    if(ii instanceof Wear) {
+                                    Wear wr = (Wear)ii;
+                                    if(wr.d == wr.m-1 && item.item.getres() != null && (!recentlyTakenCutlery.containsKey(item.item.getres().name) || System.currentTimeMillis() - recentlyTakenCutlery.get(item.item.getres().name) > 1000*60)) { // About to break
+	    	                            item.item.wdgmsg("transfer", Coord.z);
+                                        ui.gui.msg("Detected cutlery that is about to break! Taking to inventory! You may want to polish it.", Color.yellow);
+                                        recentlyTakenCutlery.put(item.item.getres().name, System.currentTimeMillis());
+                                    }
+                                }
+                        }
+                    }
+                }
             }
     	} catch(Loading l) {
     		
