@@ -199,7 +199,7 @@ public class Config {
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(16) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(19) {{
         put("basalt", new CheckListboxItem("Basalt"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
@@ -216,6 +216,9 @@ public class Config {
         put("hornblende", new CheckListboxItem("Hornblende"));
         put("olivine", new CheckListboxItem("Olivine"));
         put("alabaster", new CheckListboxItem("Alabaster"));
+        put("zincspar", new CheckListboxItem("Zincspar"));
+        put("apatite", new CheckListboxItem("Apatite"));
+        put("fluorospar", new CheckListboxItem("Fluorospar"));
     }};
 
     public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(23) {{
@@ -437,7 +440,10 @@ public class Config {
             "quartz",
             "sandstone",
             "schist",
-            "blackcoal"
+            "blackcoal",
+            "zincspar",
+            "apatite",
+            "fluorospar"
     ));
 
     public final static Set<String> mineablesOre = new HashSet<String>(Arrays.asList(
