@@ -28,12 +28,7 @@ package haven.resutil;
 
 import java.awt.image.BufferedImage;
 
-import haven.GItem;
-import haven.Glob;
-import haven.ItemInfo;
-import haven.Resource;
-import haven.RichText;
-import haven.Utils;
+import haven.*;
 
 public class Curiosity extends ItemInfo.Tip {
     public final int exp, mw, enc;
@@ -69,7 +64,15 @@ public class Curiosity extends ItemInfo.Tip {
         if (enc > 0)
             buf.append(String.format(Resource.getLocString(Resource.BUNDLE_LABEL, "Experience cost: $col[255,255,192]{%d}\n"), enc));
         if (time > 0)
-            buf.append(timefmt());
+            buf.append(timefmt() + "\n");
+        if(enc > 0)
+            buf.append(String.format("LP/EXP: $col[192,192,255]{%s}\n", Utils.thformat(exp/enc)));
+        if(time > 0)
+            buf.append(String.format("LP/Weight: $col[192,192,255]{%s}\n", Utils.thformat((Math.round(exp/mw)))));
+        if(owner instanceof GItem) {
+            Coord isz = ((GItem)owner).size();
+            buf.append(String.format("LP/Hour/Size: $col[192,192,255]{%s}", Utils.thformat(Math.round(exp/(time/60))/(isz.x*isz.y))));
+        }
         return (RichText.render(buf.toString(), 0).img);
     }
 }
