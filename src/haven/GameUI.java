@@ -1137,7 +1137,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Config.hidegobs = !Config.hidegobs;
             Utils.setprefb("hidegobs", Config.hidegobs);
             if (map != null)
-                map.refreshGobsHidable();
+                map.refreshGobsAll();
             return true;
         } else if (ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_TAB) {
             if (map != null)
