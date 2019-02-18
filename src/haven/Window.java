@@ -31,8 +31,11 @@ import haven.resutil.FoodInfo;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import static haven.PUtils.blurmask2;
 import static haven.PUtils.rasterimg;
@@ -195,7 +198,8 @@ public class Window extends Widget implements DTarget {
 	    		}
 	    		g.image(Text.labelFnd.render("Total LP: " + String.format("%,d", totalLP)).tex(), new Coord(30, 271));
 				int y = 285;
-				for(Entry<String, Double> entry : studyTimes.entrySet()) {
+				List<Entry<String, Double>> lst = studyTimes.entrySet().stream().sorted((e1, e2)-> e1.getValue().compareTo(e2.getValue())).collect(Collectors.toList());
+				for(Entry<String, Double> entry : lst) {
 					g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue())).tex(), new Coord(30, y));
 					y += 15;
 					sizeY += 15;
