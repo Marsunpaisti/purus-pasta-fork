@@ -1,5 +1,12 @@
 ## Changelog
 
+### 3.9.0
+	- Added drink script
+	- Added more info to curiosity tooltip
+	- Added warning for symbel with high wear
+	- Added Feast all! button
+	- Sort study desk curio display by remaining duration
+	- Latest merges from Amber & Default client
 ### 3.8.1
 	- Added alarm for wolves
 	- Fixed server status button
