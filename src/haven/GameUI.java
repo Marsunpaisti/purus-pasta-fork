@@ -45,10 +45,7 @@ import java.util.TreeMap;
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
-import haven.purus.BotUtils;
-import haven.purus.ItemClickCallback;
-import haven.purus.KeyBindingWnd;
-import haven.purus.KeyBindings;
+import haven.purus.*;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
@@ -108,8 +105,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private ErrorSysMsgCallback errmsgcb;
     public LivestockManager livestockwnd;
     public GameUI gui = null;
+    public boolean drinkingWater;
     public ItemClickCallback itemClickCallback;
     public KeyBindingWnd keyBindingWnd;
+    private long lastAutodrink = 0;
 
     public abstract class Belt extends Widget {
         public Belt(Coord sz) {
@@ -861,6 +860,12 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (afk && (idle <= 300)) {
             afk = false;
         }
+        if(Config.autodrink && prog == -1 && getmeter("stam", 0).a < 80) { // Drink if no hourglass and stamina is under 80%
+            if(!drinkingWater && System.currentTimeMillis()-lastAutodrink >= 1000) {
+                lastAutodrink = System.currentTimeMillis();
+                new Thread(new DrinkWater(this)).start();
+            }
+        }
     }
 
     private void togglebuff(String err, Resource res) {
@@ -1249,6 +1254,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             return true;
         } else if(KeyBindings.sprintSpeed.isThis(ev)) {
             Speedget.SpeedToSet = 3;
+            return true;
+        } else if(KeyBindings.autoDrink.isThis(ev)) {
+            Config.autodrink = !Config.autodrink;
+            Utils.setprefb("autodrink", Config.autodrink);
+            msg("Autodrink " + (Config.autodrink?"Enabled!":"Disabled!"), Color.white);
             return true;
         }
         return (super.globtype(key, ev));

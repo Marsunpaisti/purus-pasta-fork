@@ -16,7 +16,7 @@ public class KeyBindingWnd extends Window {
 	private Label changeKeyLabel;
 
 	public KeyBindingWnd(List<KeyBindings.KeyBinding> kbList) {
-		super(new Coord(400, 300), "Keybindings");
+		super(new Coord(400, 330), "Keybindings");
 
 		add(new Label("Key"), new Coord(190, 5));
 		add(new Label("Ctrl"), new Coord(220, 5));

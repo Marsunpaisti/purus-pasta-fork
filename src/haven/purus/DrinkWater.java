@@ -16,6 +16,10 @@ public class DrinkWater implements Runnable {
 	}
 
 	private void drink() {
+		// Don't attempt to drink if flower menu is already open or we are already drinking
+		if(gui.ui.root.findchild(FlowerMenu.class) != null || gui.drinkingWater)
+			return;
+		gui.drinkingWater = true;
 		WItem drinkFromThis = null;
 		Equipory e = gui.getequipory();
 		WItem l = e.quickslots[6];
@@ -48,7 +52,12 @@ public class DrinkWater implements Runnable {
 		if(drinkFromThis != null) {
 			drinkFromThis.item.wdgmsg("iact", Coord.z, 3);
 			FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
+			int retries = 0; // After 100 retries aka. 5 seconds, it will probably never appear
 			while(menu == null) {
+				if(retries++ > 100) {
+					gui.drinkingWater = false;
+					return;
+				}
 				sleep(50);
 				menu = gui.ui.root.findchild(FlowerMenu.class);
 			}
@@ -59,6 +68,7 @@ public class DrinkWater implements Runnable {
 				}
 			}
 		}
+		gui.drinkingWater = false;
 	}
 
 	private boolean canDrinkFrom(WItem item) {
@@ -84,9 +94,11 @@ public class DrinkWater implements Runnable {
 	}
 
 	private ItemInfo.Contents getContents(WItem item) {
+		if(item == null)
+			return null;
 		try {
 			for (ItemInfo info : item.item.info())
-				if (info instanceof ItemInfo.Contents)
+				if (info != null && info instanceof ItemInfo.Contents)
 					return (ItemInfo.Contents) info;
 		} catch (Loading ignored) {
 		}
