@@ -2009,6 +2009,14 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                                 Resource res = inf.gob.getres();
                                 if (res != null) {
                                     tooltip = res.name;
+                                    for(Gob.Overlay o:inf.gob.ols) {
+                                        try {
+                                            if(o.res != null && o.res.get() != null)
+                                                tooltip += String.format("\n" + o.res.get().name);
+                                        } catch(Loading l) {
+
+                                        }
+                                    }
                                     return;
                                 }
                             }
@@ -2168,7 +2176,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (selection.tt != null)
                 return (selection.tt);
         } else if (tooltip != null && ui.modshift) {
-            return Text.render(tooltip);
+            return RichText.render(tooltip, 0);
         }
         return (super.tooltip(c, prev));
     }
