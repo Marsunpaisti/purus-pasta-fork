@@ -364,7 +364,7 @@ public class Resource implements Serializable {
         }
 
         public String toString() {
-            return ("#<Resource " + res.name + ">");
+            return (Thread.currentThread().getStackTrace() + "\n#<Resource " + res.name + ">");
         }
 
         public boolean canwait() {
@@ -1538,8 +1538,9 @@ public class Resource implements Serializable {
             buf.skip();
         }
         this.layers = layers;
-        for (Layer l : layers)
+        for (Layer l : layers) {
             l.init();
+        }
         used = false;
     }
 
