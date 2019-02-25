@@ -472,7 +472,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.BAT;
         else if (name.endsWith("/wolf"))
             type = Type.WOLF;
-        else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine") || name.endsWith("/adder"))
+        else if (name.endsWith("/boar") || name.endsWith("/badger") || name.endsWith("/wolverine") || name.endsWith("/adder") || name.endsWith("/wildgoat"))
             type = Type.MOB;
         else if (name.endsWith("/minesupport") || name.endsWith("/ladder"))
             type = Type.WOODEN_SUPPORT;
