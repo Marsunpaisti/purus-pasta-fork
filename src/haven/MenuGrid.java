@@ -311,6 +311,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/purus/barrelfill")));
             p.add(paginafor(Resource.local().load("paginae/purus/stockpilefill")));
             p.add(paginafor(Resource.local().load("paginae/purus/drinkWater")));
+            p.add(paginafor(Resource.local().load("paginae/purus/transferToObject")));
             // PBot Scripts
             p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
@@ -547,7 +548,14 @@ public class MenuGrid extends Widget {
                 setfocus(gui.PBotScriptlist);
             }
         } else if(ad[1].equals("drinkWater")) {
-            new Thread(new DrinkWater(gui)).start();
+            if(!gui.drinkingWater)
+                new Thread(new DrinkWater(gui)).start();
+        } else if(ad[1].equals("transferToObject")) {
+            if(gui.transferingObjectThread != null && gui.transferingObjectThread.isAlive()) {
+                gui.transferingObjectThread.interrupt();
+            }
+            gui.transferingObjectThread = new Thread(new TransferToObject(gui));
+            gui.transferingObjectThread.start();
         }
     }
 
