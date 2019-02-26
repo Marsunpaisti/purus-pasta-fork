@@ -200,7 +200,7 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     }
 
     public List<ItemInfo> info() {
-        if (info == null)
+        if (info == null && rawinfo != null)
             info = ItemInfo.buildinfo(this, rawinfo);
         return (info);
     }
