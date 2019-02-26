@@ -1,32 +1,47 @@
 package haven.purus.pbot;
 
-import static haven.OCache.posres;
+import haven.Window;
+import haven.*;
+import haven.automation.GobSelectCallback;
+import haven.purus.BotUtils;
+import haven.purus.gobText;
 
-import java.awt.Color;
+import javax.script.Invocable;
+import javax.script.ScriptException;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import haven.Coord;
-import haven.Coord2d;
-import haven.FlowerMenu;
-import haven.GItem;
-import haven.GameUI;
-import haven.Gob;
-import haven.Inventory;
-import haven.ItemInfo;
-import haven.Loading;
-import haven.MCache;
-import haven.Makewindow;
-import haven.ResDrawable;
-import haven.WItem;
-import haven.Widget;
-import haven.Window;
-import haven.purus.BotUtils;
+import static haven.OCache.posres;
 
 public class PBotAPI {
 	
 	public static GameUI gui;
+
+	public static HashMap<String, String> gobWindowMap = new HashMap<String, String>() {{
+		put("gfx/terobjs/crate", "Crate");
+		put("gfx/terobjs/dframe", "Frame");
+		put("gfx/terobjs/kiln", "Kiln");
+		put("gfx/terobjs/fineryforge", "Finery Forge");
+		put("gfx/terobjs/steelcrucible", "Steelbox");
+		put("gfx/terobjs/smelter", "Ore Smelter");
+		put("gfx/terobjs/pow", "Fireplace");
+		put("gfx/terobjs/oven", "Oven");
+		put("gfx/terobjs/cauldron", "Cauldron");
+		put("gfx/terobjs/woodbox", "Woodbox");
+		put("gfx/terobjs/create", "Crate");
+		put("gfx/terobjs/furn/table-stone", "Table");
+		put("gfx/terobjs/furn/cottagetable", "Table");
+		put("gfx/terobjs/wbasket", "Basket");
+		put("gfx/terobjs/chickencoop", "Chicken Coop");
+		put("gfx/terobjs/htable", "Herbalist Table");
+		put("gfx/terobjs/studydesk", "Study Desk");
+		put("gfx/terobjs/cupboard", "");
+		put("gfx/terobjs/ttub", "Tub");
+		put("gfx/terobjs/chest", "Chest");
+	}};
 	
 	private static Coord selectedAreaA, selectedAreaB;
 	
