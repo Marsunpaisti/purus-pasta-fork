@@ -106,6 +106,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public LivestockManager livestockwnd;
     public GameUI gui = null;
     public boolean drinkingWater;
+    public Thread transferingObjectThread;
     public ItemClickCallback itemClickCallback;
     public KeyBindingWnd keyBindingWnd;
     private long lastAutodrink = 0;
