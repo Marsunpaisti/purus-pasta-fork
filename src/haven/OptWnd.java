@@ -1581,7 +1581,7 @@ public class OptWnd extends Window {
             public void changed() {
             	int vol = val;
                 Config.hidered = vol;
-                Utils.setprefd("hidered", vol);
+                Utils.setprefi("hidered", vol);
                 GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
             }
         });
@@ -1598,7 +1598,8 @@ public class OptWnd extends Window {
             public void changed() {
             	int vol = val;
                 Config.hidegreen = vol;
-                Utils.setprefd("hidegreen", vol);
+                Utils.setprefi("hidegreen", vol);
+                System.out.println(vol);
                 GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
             }
         });
@@ -1616,7 +1617,7 @@ public class OptWnd extends Window {
             public void changed() {
             	int vol = val;
                 Config.hideblue = vol;
-                Utils.setprefd("hideblue", vol);
+                Utils.setprefi("hideblue", vol);
                 GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
             }
         });
