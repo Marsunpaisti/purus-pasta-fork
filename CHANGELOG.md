@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.10.0
+	- Added autodrink
+	- Added warning circle to goats
+	- Added generalized tanning tub filling script
+	- Added automatic error reporting
+	- Show overlays in resinfo tooltip
+	- Fixed delay with ctrl+h
+	- Fixed hide colors not saving
 ### 3.9.0
 	- Added drink script
 	- Added more info to curiosity tooltip
