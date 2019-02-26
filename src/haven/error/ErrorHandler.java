@@ -26,13 +26,14 @@
 
 package haven.error;
 
+import haven.Config;
+import io.sentry.Sentry;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-
-import haven.Config;
 
 public class ErrorHandler extends ThreadGroup {
     private final ThreadGroup initial;
@@ -89,6 +90,11 @@ public class ErrorHandler extends ThreadGroup {
         public void report(Throwable t) {
             Report r = new Report(t);
             r.props.putAll(props);
+            Sentry.init("https://64938814d25c477988a0724e1debe1ca:50d0884df3bb4b8492665e66b42c637c@sentry.io/1403186?release=" + Config.version);
+            Sentry.getContext().addTag("Java", System.getProperty("java.runtime.version"));
+            Sentry.getContext().addTag("OS", System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
+            Sentry.getContext().addTag("GPU", (String)r.props.get("gpu"));
+            Sentry.capture(t);
             synchronized (errors) {
                 errors.add(r);
                 errors.notifyAll();
