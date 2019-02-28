@@ -22,7 +22,7 @@ public class Farmer extends Window implements AreaSelectCallback, GobSelectCallb
 	private Gob barrel;
 	
 	public Farmer() {
-		super(new Coord(180, 500), "Farming Bots");
+		super(new Coord(180, 550), "Farming Bots");
 		int y = 0;
 		Button carrotBtn = new Button(140, "Carrot") {
 			@Override
@@ -198,6 +198,23 @@ public class Farmer extends Window implements AreaSelectCallback, GobSelectCallb
 			}
 		};
 		add(hempBtn, new Coord(20, y));
+		y += 35;
+
+		Button hempBudBtn = new Button(140, "Hemp-Buds") {
+			@Override
+			public void click() {
+				if (a != null && b != null) {
+					// Start hemp farmer and close this window
+					SeedCropFarmer bf = new SeedCropFarmer(a, b, "gfx/terobjs/plants/hemp", "gfx/invobjs/hemp-fresh", 3, container, barrel);
+
+					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
+					new Thread(bf).start();
+					this.parent.destroy();
+				} else
+					BotUtils.sysMsg("Area not selected!", Color.WHITE);
+			}
+		};
+		add(hempBudBtn, new Coord(20, y));
 		y += 35;
 
 		Button trelHarBtn = new Button(140, "Trellis harvest") {

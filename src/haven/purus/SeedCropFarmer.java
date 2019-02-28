@@ -102,103 +102,116 @@ public class SeedCropFarmer extends Window implements Runnable {
 
 				if(stopThread)
 					return;
-				// Replant
-				GItem item = null;
-				while(BotUtils.getItemAtHand() == null) {
-					Inventory inv = BotUtils.playerInventory();
-					for(Widget w = inv.child; w != null; w = w.next) {
-						if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName) && (!seedName.contains("seed") || BotUtils.getAmount((GItem) w) >= 5)) {
-							item = (GItem) w;
-							break;
-						}
-					}
-					if(item != null)
-						BotUtils.takeItem(item);
-				}
-
-				while(BotUtils.getItemAtHand() == null)
-					BotUtils.sleep(10);
-
-				// Plant the seed from hand
-				int amount = 0;
-				BotUtils.mapInteractClick(0);
-				while(BotUtils.findNearestStageCrop(5, 0, cropName) == null || (BotUtils.getItemAtHand() != null && (seedName.contains("seed") && amount == BotUtils.getAmount(BotUtils.getItemAtHand())))) {
-					BotUtils.sleep(10);
-				}
-
-				if(container) {
-					// Merge seed from hand into inventory or put it in inventory
-					for(Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
-						if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName)) {
-							item = (GItem) w;
-							if(BotUtils.getItemAtHand() != null && BotUtils.getAmount(item) < 50) {
-								int handAmount = BotUtils.getAmount(BotUtils.getItemAtHand());
-								try {
-									item.wdgmsg("itemact", 0);
-								} catch(Exception e) {
-								}
-								while(BotUtils.getItemAtHand() != null && BotUtils.getAmount(BotUtils.getItemAtHand()) == handAmount)
-									BotUtils.sleep(50);
-							}
-						}
-					}
-					if(BotUtils.getItemAtHand() != null) {
-						Coord slot = BotUtils.getFreeInvSlot(BotUtils.playerInventory());
-						if(slot != null) {
-							int freeSlots = BotUtils.invFreeSlots();
-							BotUtils.dropItemToInventory(slot, BotUtils.playerInventory());
-							while(BotUtils.getItemAtHand() != null)
-								BotUtils.sleep(50);
-						}
-					}
-				} else {
+				if(seedName.equals("gfx/invobjs/hemp-fresh")) {
 					// Drop all (seed)items from the players inventory
 					BotUtils.dropItem(0);
 					for(Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
 						if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName)) {
-							item = (GItem) w;
+							GItem item = (GItem) w;
 							try {
 								item.wdgmsg("drop", Coord.z);
 							} catch(Exception e) {
 							}
 						}
 					}
-				}
-
-				if(container) { // Put items into container if inventory is full
-					if(BotUtils.invFreeSlots() == 0) {
-						BotUtils.pfRightClick(barrel, 0);
-						BotUtils.waitForWindow("Barrel");
-						if(BotUtils.getItemAtHand() != null) {
-							gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
-									barrel.rc.floor(posres), 0, -1);
-							int i = 0;
-							while(BotUtils.getItemAtHand() != null) {
-								if(i == 60000)
-									break;
-								BotUtils.sleep(10);
-								i++;
+				} else {
+					// Replant
+					GItem item = null;
+					while(BotUtils.getItemAtHand() == null) {
+						Inventory inv = BotUtils.playerInventory();
+						for(Widget w = inv.child; w != null; w = w.next) {
+							if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName) && (!seedName.contains("seed") || BotUtils.getAmount((GItem) w) >= 5)) {
+								item = (GItem) w;
+								break;
 							}
 						}
-						while(BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).size() != 0) {
-							if(stopThread)
-								break;
-							item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).get(0).item;
+						if(item != null)
 							BotUtils.takeItem(item);
+					}
 
-							gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
-									barrel.rc.floor(posres), 0, -1);
-							int i = 0;
-							while(BotUtils.getItemAtHand() != null) {
-								if(i == 60000)
+					while(BotUtils.getItemAtHand() == null)
+						BotUtils.sleep(10);
+
+					// Plant the seed from hand
+					int amount = 0;
+					BotUtils.mapInteractClick(0);
+					while(BotUtils.findNearestStageCrop(5, 0, cropName) == null || (BotUtils.getItemAtHand() != null && (seedName.contains("seed") && amount == BotUtils.getAmount(BotUtils.getItemAtHand())))) {
+						BotUtils.sleep(10);
+					}
+
+					if(container) {
+						// Merge seed from hand into inventory or put it in inventory
+						for(Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
+							if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName)) {
+								item = (GItem) w;
+								if(BotUtils.getItemAtHand() != null && BotUtils.getAmount(item) < 50) {
+									int handAmount = BotUtils.getAmount(BotUtils.getItemAtHand());
+									try {
+										item.wdgmsg("itemact", 0);
+									} catch(Exception e) {
+									}
+									while(BotUtils.getItemAtHand() != null && BotUtils.getAmount(BotUtils.getItemAtHand()) == handAmount)
+										BotUtils.sleep(50);
+								}
+							}
+						}
+						if(BotUtils.getItemAtHand() != null) {
+							Coord slot = BotUtils.getFreeInvSlot(BotUtils.playerInventory());
+							if(slot != null) {
+								int freeSlots = BotUtils.invFreeSlots();
+								BotUtils.dropItemToInventory(slot, BotUtils.playerInventory());
+								while(BotUtils.getItemAtHand() != null)
+									BotUtils.sleep(50);
+							}
+						}
+					} else {
+						// Drop all (seed)items from the players inventory
+						BotUtils.dropItem(0);
+						for(Widget w = BotUtils.playerInventory().child; w != null; w = w.next) {
+							if(w instanceof GItem && ((GItem) w).resource().name.equals(seedName)) {
+								item = (GItem) w;
+								try {
+									item.wdgmsg("drop", Coord.z);
+								} catch(Exception e) {
+								}
+							}
+						}
+					}
+
+					if(container) { // Put items into container if inventory is full
+						if(BotUtils.invFreeSlots() == 0) {
+							BotUtils.pfRightClick(barrel, 0);
+							BotUtils.waitForWindow("Barrel");
+							if(BotUtils.getItemAtHand() != null) {
+								gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
+										barrel.rc.floor(posres), 0, -1);
+								int i = 0;
+								while(BotUtils.getItemAtHand() != null) {
+									if(i == 60000)
+										break;
+									BotUtils.sleep(10);
+									i++;
+								}
+							}
+							while(BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).size() != 0) {
+								if(stopThread)
 									break;
-								BotUtils.sleep(10);
-								i++;
+								item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).get(0).item;
+								BotUtils.takeItem(item);
+
+								gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
+										barrel.rc.floor(posres), 0, -1);
+								int i = 0;
+								while(BotUtils.getItemAtHand() != null) {
+									if(i == 60000)
+										break;
+									BotUtils.sleep(10);
+									i++;
+								}
 							}
 						}
 					}
 				}
-
 				cropsHarvested++;
 				lblProg.settext(cropsHarvested + "/" + totalCrops);
 			}
