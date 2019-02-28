@@ -391,17 +391,19 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Menu settings", 'f', flowermenus), new Coord(420, 30));
         main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
         main.add(new PButton(200, "Hide settings", 'h', hidesettings), new Coord(420, 90));
-        main.add(new Button(200, "Keybindings") {
-            public void click() {
-                GameUI gui = gameui();
-                if(gui.keyBindingWnd.visible) {
-                    gui.keyBindingWnd.hide();
-                } else {
-                    gui.keyBindingWnd.show();
-                    gui.keyBindingWnd.raise();
+        if(gopts) {
+            main.add(new Button(200, "Keybindings") {
+                public void click() {
+                    GameUI gui = gameui();
+                    if(gui.keyBindingWnd.visible) {
+                        gui.keyBindingWnd.hide();
+                    } else {
+                        gui.keyBindingWnd.show();
+                        gui.keyBindingWnd.raise();
+                    }
                 }
-            }
-        }, new Coord(0, 120));
+            }, new Coord(0, 120));
+        }
         if (gopts) {
             main.add(new Button(200, "Switch character") {
                 public void click() {
