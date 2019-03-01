@@ -80,8 +80,7 @@ public class TroughFiller extends Window implements GobSelectCallback {
 					GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).get(0).item;
 					BotUtils.takeItem(item);
 
-					gameui().map.wdgmsg("itemact", Coord.z, trough.rc.floor(posres), 0, 0, (int) trough.id,
-							trough.rc.floor(posres), 0, -1);
+					BotUtils.itemClickAll(trough);
 					int i = 0;
 					while (BotUtils.getItemAtHand() != null) {
 						if (i == 60000)
