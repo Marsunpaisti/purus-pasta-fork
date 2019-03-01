@@ -123,7 +123,8 @@ public class GobHitbox extends Sprite {
             return bboxSmelter;
         else if (name.endsWith("brickwallseg") || name.endsWith("brickwallcp") ||
                 name.endsWith("palisadeseg") || name.endsWith("palisadecp") ||
-                name.endsWith("poleseg") || name.endsWith("polecp"))
+                name.endsWith("poleseg") || name.endsWith("polecp") ||
+                name.endsWith("drystonewallseg") || name.endsWith("drystonewallcp"))
             return bboxWallseg;
         else if (name.endsWith("/hwall"))
             return bboxHwall;
