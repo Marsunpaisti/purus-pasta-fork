@@ -7,22 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import haven.Coord;
-import haven.Coord2d;
-import haven.Equipory;
-import haven.FlowerMenu;
+import haven.*;
 import haven.FlowerMenu.Petal;
-import haven.GItem;
-import haven.GameUI;
-import haven.Gob;
-import haven.HavenPanel;
-import haven.Inventory;
-import haven.ItemInfo;
-import haven.Loading;
-import haven.ResDrawable;
-import haven.Resource;
-import haven.WItem;
-import haven.Widget;
 
 public class BotUtils {
 
@@ -66,9 +52,13 @@ public class BotUtils {
 				if (dist < min) {
 					boolean matches = false;
 					for (String name : names) {
-						if (gob.getres() != null && gob.getres().name.equals(name)) {
-							matches = true;
-							break;
+						try {
+							if(gob.getres() != null && gob.getres().name.equals(name)) {
+								matches = true;
+								break;
+							}
+						} catch(Session.LoadingIndir l) {
+
 						}
 					}
 					if (matches) {
