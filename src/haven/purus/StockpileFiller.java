@@ -87,7 +87,7 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 
 	Thread t = new Thread(new Runnable() {
 		public void run() {
-			while(true) {
+			while(!stockpiles.isEmpty()) {
 				Gob gob = BotUtils.findObjectByNames(1000, terobj);
 				if(gob == null) {
 					BotUtils.sysMsg("No more items on ground found!", Color.GREEN);

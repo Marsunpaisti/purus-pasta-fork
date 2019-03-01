@@ -329,6 +329,15 @@ public class BotUtils {
 			return false;	
 	}
 
+	// Repeat shift + itemact until all similari tems from inventory have been clicked
+	// May result in valuable items accidentally being put in the trough etc.
+	public static void itemClickAll(Gob gob) {
+		Object[] args = {Coord.z, gob.rc.floor(posres), 1, 0, (int) gob.id, gob.rc.floor(posres), 0, -1};
+		gui.map.lastItemactClickArgs = args;
+		gui.map.wdgmsg("itemact", Coord.z, gob.rc.floor(posres), 1, 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
+	}
+
+
 	// Returns amount of free inventory slots
 	public static int invFreeSlots() {
 		int takenSlots = 0;
