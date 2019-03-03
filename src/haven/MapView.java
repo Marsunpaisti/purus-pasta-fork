@@ -102,6 +102,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
     public boolean farmSelect = false;
     public boolean PBotAPISelect = false;
+    public haven.purus.pathfinder.Pathfinder pastaPathfinder;
 
     public interface Delayed {
         public void run(GOut g);
@@ -1878,6 +1879,16 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         this.areaselcb = null;
     }
 
+    public void purusPfLeftClick(Coord mc, String action) {
+        synchronized(haven.purus.pathfinder.Pathfinder.class) {
+            if(pastaPathfinder != null && pastaPathfinder.isAlive()) {
+                pastaPathfinder.interrupt();
+            }
+            pastaPathfinder = new haven.purus.pathfinder.Pathfinder(gameui(), new Coord2d(mc), action);
+            pastaPathfinder.start();
+        }
+    }
+
     public void pfLeftClick(Coord mc, String action) {
         Gob player = player();
         if (player == null)
@@ -1901,6 +1912,16 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             pf.addListener(this);
             pfthread = new Thread(pf, "Pathfinder");
             pfthread.start();
+        }
+    }
+
+    public void purusPfRightClick(Gob gob, int meshid, int clickb, int modflags, String action) {
+        synchronized(haven.purus.pathfinder.Pathfinder.class) {
+            if(pastaPathfinder != null && pastaPathfinder.isAlive()) {
+                pastaPathfinder.interrupt();
+            }
+            pastaPathfinder = new haven.purus.pathfinder.Pathfinder(gameui(), gob, clickb, modflags, meshid, action);
+            pastaPathfinder.start();
         }
     }
 
