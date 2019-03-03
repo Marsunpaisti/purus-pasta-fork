@@ -72,12 +72,9 @@ public class SeedCropFarmer extends Window implements Runnable {
 					return;
 
 				// Right click the crop
-				BotUtils.doClick(g, 1, 0);
-				BotUtils.gui.map.wdgmsg("click", Coord.z, g.rc.floor(posres), 1, 0);
-				while(BotUtils.player().rc.x != g.rc.x || BotUtils.player().rc.y != g.rc.y) {
-					BotUtils.sleep(10);
-				}
-				BotUtils.pfRightClick(g, 0);
+				//BotUtils.doClick(g, 1, 0);
+				//BotUtils.gui.map.wdgmsg("click", Coord.z, g.rc.floor(posres), 1, 0);
+				BotUtils.pfGobClick(g, 3, 0);
 
 				// Wait for harvest menu to appear and harvest the crop
 				while(ui.root.findchild(FlowerMenu.class) == null) {
@@ -180,7 +177,7 @@ public class SeedCropFarmer extends Window implements Runnable {
 
 					if(container) { // Put items into container if inventory is full
 						if(BotUtils.invFreeSlots() == 0) {
-							BotUtils.pfRightClick(barrel, 0);
+							BotUtils.pfGobClick(barrel, 3, 0);
 							BotUtils.waitForWindow("Barrel");
 							if(BotUtils.getItemAtHand() != null) {
 								gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
@@ -218,7 +215,7 @@ public class SeedCropFarmer extends Window implements Runnable {
 			if(container) {
 				if(BotUtils.getItemAtHand() != null)
 					BotUtils.dropItem(0);
-				BotUtils.pfRightClick(barrel, 0);
+				BotUtils.pfGobClick(barrel, 3, 0);
 				BotUtils.waitForWindow("Barrel");
 
 				while(BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), Arrays.asList(seedName)).size() != 0) {

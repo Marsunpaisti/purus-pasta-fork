@@ -57,12 +57,12 @@ public class BarrelFiller extends Window implements GobSelectCallback {
 						break;
 
 					Gob g = BotUtils.findObjectByNames(1000, terobjs);
-					BotUtils.pfRightClick(g, 0);
+					BotUtils.pfGobClick(g,  3, 0);
 					int i = 0;
 					while (BotUtils.findObjectById(g.id) != null) {
-						if (i == 100)
+						if (i == 1000)
 							break;
-						BotUtils.sleep(100);
+						BotUtils.sleep(10);
 						i++;
 					}
 				}
@@ -71,24 +71,18 @@ public class BarrelFiller extends Window implements GobSelectCallback {
 					break main;
 				if (BotUtils.getItemAtHand() != null)
 					BotUtils.dropItem(0);
-				BotUtils.pfRightClick(barrel, 0);
-				BotUtils.waitForWindow("Barrel");
-
-				while (BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).size() != 0) {
+				BotUtils.pfGobClick(barrel, 1, 0);
+				if (stop)
+					break main;
+				GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).get(0).item;
+				BotUtils.takeItem(item);
+				if (stop)
+					break main;
+				BotUtils.itemClickAll(barrel);
+				while (BotUtils.getItemAtHand() != null || BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).size() != 0) {
+					BotUtils.sleep(30);
 					if (stop)
 						break main;
-					GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).get(0).item;
-					BotUtils.takeItem(item);
-
-					gameui().map.wdgmsg("itemact", Coord.z, barrel.rc.floor(posres), 0, 0, (int) barrel.id,
-							barrel.rc.floor(posres), 0, -1);
-					int i = 0;
-					while (BotUtils.getItemAtHand() != null) {
-						if (i == 60000)
-							break main;
-						BotUtils.sleep(10);
-						i++;
-					}
 				}
 
 			}

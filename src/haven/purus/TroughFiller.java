@@ -57,7 +57,7 @@ public class TroughFiller extends Window implements GobSelectCallback {
 						break;
 
 					Gob g = BotUtils.findObjectByNames(1000, terobjs);
-					BotUtils.pfRightClick(g, 0);
+					BotUtils.pfGobClick(g, 3, 0);
 					int i = 0;
 					while (BotUtils.findObjectById(g.id) != null) {
 						if (i == 100)
@@ -71,24 +71,21 @@ public class TroughFiller extends Window implements GobSelectCallback {
 					break main;
 				if (BotUtils.getItemAtHand() != null)
 					BotUtils.dropItem(0);
-				BotUtils.pfRightClick(trough, 0);
+				BotUtils.pfGobClick(trough, 3, 0);
 				BotUtils.waitForWindow("Trough");
 
-				while (BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).size() != 0) {
 					if (stop)
 						break main;
 					GItem item = BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).get(0).item;
 					BotUtils.takeItem(item);
-
+					if (stop)
+						break main;
 					BotUtils.itemClickAll(trough);
-					int i = 0;
-					while (BotUtils.getItemAtHand() != null) {
-						if (i == 60000)
-							break main;
+					while (BotUtils.getItemAtHand() != null || BotUtils.getInventoryItemsByNames(BotUtils.playerInventory(), invobjs).size() != 0) {
 						BotUtils.sleep(10);
-						i++;
+						if (stop)
+							break main;
 					}
-				}
 
 			}
 			BotUtils.sysMsg("Trough Filler finished", Color.WHITE);

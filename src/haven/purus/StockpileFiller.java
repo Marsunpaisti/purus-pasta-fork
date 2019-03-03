@@ -96,9 +96,9 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 				while(gob != null && BotUtils.getItemAtHand() == null) {
 					if(stop)
 						break;
-					BotUtils.doClick(gob, 3, 1);
+					BotUtils.pfGobClick(gob, 3, 1);
 					while(BotUtils.findObjectById(gob.id) != null && BotUtils.getItemAtHand() == null) {
-						BotUtils.sleep(100);
+						BotUtils.sleep(30);
 					}
 					gob = BotUtils.findObjectByNames(1000, terobj);
 				}
@@ -119,10 +119,11 @@ public class StockpileFiller extends Window implements GobSelectCallback, ItemCl
 					}
 					if(stop)
 						break;
+					BotUtils.pfGobClick(stockpiles.get(0), 1, 0);
 					BotUtils.gui.map.wdgmsg("itemact", Coord.z, stockpiles.get(0).rc.floor(posres), 1, 0, (int) stockpiles.get(0).id, stockpiles.get(0).rc.floor(posres), 0, -1);
 					int cnt = BotUtils.invFreeSlots();
 					while(BotUtils.invFreeSlots() == cnt) {
-						BotUtils.sleep(100);
+						BotUtils.sleep(30);
 					}
 					if(BotUtils.getItemAtHand()==null && BotUtils.getInventoryItemsByName(BotUtils.playerInventory(), invobj).size()>0) {
 						BotUtils.takeItem(BotUtils.getInventoryItemsByName(BotUtils.playerInventory(), invobj).get(0).item);

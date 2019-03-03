@@ -84,10 +84,11 @@ public class BotUtils {
 			return true;
 	}
 
-	// Right clicks a gob with pathfinder (Pathfinds near, then right clicks)
+	// Replace with pasta pathfinder
+	/*// Right clicks a gob with pathfinder (Pathfinds near, then right clicks)
 	public static void pfRightClick(Gob gob, int mod) {
 		gui.map.pfRightClick(gob, -1, 3, mod, null);
-	}
+	}*/
 
 	// Chooses option from flower menu
 	public static void Choose(Petal option) {
@@ -349,5 +350,23 @@ public class BotUtils {
 		}
 		int allSlots = playerInventory().isz.x * playerInventory().isz.y;
 		return allSlots - takenSlots;
+	}
+
+	public static void pfLeftClick(Coord mc) {
+		gui.map.purusPfLeftClick(mc, "");
+		try {
+			gui.map.pastaPathfinder.join();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void pfGobClick(Gob gob, int btn, int mod) {
+		gui.map.purusPfRightClick(gob, -1, btn, mod, "");
+		try {
+			gui.map.pastaPathfinder.join();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
