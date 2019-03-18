@@ -2,6 +2,7 @@ package haven.purus.pathfinder;
 
 import haven.*;
 import haven.purus.pbot.PBotAPI;
+import haven.purus.pbot.PBotUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -59,6 +60,7 @@ public class Pathfinder extends Thread {
 
 	HashSet<String> inaccessibleTiles = new HashSet<String>() {{
 		add("gfx/tiles/nil");
+		add("gfx/tiles/deep");
 	}};
 
 	HashSet<String> whitelistedGobs = new HashSet<String>() {{
@@ -79,7 +81,7 @@ public class Pathfinder extends Thread {
 
 	// Click tile at its center point
 	private void clickTile(Coord tile, Coord2d origin) {
-		gui.map.wdgmsg("click", PBotAPI.getCenterScreenCoord(), origin.add(tile.x*11, tile.y*11).add(11/2.0, 11/2.0).floor(posres), 1, 0);
+		gui.map.wdgmsg("click", PBotUtils.getCenterScreenCoord(), origin.add(tile.x*11, tile.y*11).add(11/2.0, 11/2.0).floor(posres), 1, 0);
 	}
 
 	private void moveToTileAndWait(Coord tile, Coord2d origin) {
@@ -216,7 +218,7 @@ public class Pathfinder extends Thread {
 				return;
 			}
 			// Randomly click around and hope that player moves to correct position, timeout after few retries
-			gui.map.wdgmsg("click", PBotAPI.getCenterScreenCoord(), gui.map.player().rc.add(rng.nextInt()%11, rng.nextInt()%11).floor(posres), 1, 0);
+			gui.map.wdgmsg("click", PBotUtils.getCenterScreenCoord(), gui.map.player().rc.add(rng.nextInt()%11, rng.nextInt()%11).floor(posres), 1, 0);
 			do {
 				sleep(250);
 				if(stop)
