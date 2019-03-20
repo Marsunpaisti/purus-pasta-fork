@@ -47,6 +47,7 @@ public class LoginScreen extends Widget {
     static Text.Foundry textf, textfs, special;
     static Tex bg = Resource.loadtex("gfx/loginscr");
     Text progress = null;
+    Thread statusupdaterthread;
 
     static {
         textf = new Text.Foundry(Text.sans, 16).aa(true);
@@ -333,6 +334,12 @@ public class LoginScreen extends Widget {
         }
     }
 
+    @Override
+    public void destroy() {
+        statusupdaterthread.interrupt();
+        super.destroy();
+    }
+
     public void uimsg(String msg, Object... args) {
         synchronized (ui) {
             if (msg == "passwd") {
@@ -380,7 +387,7 @@ public class LoginScreen extends Widget {
     }
     
     private void StartUpdaterThread() {
-        Thread statusupdaterthread = new Thread(new Runnable() {
+        statusupdaterthread = new Thread(new Runnable() {
             public void run() {
 				try {
 					URL url = new URL("http://www.havenandhearth.com/portal/index/status");
@@ -397,10 +404,10 @@ public class LoginScreen extends Widget {
 				} catch(IOException e) {
 					e.printStackTrace();
 				} catch(InterruptedException e) {
-					e.printStackTrace();
+					// Ignore
                 }
             }
         });
         statusupdaterthread.start();
-}
+    }
 }
