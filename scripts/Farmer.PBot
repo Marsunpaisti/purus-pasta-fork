@@ -2,7 +2,6 @@
 // Made by Purus Cor to demonstrate usage of PBot API
 // For more information about API, join Purus Pasta discord
 // To suggest features into API, suggest them in discord
-const PBotUtils = Java.type('haven.purus.pbot.PBotUtils');
 console.log("Hello World!");
 
 const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");

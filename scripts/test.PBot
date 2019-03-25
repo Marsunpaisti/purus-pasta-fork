@@ -1,5 +1,243 @@
-// Test script
+// MUST START PRECISELY AT THE ORIGIN (For example, hearth fire or a chair)
 print("Hello World!");
 var PBot = Java.type("haven.purus.pbot.PBotAPI");
-var ikkuna = PBot.getWindow("Cupboard");
-PBot.setFocus(ikkuna);
+var PBotDB = Java.type("haven.purus.pbot.PBotDatabase");
+var PBotWindow = PBot.PBotWindow("Storage bot", 400, 200, scriptID);
+var entryBox = PBotWindow.addTextEntry(180, "", 10, 100);
+PBotWindow.addButton("addGobBtn", "Add a gob", 180, 10, 35);
+PBotWindow.addButton("searchGob", "Search gob by name", 180, 10, 65);
+PBotWindow.addButton("updInvBtn", "Update inventory", 180, 10, 150);
+PBotWindow.addButton("nameGobsBtn", "Name gobs", 180, 10, 180);
+PBotWindow.addButton("addGobsArea", "Add gobs from area", 180, 10, 210)
+PBotWindow.addButton("updateInventories", "Update area inventories", 180, 10, 240)
+PBotWindow.addButton("testBtn", "Testinappula", 180, 10, 280)
+var cbAct = 0, a, b;
+PBotDB.connect();
+PBotDB.initTables();
+var areaContainers = []; // Containers/gobs in the selected area that are in db {id, gob}
+
+var rcc = Java.type("haven.purus.pbot.RelCoord");
+var relCoord = new rcc(PBot.player());
+
+function nameGobsBtn() {
+	var coords = PBotDB.getAllGobCoords();
+	for(var i=0; i<coords.size(); i++) {
+		var gob = PBot.getGobWithCoords(relCoord.toReal(coords[i]));
+		if(gob != null) {
+			PBot.addGobText(gob, PBotDB.getGobNameWithCoords(coords[i]), 10);
+		}
+	}
+}
+
+function closeDb() {
+	PBotDB.closeConnection();
+}
+
+function testBtn() {
+	// take item from inventory
+	for(var i=0; i<1; i++) { // craft given item x times
+		craftOne("feathertrinket");
+		//storeItem("gfx/invobjs/feathertrinket");
+	}
+	return;
+}
+
+// Crafts one of the given item, false if crafting failed for example due to not having enough inputs
+function craftOne(craftName) {
+	PBot.openCraftingWnd(craftName);
+	var craftInputs = PBot.craftingInputs();
+	var inputItemIds = [];
+	for(var i=0; i<craftInputs.size(); i++) {
+		var names = [];
+		for(var j=0; j<craftInputs[i].inputs.size(); j++) {
+			names.push(craftInputs[i].inputs.itemName);
+		}
+		var itemsWithNames = PBotDB.itemsWithNames(names);
+		if(itemsWithNames.size() < craftInputs[i].count) {
+			return false;
+		} else {
+			for(var j=0; j<craftInputs[i].count; j++)
+			inputItemIds.push(itemsWithNames[j]);
+		}
+	}
+	console.log(inputItemIds.length());
+}
+
+function addGobsArea() {
+	var areaGobs = selectArea();
+	for(var i=0; i<areaGobs.length; i++) {
+		var gobid = PBotDB.getGobId(areaGobs[i], relCoord);
+		if(gobid == -1)
+			addGob(areaGobs[i]);
+	}
+}
+
+// Attempts to store a item with name from the inventory to some container in the selected area true if success, false else
+function storeItem(fullResName) {
+	var item = PBot.getItemFromInventory(PBot.playerInventory(), fullResName);
+	for(var i=0; i<areaContainers.length; i++) {
+		print(i);
+		if(PBot.freeSpaceForItem(PBotDB.containerMatrix(areaContainers[i].id), item)) {
+			PBot.pfRightClick(areaContainers[i].gob, 0);
+			PBot.waitForWindow(PBot.inventoryNameForGob(areaContainers[i].gob));
+			PBot.transferItem(item);
+			PBot.doClick(areaContainers[i].gob, 1, 0);
+			PBot.waitForWindowClose(PBot.inventoryNameForGob(areaContainers[i].gob));
+			updateInventory(areaContainers[i].gob);
+			return true;
+		}
+	}
+	return false;
+}
+
+// Finds given amount of items from container and takes them to inventory, false if cannot find enough items
+function getItemsWithNames(names, count) {
+	var itms = PBotDB.itemsWithNames(names);
+	if(itms.size() < count) {
+		PBot.sysMsg("Found " + itms.size() + " items with names: " + names + " while " + count + " were requested!", 255, 0, 0);
+		return false;
+	} else {
+		for(var i=0; i<count; i++) {
+			print(itms[i]);
+			takeItem(itms[i]);
+		}
+		return true;
+	}
+}
+
+// Find an item with res name from the containers and takes it to inventory, true if success, false if not found
+function getItemWithRes(fullResname) {
+	var itms = PBotDB.itemsWithRes(fullResname);
+	if(itms.size() == 0) {
+		PBot.sysMsg("Didn't find item with resname: " + fullResname + " !", 255, 0, 0);
+		return false;
+	} else {
+		print(itms[0]);
+		takeItem(itms[0]);
+		return true;
+	}
+}
+
+// Transfers item to inventory or away from inventory (To active or latest window?)
+function takeItem(id) {
+	var gob = PBot.getGobWithCoords(relCoord.toReal(PBotDB.gobLocationFromItemId(id)));
+	var itemLoc = PBotDB.itemLocationFromItemId(id);
+	PBot.pfRightClick(gob, 0);
+	var wndName = PBot.gobWindowMap.get(gob.res.name);
+	PBot.waitForWindow(wndName);
+	PBot.transferItem(PBot.getItemFromInventoryAtLocation(PBot.getInventory(PBot.getWindow(wndName)), itemLoc.x, itemLoc.y));
+	PBot.doClick(gob, 1, 0);
+	PBot.waitForWindowClose(PBot.inventoryNameForGob(gob));
+	updateInventory(gob);
+}
+
+function addGobBtn() {
+	PBot.selectGobCbRegister("selectGob", scriptID);
+	cbAct = 1;
+}
+
+function updInvBtn() {
+	PBot.selectGobCbRegister("selectGob", scriptID);
+	cbAct = 2;
+}
+
+function searchGob() {
+	var gob = null;
+	var gCoords = PBotDB.getGobCoordsWithName(entryBox.text);
+	if(gCoords != null)
+		gob = PBot.getGobWithCoords(relCoord.toReal(gCoords));
+	print(gob);
+	if(gob == null) {
+		PBot.sysMsg("Gob with name: " + entryBox.text + " not found!", 100, 100, 100);
+	} else {
+		PBot.addGobText(gob, entryBox.text, 10);
+	}
+
+}
+
+function selectGob(gob) {
+	if(cbAct == 1) {
+		addGob(gob);
+		PBot.selectGobCbUnregister();
+	} else if(cbAct == 2) {
+		PBot.sysMsg("Updating inventory of gob called: " + entryBox.text + " and coordinates: "  + relCoord.toRel(gob.rc).toString(), 100, 100, 100);
+		PBot.pfRightClick(gob, 0);
+		var wndName = PBot.gobWindowMap.get(gob.res.name);
+		PBot.waitForWindow(wndName);
+		PBotDB.updateInventory(gob, PBot.getInventory(PBot.getWindow(wndName)), relCoord);
+		PBot.doClick(gob, 1, 0);
+		PBot.waitForWindowClose(PBot.inventoryNameForGob(gob));
+		updateInventory(gob);
+		PBot.sysMsg("Updating finished!", 100, 100, 100);
+	}
+}
+
+// Adds a gob to the database
+function addGob(gob) {
+	PBot.sysMsg("Adding a new gob to the database: " + gob.getres().name + " with coordinates: " + relCoord.toRel(gob.rc).toString(), 100, 100, 100);
+	PBotDB.addGob(gob.getres().basename() + relCoord.toRel(gob.rc).floor().toString(), gob, relCoord);
+}
+
+function updateInventories() {
+	var areaGobs = selectArea();
+	areaContainers = [];
+	for(var i=0; i<areaGobs.length; i++) {
+		var gobid = PBotDB.getGobId(areaGobs[i], relCoord);
+		if(gobid != -1)
+			areaContainers.push({gob: areaGobs[i], id: gobid});
+	}
+	for(var i=0; i<areaContainers.length; i++) {
+		updateInventory(areaContainers[i].gob);
+	}
+	PBot.msgToChat("Area Chat", "Updating inventory contents finished!");
+}
+
+function updateInventory(gob) {
+	PBot.sysMsg("Updating inventory of gob called: " + entryBox.text + " and coordinates: "  + relCoord.toRel(gob.rc).toString(), 100, 100, 100);
+	PBot.pfRightClick(gob, 0);
+	var wndName = PBot.gobWindowMap.get(gob.res.name);
+	PBot.waitForWindow(wndName);
+	PBotDB.updateInventory(gob, PBot.getInventory(PBot.getWindow(wndName)), relCoord);
+	PBot.sysMsg("Updating finished!", 100, 100, 100);
+	PBot.doClick(gob, 1, 0);
+	PBot.waitForWindowClose(PBot.inventoryNameForGob(gob));
+}
+
+// Returns a list of gobs in the area
+function selectArea() {
+	PBot.selectArea();
+	a = PBot.getSelectedAreaA();
+	b = PBot.getSelectedAreaB();
+	// List of gobs inside the area selected
+	var bigX = Math.max(a.x, b.x);
+	var smallX = Math.min(a.x, b.x);
+	var bigY = Math.max(a.y, b.y);
+	var smallY = Math.min(a.y, b.y);
+	var allGobs = PBot.getGobs();
+	// Iterate through all of the gobs
+	var areaGobs = [];
+	for(var i=0; i<allGobs.length; i++) {
+		// Add only gobs that are fully-grown carrots from inside of the selected area,
+		var gobCoords = PBot.getCoords(allGobs[i]);
+		if(gobCoords.x <= bigX && gobCoords.x >= smallX
+		&& gobCoords.y <= bigY && gobCoords.y >= smallY) {
+			areaGobs.push(allGobs[i]);
+		}
+	}
+	areaGobs.sort(function(gob1, gob2) {
+		var aGob = relCoord.toRel(gob1.rc).div(11).floor();
+		var bGob = relCoord.toRel(gob2.rc).div(11).floor();
+		if(aGob.y > bGob.y) {
+			return 1;
+		} else if(aGob.y < bGob.y) {
+			return -1;
+		} else {
+			if(aGob.y%2 == 0) {
+				return gob1.rc.x-gob2.rc.x;
+			} else {
+				return gob2.rc.x-gob1.rc.x;
+			}
+		}
+	});
+	return areaGobs;
+}

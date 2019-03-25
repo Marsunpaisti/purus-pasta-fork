@@ -4,7 +4,6 @@
 // For more information about API, join Purus Pasta discord
 // To suggest features into API, suggest them in discord
 const PBotUtils = Java.type('haven.purus.pbot.PBotUtils');
-const PBotUtils = Java.type('haven.purus.pbot.PBotUtils');
 const PBotCharacterAPI = Java.type('haven.purus.pbot.PBotCharacterAPI');
 const PBotGobAPI = Java.type('haven.purus.pbot.PBotGobAPI');
 const window = PBotUtils.PBotWindow("Destroyer", 70, 200, ScriptID);
