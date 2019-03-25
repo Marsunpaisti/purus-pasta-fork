@@ -46,6 +46,7 @@ import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.*;
+import haven.purus.alarms.AlarmWindow;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
@@ -105,10 +106,11 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private ErrorSysMsgCallback errmsgcb;
     public LivestockManager livestockwnd;
     public GameUI gui = null;
-    public boolean drinkingWater;
+    public boolean drinkingWater, lastDrinkingSucessful;
     public Thread transferingObjectThread;
     public ItemClickCallback itemClickCallback;
     public KeyBindingWnd keyBindingWnd;
+    public AlarmWindow alarmWindow;
     private long lastAutodrink = 0;
 
     public abstract class Belt extends Widget {
@@ -258,6 +260,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         keyBindingWnd = KeyBindings.initWnd();
         keyBindingWnd.hide();
         add(keyBindingWnd, 300, 300);
+
+        alarmWindow = new AlarmWindow();
+        alarmWindow.hide();
+        add(alarmWindow, 300, 300);
     }
     
     @Override

@@ -97,8 +97,16 @@
   	      </fileset>
   	</copy>
   </target>
+  <target name="alarms" depends="build-env">
+	<mkdir dir="build/alarms"/>
+	<copy todir="build/alarms">
+		<fileset dir="customAlarms/alarms" includes="*">
+		</fileset>
+	</copy>
+	<copy todir="build" file="customAlarms/defaultAlarms" />
+  </target>
   
-  <target name="jars" depends="build-env, jar, res-jar, l10n-jar, custom-jar, scripts">
+  <target name="jars" depends="build-env, jar, res-jar, l10n-jar, custom-jar, scripts, alarms">
     <copy todir="build/lib">
       <fileset dir="lib">
 	<include name="jogl.jar" />

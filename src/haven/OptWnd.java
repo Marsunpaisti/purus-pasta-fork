@@ -403,6 +403,17 @@ public class OptWnd extends Window {
                     }
                 }
             }, new Coord(0, 120));
+            main.add(new Button(200, "Alarms") {
+                public void click() {
+                    GameUI gui = gameui();
+                    if(gui.alarmWindow.visible) {
+                        gui.alarmWindow.hide();
+                    } else {
+                        gui.alarmWindow.show();
+                        gui.alarmWindow.raise();
+                    }
+                }
+            }, new Coord(210, 120));
         }
         if (gopts) {
             main.add(new Button(200, "Switch character") {
@@ -1601,7 +1612,6 @@ public class OptWnd extends Window {
             	int vol = val;
                 Config.hidegreen = vol;
                 Utils.setprefi("hidegreen", vol);
-                System.out.println(vol);
                 GobHitbox.fillclrstate = new States.ColState(new Color(Config.hidered, Config.hidegreen, Config.hideblue, 255));
             }
         });

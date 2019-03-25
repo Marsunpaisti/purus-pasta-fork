@@ -26,6 +26,8 @@
 
 package haven;
 
+import haven.purus.alarms.AlarmManager;
+
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
@@ -387,6 +389,7 @@ public class MainFrame extends java.awt.Frame implements Runnable, Console.Direc
             }
         }, "Haven main thread");
         main.start();
+        AlarmManager.init();
     }
 
     private static void dumplist(Collection<Resource> list, String fn) {

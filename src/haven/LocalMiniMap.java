@@ -40,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import haven.purus.alarms.AlarmManager;
 import haven.resutil.Ridges;
 
 public class LocalMiniMap extends Widget {
@@ -243,46 +244,8 @@ public class LocalMiniMap extends Widget {
                     if (sgobs.contains(gob.id))
                         continue;
 
-                    if (gob.type == Gob.Type.FU_YE_CURIO) {
+                    if(AlarmManager.play(res.name))
                         sgobs.add(gob.id);
-                        Audio.play(foragablesfx, Config.alarmonforagablesvol);
-                    } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
-                        sgobs.add(gob.id);
-                        Audio.play(voiveljet, Config.alarmlocresvol);
-                    } else if (gob.type == Gob.Type.WOLF && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        double rnd = Math.random();
-                        if(rnd <= 1.0/3)
-                            Audio.play(wolf1, 1.0);
-                        else if(rnd <= 1.0/3*2)
-                            Audio.play(wolf2, 1.0);
-                        else
-                            Audio.play(wolf3, 1.0);
-                    } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(bearsfx, 0.7);
-                    } else if (gob.type == Gob.Type.LYNX && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(lynxfx, 0.8);
-                    } else if (gob.type == Gob.Type.WALRUS && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(walrusfx, 0.7);
-                    } else if (gob.type == Gob.Type.SEAL && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(sealsfx, 0.8);
-                    } else if (gob.type == Gob.Type.TROLL && gob.knocked == Boolean.FALSE && Config.alarmtroll) {
-                        sgobs.add(gob.id);
-                        Audio.play(trollsfx, Config.alarmtrollvol);
-                    } else if (gob.type == Gob.Type.MAMMOTH && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(mammothsfx, 0.7);
-                    } else if (gob.type == Gob.Type.EAGLE && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(eaglesfx);
-                    } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
-                        sgobs.add(gob.id);
-                        Audio.play(doomedsfx, Config.alarmbramvol);
-                    }
                 } catch (Loading l) {
                 }
             }
@@ -333,41 +296,6 @@ public class LocalMiniMap extends Widget {
                             gameui().act("travel", "hearth");
 
                         continue;
-                    }
-
-                    if (sgobs.contains(gob.id))
-                        continue;
-
-                    if (gob.type == Gob.Type.FU_YE_CURIO) {
-                        sgobs.add(gob.id);
-                        Audio.play(voiveljet, Config.alarmonforagablesvol);
-                    } else if (Config.alarmlocres && gob.type == Gob.Type.LOC_RESOURCE) {
-                        sgobs.add(gob.id);
-                        Audio.play(voiveljet, Config.alarmlocresvol);
-                    } else if (gob.type == Gob.Type.BEAR && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(bearsfx, 0.7);
-                    } else if (gob.type == Gob.Type.LYNX && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(lynxfx, 0.8);
-                    } else if (gob.type == Gob.Type.WALRUS && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(walrusfx, 0.7);
-                    } else if (gob.type == Gob.Type.SEAL && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(sealsfx, 0.8);
-                    } else if (gob.type == Gob.Type.TROLL && gob.knocked == Boolean.FALSE && Config.alarmtroll) {
-                        sgobs.add(gob.id);
-                        Audio.play(trollsfx, Config.alarmtrollvol);
-                    } else if (gob.type == Gob.Type.MAMMOTH && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(mammothsfx, 0.7);
-                    } else if (gob.type == Gob.Type.EAGLE && gob.knocked == Boolean.FALSE) {
-                        sgobs.add(gob.id);
-                        Audio.play(eaglesfx);
-                    } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
-                        sgobs.add(gob.id);
-                        Audio.play(doomedsfx, Config.alarmbramvol);
                     }
                 } catch (Loading l) {
                 }
