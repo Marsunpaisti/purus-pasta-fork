@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.11.1
+	- Fix scripts
 ### 3.11.0
 	- Major rework of PBot API
 	- Added customizable alarms
