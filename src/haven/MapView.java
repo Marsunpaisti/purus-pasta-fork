@@ -90,6 +90,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
     public Object[] lastItemactClickArgs;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
+    private static DropSky skydrop = new DropSky(sky);
     public boolean farmSelect = false;
     public boolean PBotAPISelect = false;
     public haven.purus.pathfinder.Pathfinder pastaPathfinder;
@@ -1028,8 +1029,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     	            }
     	        }
             }
-            if(skyb)
-            	rl.add(new DropSky(sky), Rendered.last);
+            if(skyb) {
+                rl.add(skydrop, Rendered.last);
+            }
         }
     }
 
