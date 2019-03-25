@@ -28,15 +28,11 @@ package haven;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Makewindow extends Widget {
     Widget obtn, cbtn;
-    List<Spec> inputs = Collections.emptyList();
+    public List<Spec> inputs = Collections.emptyList();
     List<Spec> outputs = Collections.emptyList();
     List<Indir<Resource>> qmod = null;
     static final Text qmodl = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Quality:"));
@@ -62,9 +58,10 @@ public class Makewindow extends Widget {
         public Indir<Resource> res;
         public MessageBuf sdt;
         public Tex num;
+        public int numInt;
         private GSprite spr;
         private Object[] rawinfo;
-        private List<ItemInfo> info;
+        public List<ItemInfo> info;
 
         public Spec(Indir<Resource> res, Message sdt, int num, Object[] info) {
             this.res = res;
@@ -73,6 +70,7 @@ public class Makewindow extends Widget {
                 this.num = new TexI(Utils.outline2(Text.render(Integer.toString(num), Color.WHITE,  Text.num10Fnd).img, Utils.contrast(Color.WHITE)));
             else
                 this.num = null;
+            this.numInt = num;
             this.rawinfo = info;
         }
 

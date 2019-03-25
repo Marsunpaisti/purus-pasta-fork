@@ -67,6 +67,9 @@ public class DrinkWater implements Runnable {
 					menu.destroy();
 				}
 			}
+			gui.lastDrinkingSucessful = true;
+		} else {
+			gui.lastDrinkingSucessful = false;
 		}
 		gui.drinkingWater = false;
 	}

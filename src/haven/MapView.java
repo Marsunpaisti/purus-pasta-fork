@@ -2322,7 +2322,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     wdgmsg("sel", sc, ec, modflags);
                     sc = null;
                     if(PBotAPISelect) {
-                    	PBotAPI.areaSelect(ol.getc1(), ol.getc2());
+                    	PBotUtils.areaSelect(ol.getc1(), ol.getc2());
                     	PBotAPISelect = false;
                         selection.destroy();
                         selection = null;}

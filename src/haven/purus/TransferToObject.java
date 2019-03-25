@@ -1,7 +1,7 @@
 package haven.purus;
 
 import haven.*;
-import haven.purus.pbot.PBotAPI;
+import haven.purus.pbot.PBotGobAPI;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,7 +28,7 @@ public class TransferToObject implements Runnable {
 		Gob gob = getClosestGob();
 		if(gob == null)
 			return;
-		String wndName = PBotAPI.gobWindowMap.get(gob.getres().name);
+		String wndName = PBotGobAPI.gobWindowMap.get(gob.getres().name);
 		gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), 3, 0, 0, (int) gob.id, gob.rc.floor(posres), 0, -1);
 		int retries = 0;
 		while(retries < 50) {
@@ -79,7 +79,7 @@ public class TransferToObject implements Runnable {
 		synchronized(gui.ui.sess.glob.oc) {
 			for(Gob gob:gui.ui.sess.glob.oc) {
 				try {
-					if(gob == player || gob.getres() == null || !PBotAPI.gobWindowMap.containsKey(gob.getres().name))
+					if(gob == player || gob.getres() == null || !PBotGobAPI.gobWindowMap.containsKey(gob.getres().name))
 						continue;
 				} catch(Loading l) {
 

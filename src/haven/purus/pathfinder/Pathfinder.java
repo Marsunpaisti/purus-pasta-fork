@@ -1,7 +1,6 @@
 package haven.purus.pathfinder;
 
 import haven.*;
-import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotUtils;
 
 import javax.imageio.ImageIO;
@@ -9,8 +8,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static haven.OCache.posres;
 

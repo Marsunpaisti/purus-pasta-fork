@@ -26,12 +26,14 @@ public class BotUtils {
 	
 	public static int getAmount(GItem item) {
 		int ret = -1;
-		List<ItemInfo> li = item.info();
-		if(li == null)
-			return -1;
-		for(ItemInfo o:li) {
-			if(o instanceof GItem.Amount)
-				ret = ((GItem.Amount) o).itemnum();
+		synchronized(item.ui) {
+			List<ItemInfo> li = item.info();
+			if(li == null)
+				return -1;
+			for(ItemInfo o : li) {
+				if(o instanceof GItem.Amount)
+					ret = ((GItem.Amount) o).itemnum();
+			}
 		}
 		return ret;
 	}
@@ -170,9 +172,11 @@ public class BotUtils {
 	// Returns contents of an item
 	public static ItemInfo.Contents getContents(WItem item) {
 		try {
-			for (ItemInfo info : item.item.info())
-				if (info instanceof ItemInfo.Contents)
-					return (ItemInfo.Contents) info;
+			synchronized(item.ui) {
+				for(ItemInfo info : item.item.info())
+					if(info instanceof ItemInfo.Contents)
+						return (ItemInfo.Contents) info;
+			}
 		} catch (Loading ignored) {
 		}
 		return null;
