@@ -1,5 +1,10 @@
 ## Changelog
 
+### 3.11.0
+	- Major rework of PBot API
+	- Added customizable alarms
+	- Added boundingbox for dry stonewall
+	- Various minor fixes
 ### 3.10.0
 	- Added autodrink
 	- Added warning circle to goats
