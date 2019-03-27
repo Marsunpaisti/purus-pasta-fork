@@ -3,6 +3,7 @@ package haven.purus.pbot;
 import haven.Coord2d;
 import haven.GameUI;
 import haven.Gob;
+import haven.Loading;
 import haven.automation.GobSelectCallback;
 import haven.purus.BotUtils;
 
@@ -70,11 +71,14 @@ public class PBotGobAPI {
 				double dist = gob.rc.dist(plc);
 				if (dist < min) {
 					boolean matches = false;
-					for (String name : names) {
-						if (gob.getres() != null && gob.getres().name.contains(name)) {
-							matches = true;
-							break;
+					try {
+						for (String name : names) {
+							if (gob.getres() != null && gob.getres().name.contains(name)) {
+								matches = true;
+								break;
+							}
 						}
+					} catch(Loading l) {
 					}
 					if (matches) {
 						min = dist;
