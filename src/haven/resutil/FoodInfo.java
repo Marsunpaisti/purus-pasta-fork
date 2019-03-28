@@ -87,6 +87,10 @@ public class FoodInfo extends ItemInfo.Tip {
         BufferedImage base = RichText.render(String.format(infoStr, Utils.odformat2(end * 100, 2), Utils.odformat2(glut * 100, 2)), 0).img;
         Collection<BufferedImage> imgs = new LinkedList<BufferedImage>();
         imgs.add(base);
+        double totalFeps = 0;
+        for(int i=0; i<evs.length; i++) {
+            totalFeps += evs[i].a;
+        }
         for (int i = 0; i < evs.length; i++) {
             Color col = Utils.blendcol(evs[i].ev.col, Color.WHITE, 0.5);
             String str;
@@ -97,7 +101,7 @@ public class FoodInfo extends ItemInfo.Tip {
                         col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2),
                         col.getRed(), col.getGreen(), col.getBlue(), q != null ? basefepfmt.format(evs[i].a / Math.sqrt(q.q / 10)) : "???");
             } else {
-                str = String.format("%s: $col[%d,%d,%d]{%s}", evs[i].ev.nm, col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2));
+                str = String.format("%s: $col[%d,%d,%d]{%s - %s}", evs[i].ev.nm, col.getRed(), col.getGreen(), col.getBlue(), Utils.odformat2(evs[i].a, 2), Utils.odformat2(evs[i].a/(totalFeps/100.0), 2) + "%");
             }
             imgs.add(catimgsh(5, evs[i].img, RichText.render(str, 0).img));
         }
