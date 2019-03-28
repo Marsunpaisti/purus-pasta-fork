@@ -120,7 +120,8 @@ public class BotUtils {
 
 		if (item != null) {
 			item.item.wdgmsg("iact", Coord.z, 3);
-			sleep(250);
+			while(gui.ui.root.findchild(FlowerMenu.class) == null)
+				sleep(10);
 			@SuppressWarnings("deprecation")
 			FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
 			if (menu != null) {
