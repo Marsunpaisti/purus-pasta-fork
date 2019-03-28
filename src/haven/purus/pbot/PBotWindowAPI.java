@@ -49,10 +49,10 @@ public class PBotWindowAPI {
 	 * @param window Window to look inventory from
 	 * @return Inventory of the window or null if not found
 	 */
-	public static Inventory getInventory(Window window) {
+	public static PBotInventory getInventory(Window window) {
 		for(Widget wdg = window.lchild; wdg!=null; wdg = wdg.prev) {
 			if(wdg instanceof Inventory) {
-				return (Inventory) wdg;
+				return new PBotInventory((Inventory) wdg);
 			}
 		}
 		return null;
