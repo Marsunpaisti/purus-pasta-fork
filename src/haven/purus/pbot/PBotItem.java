@@ -1,6 +1,7 @@
 package haven.purus.pbot;
 
 import haven.*;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 import java.util.regex.Pattern;
 
@@ -108,11 +109,15 @@ public class PBotItem {
 	}
 
 	/**
-	 * Returns quality of the item
+	 * Returns quality of the item, or -1 if quality was not found
 	 * @return Quality of the item
 	 */
 	public double getQuality() {
-		return gitem.quality().q;
+		QBuff buff = gitem.quality();
+		if(buff == null)
+			return -1;
+		else
+			return buff.q;
 	}
 
 	/**
