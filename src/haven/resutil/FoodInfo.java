@@ -105,6 +105,8 @@ public class FoodInfo extends ItemInfo.Tip {
             }
             imgs.add(catimgsh(5, evs[i].img, RichText.render(str, 0).img));
         }
+        new Color(0,0,0);
+        imgs.add(RichText.render(String.format("Total FEP: $col[%d,%d,%d]{%s}, FEP/Hunger: $col[%d,%d,%d]{%s}", 0, 180, 0, Utils.odformat2(totalFeps, 2), 0, 180, 0, Utils.odformat2(totalFeps/(glut*100), 2)), 0).img);
         for (int i = 0; i < efs.length; i++) {
             BufferedImage efi = ItemInfo.longtip(efs[i].info);
             if (efs[i].p != 1)
