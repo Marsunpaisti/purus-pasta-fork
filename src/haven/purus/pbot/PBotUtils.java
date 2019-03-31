@@ -151,6 +151,28 @@ public class PBotUtils {
 	}
 
 	/**
+	 * Waits for the hourglass timer when crafting or drinking for example
+	 * Also waits until the hourglass has been seen to change at least once
+	 * If hourglass does not appear within timeout, returns false, else true
+	 * @param timeout Timeout in milliseconds
+	 */
+	public static boolean waitForHourglass(int timeout) {
+		double prog = gui.prog;
+		int retries = 0;
+		while(prog == gui.prog) {
+			if(retries > timeout/5)
+				return false;
+			retries++;
+			prog = gui.prog;
+			sleep(5);
+		}
+		while (gui.prog >= 0) {
+			sleep(25);
+		}
+		return true;
+	}
+
+	/**
 	 * Returns value of hourglass, -1 = no hourglass, else the value between 0.0 and 1.0
 	 * @return value of hourglass
 	 */
