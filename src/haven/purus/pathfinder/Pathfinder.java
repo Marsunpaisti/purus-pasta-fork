@@ -29,7 +29,7 @@ public class Pathfinder extends Thread {
 		this.action = action;
 	}
 
-	// Move close to the gob and right click it
+	// Move close to the gob and right or left click it
 	public Pathfinder(GameUI gui, Gob destGob, int button, int mod, int meshid, String action) {
 		this.gui = gui;
 		this.dest = destGob.rc;
