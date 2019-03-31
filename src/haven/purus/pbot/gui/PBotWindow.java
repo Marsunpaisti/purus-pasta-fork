@@ -9,6 +9,7 @@ import haven.purus.pbot.PBotScriptmanager;
 public class PBotWindow extends Window {
 
 	private String id;
+	private boolean closed = false;
 
 	public PBotWindow(Coord sz, String cap, String id) {
 		super(sz, cap);
@@ -100,18 +101,28 @@ public class PBotWindow extends Window {
 		add(te, new Coord(x,y));
 		return te;
 	}
+
+	/**
+	 * Has the window been closen by the user or program?
+	 * @return True if the window has been closen
+	 */
+	public boolean closed() {
+		return closed;
+	}
 	
 	/**
 	 * Closes the window
 	 */
 	public void closeWindow() {
 		reqdestroy();
+		closed = true;
 	}
 	
 	@Override
 	public void wdgmsg(Widget sender, String msg, Object... args) {
 		if(sender == cbtn) {
 			reqdestroy();
+			closed = true;
 		} else {
 			super.wdgmsg(sender, msg, args);
 		}
