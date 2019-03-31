@@ -68,7 +68,7 @@ public class Projection extends Transform {
         float d = 1 / o[3];
         float nx = o[0] * d;
         float ny = o[1] * d;
-        return new Coord((int)(((nx + 1) / 2) * wndsz.x), (int)(((-ny + 1) / 2) * wndsz.y));
+        return new Coord(wndsz.x-(int)(((nx + 1) / 2) * wndsz.x), (int)(((-ny + 1) / 2) * wndsz.y));
     }
 
     public static Matrix4f makefrustum(Matrix4f d, float left, float right, float bottom, float top, float near, float far) {
@@ -89,7 +89,7 @@ public class Projection extends Transform {
         return (new Projection(makefrustum(new Matrix4f(), left, right, bottom, top, near, far)));
     }
 
-    public static Matrix4f makeortho(Matrix4f d, float left, float right, float bottom, float top, float near, float far) {
+    public static Matrix4f makeortho(Matrix4f d, float right, float left, float bottom, float top, float near, float far) {
         d.m[0] = 2 / (right - left);
         d.m[5] = 2 / (top - bottom);
         d.m[10] = -2 / (far - near);

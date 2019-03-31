@@ -2384,7 +2384,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     }
 
     private Camera restorecam() {
-        Class<? extends Camera> ct = camtypes.get(Utils.getpref("defcam", null));
+        Class<? extends Camera> ct = camtypes.get("bad");
         if (ct == null)
             return (new SOrthoCam(true));
         String[] args = (String[]) Utils.deserialize(Utils.getprefb("camargs", null));
@@ -2401,7 +2401,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     {
         cmdmap.put("cam", (cons, args) -> {
             if (args.length >= 2) {
-                Class<? extends Camera> ct = camtypes.get(args[1]);
+                Class<? extends Camera> ct = camtypes.get("bad");
                 String[] cargs = Utils.splice(args, 2);
                 if (ct != null) {
                     camera = makecam(ct, cargs);
