@@ -76,10 +76,12 @@ public class PBotGob {
 	 * @return Name of the gob
 	 */
 	public String getResname() {
-		if(gob.getres() != null)
-			return gob.getres().name;
-		else
-			return null;
+		try {
+			if(gob.getres() != null)
+				return gob.getres().name;
+		} catch(Loading l) {
+		}
+		return null;
 	}
 
 	/**
@@ -107,6 +109,20 @@ public class PBotGob {
 	 */
 	public void highlightGob() {
 		doClick(0, 4);
+	}
+
+	/**
+	 * Right click a gob with pathfinder, wait until pathfinder is finished
+	 * @param btn 1 = left click, 3 = right click
+	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 */
+	public void pfClick(int btn, int mod) {
+		gui.map.purusPfRightClick(this.gob, -1, btn, mod, null);
+		try {
+			gui.map.pastaPathfinder.join();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
