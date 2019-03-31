@@ -312,6 +312,7 @@ public class MenuGrid extends Widget {
             p.add(paginafor(Resource.local().load("paginae/purus/stockpilefill")));
             p.add(paginafor(Resource.local().load("paginae/purus/drinkWater")));
             p.add(paginafor(Resource.local().load("paginae/purus/transferToObject")));
+            p.add(paginafor(Resource.local().load("paginae/purus/flowerPicker")));
             // PBot Scripts
             p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
@@ -556,6 +557,8 @@ public class MenuGrid extends Widget {
             }
             gui.transferingObjectThread = new Thread(new TransferToObject(gui));
             gui.transferingObjectThread.start();
+        } else if(ad[1].equals("flowerPicker")) {
+            new Thread(new FlowerPicker(gui)).start();
         }
     }
 

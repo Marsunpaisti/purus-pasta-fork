@@ -39,7 +39,7 @@ public class Inventory extends Widget implements DTarget {
     public static final Coord sqsz = new Coord(33, 33);
     public boolean dropul = true;
     public Coord isz;
-    Map<GItem, WItem> wmap = new HashMap<GItem, WItem>();
+    public Map<GItem, WItem> wmap = new HashMap<GItem, WItem>();
     @RName("inv")
     public static class $_ implements Factory {
         public Widget create(UI ui, Object[] args) {
