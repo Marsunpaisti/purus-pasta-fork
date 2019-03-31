@@ -1,5 +1,13 @@
 ## Changelog
 
+### 3.12.0
+	- Added more FEP info to foods
+	- Added some PBot functions
+	- Re-implemented PBot destroyer
+	- Re-implemented PBot farmer
+	- Fixed defaultalarm config
+	- Mirrored everything
+	- Various minor bugfixes
 ### 3.11.1
 	- Fix scripts
 ### 3.11.0
