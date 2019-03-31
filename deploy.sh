@@ -4,3 +4,4 @@ cd ../puruscor.github.io/
 git add ./HnH/*
 git commit -m "Update client files"
 git push
+curl --request post https://api.github.com/repos/puruscor/puruscor.github.io/pages/builds
