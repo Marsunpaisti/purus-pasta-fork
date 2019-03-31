@@ -22,7 +22,7 @@ public class Farmer extends Window implements AreaSelectCallback, GobSelectCallb
 	private Gob barrel;
 	
 	public Farmer() {
-		super(new Coord(180, 550), "Farming Bots");
+		super(new Coord(180, 615), "Farming Bots");
 		int y = 0;
 		Button carrotBtn = new Button(140, "Carrot") {
 			@Override
@@ -181,6 +181,44 @@ public class Farmer extends Window implements AreaSelectCallback, GobSelectCallb
 			}
 		};
 		add(poppyBtn, new Coord(20, y));
+		y += 35;
+
+		Button pipeweedBtn = new Button(140, "Pipeweed") {
+			@Override
+			public void click() {
+				if (a != null && b != null) {
+					// Start poppy farmer and close this window
+					SeedCropFarmer bf =
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/pipeweed", "gfx/invobjs/seed-pipeweed", 4, container, barrel);
+
+					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
+					new Thread(bf).start();
+					this.parent.destroy();
+				} else {
+					BotUtils.sysMsg("Area not selected!", Color.WHITE);
+				}
+			}
+		};
+		add(pipeweedBtn, new Coord(20, y));
+		y += 35;
+
+		Button lettuceBtn = new Button(140, "Lettuce") {
+			@Override
+			public void click() {
+				if (a != null && b != null) {
+					// Start poppy farmer and close this window
+					SeedCropFarmer bf =
+							new SeedCropFarmer(a, b, "gfx/terobjs/plants/lettuce", "gfx/invobjs/seed-lettuce", 4, container, barrel);
+
+					gameui().add(bf, new Coord(gameui().sz.x / 2 - bf.sz.x / 2, gameui().sz.y / 2 - bf.sz.y / 2 - 200));
+					new Thread(bf).start();
+					this.parent.destroy();
+				} else {
+					BotUtils.sysMsg("Area not selected!", Color.WHITE);
+				}
+			}
+		};
+		add(lettuceBtn, new Coord(20, y));
 		y += 35;
 
 		Button hempBtn = new Button(140, "Hemp") {
