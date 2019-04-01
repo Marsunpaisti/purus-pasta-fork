@@ -509,7 +509,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     void dispatch() {
         synchronized (events) {
             if (mousemv != null) {
-                mousepos = new Coord(this.getWidth()-mousemv.getX(), mousemv.getY());
+                mousepos = new Coord(mousemv.getX(), mousemv.getY());
                 ui.mousemove(mousemv, mousepos);
                 mousemv = null;
             }
@@ -518,11 +518,11 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                 if (e instanceof MouseEvent) {
                     MouseEvent me = (MouseEvent) e;
                     if (me.getID() == MouseEvent.MOUSE_PRESSED) {
-                        ui.mousedown(me, new Coord(this.getWidth()-me.getX(), me.getY()), me.getButton());
+                        ui.mousedown(me, new Coord(me.getX(), me.getY()), me.getButton());
                     } else if (me.getID() == MouseEvent.MOUSE_RELEASED) {
-                        ui.mouseup(me, new Coord(this.getWidth()-me.getX(), me.getY()), me.getButton());
+                        ui.mouseup(me, new Coord(me.getX(), me.getY()), me.getButton());
                     } else if (me instanceof MouseWheelEvent) {
-                        ui.mousewheel(me, new Coord(this.getWidth()-me.getX(), me.getY()), ((MouseWheelEvent) me).getWheelRotation());
+                        ui.mousewheel(me, new Coord(me.getX(), me.getY()), ((MouseWheelEvent) me).getWheelRotation());
                     }
                 } else if (e instanceof KeyEvent) {
                     KeyEvent ke = (KeyEvent) e;
