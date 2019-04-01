@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.12.1
+	- Reverted mirror everything
 ### 3.12.0
 	- Added more FEP info to foods
 	- Added some PBot functions
