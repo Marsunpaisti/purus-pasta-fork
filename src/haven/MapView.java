@@ -50,6 +50,7 @@ import static haven.OCache.posres;
 
 public class MapView extends PView implements DTarget, Console.Directory, PFListener {
     public static boolean clickdb = false;
+    public boolean foundPath = false;
     public static long plgob = -1;
     public static Coord2d pllastcc;
     public Coord2d cc;
@@ -1877,6 +1878,15 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 pastaPathfinder.interrupt();
             }
             pastaPathfinder = new haven.purus.pathfinder.Pathfinder(gameui(), new Coord2d(mc), action);
+            pastaPathfinder.start();
+        }
+    }
+    public void purusPfLeftClick(Coord2d mc, String action) {
+        synchronized(haven.purus.pathfinder.Pathfinder.class) {
+            if(pastaPathfinder != null && pastaPathfinder.isAlive()) {
+                pastaPathfinder.interrupt();
+            }
+            pastaPathfinder = new haven.purus.pathfinder.Pathfinder(gameui(), mc, action);
             pastaPathfinder.start();
         }
     }
