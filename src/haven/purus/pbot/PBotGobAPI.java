@@ -1,9 +1,6 @@
 package haven.purus.pbot;
 
-import haven.Coord2d;
-import haven.GameUI;
-import haven.Gob;
-import haven.Loading;
+import haven.*;
 import haven.automation.GobSelectCallback;
 import haven.purus.BotUtils;
 
@@ -54,6 +51,22 @@ public class PBotGobAPI {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * Waits for any gob to appear at the precisely given coordinates, excluding player
+	 * @param x
+	 * @param y
+	 */
+	public static void waitForGob(double x, double y) {
+		Coord2d expected = new Coord2d(x, y);
+		while(true) {
+			for(PBotGob gob:getAllGobs()) {
+				if(gob.getRcCoords().equals(expected) && player().getGobId() != gob.getGobId())
+					return;
+			}
+			PBotUtils.sleep(25);
+		}
 	}
 
 	/**
