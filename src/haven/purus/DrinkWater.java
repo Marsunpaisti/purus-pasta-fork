@@ -77,11 +77,13 @@ public class DrinkWater implements Runnable {
 	private boolean canDrinkFrom(WItem item) {
 		ItemInfo.Contents contents = getContents(item);
 		if (contents != null && contents.sub != null) {
-			for (ItemInfo info : contents.sub) {
-				if (info instanceof ItemInfo.Name) {
-					ItemInfo.Name name = (ItemInfo.Name) info;
-					if (name.str != null && name.str.text.contains("Water"))
-						return true;
+			synchronized(item.item.ui) {
+				for(ItemInfo info : contents.sub) {
+					if(info instanceof ItemInfo.Name) {
+						ItemInfo.Name name = (ItemInfo.Name) info;
+						if(name.str != null && name.str.text.contains("Water"))
+							return true;
+					}
 				}
 			}
 		}
@@ -99,11 +101,13 @@ public class DrinkWater implements Runnable {
 	private ItemInfo.Contents getContents(WItem item) {
 		if(item == null)
 			return null;
-		try {
-			for (ItemInfo info : item.item.info())
-				if (info != null && info instanceof ItemInfo.Contents)
-					return (ItemInfo.Contents) info;
-		} catch (Loading ignored) {
+		synchronized(item.item.ui) {
+			try {
+				for(ItemInfo info : item.item.info())
+					if(info != null && info instanceof ItemInfo.Contents)
+						return (ItemInfo.Contents) info;
+			} catch(Loading ignored) {
+			}
 		}
 		return null;
 	}

@@ -159,11 +159,13 @@ public class BotUtils {
 	public static boolean canDrinkFrom(WItem item) {
 		ItemInfo.Contents contents = getContents(item);
 		if (contents != null && contents.sub != null) {
-			for (ItemInfo info : contents.sub) {
-				if (info instanceof ItemInfo.Name) {
-					ItemInfo.Name name = (ItemInfo.Name) info;
-					if (name.str != null && liquidPattern.matcher(name.str.text).matches())
-						return true;
+			synchronized(item.item.ui) {
+				for(ItemInfo info : contents.sub) {
+					if(info instanceof ItemInfo.Name) {
+						ItemInfo.Name name = (ItemInfo.Name) info;
+						if(name.str != null && liquidPattern.matcher(name.str.text).matches())
+							return true;
+					}
 				}
 			}
 		}
