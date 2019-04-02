@@ -180,11 +180,10 @@ public class PBotGobAPI {
 
 	/**
 	 * Use to place something, for example, a stockpile
-	 * 11 offset = 1 tile
-	 * @param x Offset from player to place stockpile to
-	 * @param y Offset from player to place stockpile to
+	 * @param x x place stockpile to
+	 * @param y y place stockpile to
 	 */
-	public static void placeThing(int x, int y) {
-		gui.map.wdgmsg("place", player().getRcCoords().add(x, y).floor(posres), 0, 1, 0);
+	public static void placeThing(double x, double y) {
+		gui.map.wdgmsg("place", new Coord2d(x, y).floor(posres), 0, 1, 0);
 	}
 }
