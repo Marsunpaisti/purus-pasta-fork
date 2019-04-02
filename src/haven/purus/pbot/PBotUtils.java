@@ -37,13 +37,17 @@ public class PBotUtils {
 	 * Right click a gob with pathfinder, wait until pathfinder is finished
 	 * @param gob Gob to right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @return False if path was not found, true if it was found
 	 */
-	public static void pfRightClick(PBotGob gob, int mod) {
+	public static boolean pfRightClick(PBotGob gob, int mod) {
 		gui.map.purusPfRightClick(gob.gob, -1, 3, mod, null);
 		try {
 			gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
+		}
+		synchronized(gui.map) {
+			return gui.map.foundPath;
 		}
 	}
 
@@ -51,17 +55,28 @@ public class PBotUtils {
 	/**
 	 * Chooses a petal with given label from a flower menu that is currently open
 	 * @param name Name of petal to open
+	 * @return False if petal or flower menu with name could not be found
 	 */
-	public static void choosePetal(String name) {
+	public static boolean choosePetal(String name) {
 		FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
 		if(menu != null) {
 			for(FlowerMenu.Petal opt : menu.opts) {
 				if(opt.name.equals(name)) {
 					menu.choose(opt);
 					menu.destroy();
+					return true;
 				}
 			}
 		}
+		return false;
+	}
+
+	/**
+	 * Closes flowermenu, if it is open
+	 */
+	public static void waitFlowermenuClose() {
+		while(gui.ui.root.findchild(FlowerMenu.class) != null)
+			sleep(25);
 	}
 
 	/**
@@ -100,13 +115,17 @@ public class PBotUtils {
 	 * Left click to somewhere with pathfinder, wait until pathfinder is finished
 	 * @param x X-Coordinate
 	 * @param y Y-Coordinate
+	 * @return False if path was not found, true if it was found
 	 */
-	public static void pfLeftClick(int x, int y) {
-		gui.map.purusPfLeftClick(new Coord(x, y), null);
+	public static boolean pfLeftClick(double x, double y) {
+		gui.map.purusPfLeftClick(new Coord2d(x, y), null);
 		try {
 			gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
+		}
+		synchronized(gui.map) {
+			return gui.map.foundPath;
 		}
 	}
 
@@ -134,6 +153,20 @@ public class PBotUtils {
 	 */
 	public static void waitForFlowerMenu() {
 		while(gui.ui.root.findchild(FlowerMenu.class) == null) {
+			BotUtils.sleep(15);
+		}
+	}
+
+	/**
+	 * Waits for the flower menu to disappear
+	 */
+	public static void closeFlowermenu() {
+		FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
+		if(menu != null) {
+			menu.choose(null);
+			menu.destroy();
+		}
+		while(gui.ui.root.findchild(FlowerMenu.class) != null) {
 			BotUtils.sleep(15);
 		}
 	}
@@ -256,6 +289,24 @@ public class PBotUtils {
 	 */
 	public static PBotInventory playerInventory() {
 		return new PBotInventory(gui.maininv);
+	}
+
+	/**
+	 * Returns all open inventories
+	 * @return List of inventories
+	 */
+	public static ArrayList<PBotInventory> getAllInventories() {
+		ArrayList<PBotInventory> ret = new ArrayList<>();
+		for(Widget window = gui.lchild; window != null; window = window.prev) {
+			if(window instanceof Window) {
+				for(Widget wdg = window.lchild; wdg != null; wdg = wdg.prev) {
+					if(wdg instanceof Inventory) {
+						ret.add(new PBotInventory((Inventory) wdg));
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
