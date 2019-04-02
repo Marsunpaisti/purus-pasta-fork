@@ -5,6 +5,7 @@ import haven.Window;
 import haven.automation.GobSelectCallback;
 import haven.purus.BotUtils;
 import haven.purus.DrinkWater;
+import haven.purus.ItemClickCallback;
 import haven.purus.pbot.gui.PBotWindow;
 
 import java.awt.*;
@@ -17,6 +18,8 @@ public class PBotUtils {
 
 	private static Coord selectedAreaA, selectedAreaB;
 	private static GameUI gui = PBotAPI.gui;
+	private static boolean itemSelectWait;
+	private static PBotItem selectedItem;
 
 	/**
 	 * Sleep for t milliseconds
@@ -384,6 +387,35 @@ public class PBotUtils {
 					return (a.gob.rc.floor().y <b.gob.rc.floor().y) ? -1 : (a.gob.rc.floor().y >b.gob.rc.floor().y) ? 1 : 0;
 			} else
 				return (a.gob.rc.floor().x <b.gob.rc.floor().x) ? -1 : (a.gob.rc.floor().x > b.gob.rc.floor().x) ? 1 : 0;
+		}
+	}
+
+	/**
+	 * Next click to item in inventory returns the item, the function will wait until this happens
+	 */
+	public static PBotItem selectItem() {
+		synchronized (ItemClickCallback.class) {
+			BotUtils.gui.registerItemCallback(new ItemCb());
+		}
+		while(itemSelectWait) {
+			PBotUtils.sleep(25);
+		}
+		synchronized(ItemClickCallback.class) {
+			BotUtils.gui.unregisterItemCallback();
+		}
+		return selectedItem;
+	}
+
+	private static class ItemCb implements ItemClickCallback {
+
+		public ItemCb() {
+			itemSelectWait = true;
+		}
+
+		@Override
+		public void itemClick(WItem item) {
+			selectedItem = new PBotItem(item);
+			itemSelectWait = false;
 		}
 	}
 }
