@@ -4,6 +4,7 @@ import haven.*;
 import haven.res.ui.tt.q.qbuff.QBuff;
 
 import java.util.regex.Pattern;
+import static haven.OCache.posres;
 
 public class PBotItem {
 
@@ -61,6 +62,14 @@ public class PBotItem {
 	 */
 	public void activateItem() {
 		gitem.wdgmsg("iact", Coord.z, 3);
+	}
+
+	/**
+	 * Itemact
+	 * @param mod modifier for example 1 = shift etc.
+	 */
+	public void itemact(int mod) {
+		gitem.wdgmsg("itemact",  mod);
 	}
 
 	/**
