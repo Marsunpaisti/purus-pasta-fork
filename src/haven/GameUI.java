@@ -867,7 +867,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (afk && (idle <= 300)) {
             afk = false;
         }
-        if(Config.autodrink && prog == -1 && getmeter("stam", 0).a < 80) { // Drink if no hourglass and stamina is under 80%
+        if(Config.autodrink && prog == -1 && getmeter("stam", 0) != null && getmeter("stam", 0).a < 80) { // Drink if no hourglass and stamina is under 80%
             if(!drinkingWater && System.currentTimeMillis()-lastAutodrink >= 1000) {
                 lastAutodrink = System.currentTimeMillis();
                 new Thread(new DrinkWater(this)).start();
