@@ -12,7 +12,6 @@ import static haven.OCache.posres;
 
 public class PBotGobAPI {
 
-	private static GameUI gui = PBotAPI.gui;
 	private static boolean gobSelectWait = false;
 	private static Gob selectedGob;
 
@@ -45,8 +44,8 @@ public class PBotGobAPI {
 	 */
 	public static List<PBotGob> getAllGobs() {
 		List<PBotGob> list = new ArrayList<PBotGob>();
-		synchronized(gui.ui.sess.glob.oc) {
-			for(Gob gob : gui.ui.sess.glob.oc) {
+		synchronized(PBotAPI.gui.ui.sess.glob.oc) {
+			for(Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
 				list.add(new PBotGob(gob));
 			}
 		}
@@ -79,8 +78,8 @@ public class PBotGobAPI {
 		Coord2d plc = player().getRcCoords();
 		double min = radius;
 		Gob nearest = null;
-		synchronized (gui.ui.sess.glob.oc) {
-			for (Gob gob : gui.ui.sess.glob.oc) {
+		synchronized (PBotAPI.gui.ui.sess.glob.oc) {
+			for (Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
 				double dist = gob.rc.dist(plc);
 				if (dist < min) {
 					boolean matches = false;
@@ -112,8 +111,8 @@ public class PBotGobAPI {
 	 * @return Gob with coordinates or null
 	 */
 	public static PBotGob getGobWithCoords(Coord2d c) {
-		synchronized (gui.ui.sess.glob.oc) {
-			for (Gob gob : gui.ui.sess.glob.oc) {
+		synchronized (PBotAPI.gui.ui.sess.glob.oc) {
+			for (Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
 				if(gob.rc.x == c.x && gob.rc.y == c.y)
 					return new PBotGob(gob);
 			}
@@ -126,7 +125,7 @@ public class PBotGobAPI {
 	 * @return Player gob
 	 */
 	public static PBotGob player() {
-		return new PBotGob(gui.map.player());
+		return new PBotGob(PBotAPI.gui.map.player());
 	}
 
 
@@ -136,11 +135,11 @@ public class PBotGobAPI {
 	 * @return Object, or null if not found
 	 */
 	public static PBotGob findGobById(long id) {
-		Gob gob = gui.ui.sess.glob.oc.getgob(id);
+		Gob gob = PBotAPI.gui.ui.sess.glob.oc.getgob(id);
 		if(gob == null)
 			return null;
 		else
-			return new PBotGob(gui.ui.sess.glob.oc.getgob(id));
+			return new PBotGob(PBotAPI.gui.ui.sess.glob.oc.getgob(id));
 	}
 
 
@@ -175,7 +174,7 @@ public class PBotGobAPI {
 	 * Itemact with item in hand, for example, to make a stockpile
 	 */
 	public static void makePile() {
-		gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), player().getRcCoords().floor(posres), 0);
+		PBotAPI.gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), player().getRcCoords().floor(posres), 0);
 	}
 
 	/**
@@ -184,6 +183,6 @@ public class PBotGobAPI {
 	 * @param y y place stockpile to
 	 */
 	public static void placeThing(double x, double y) {
-		gui.map.wdgmsg("place", new Coord2d(x, y).floor(posres), 0, 1, 0);
+		PBotAPI.gui.map.wdgmsg("place", new Coord2d(x, y).floor(posres), 0, 1, 0);
 	}
 }

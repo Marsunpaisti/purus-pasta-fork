@@ -17,7 +17,6 @@ import static haven.OCache.posres;
 public class PBotUtils {
 
 	private static Coord selectedAreaA, selectedAreaB;
-	private static GameUI gui = PBotAPI.gui;
 	private static boolean itemSelectWait;
 	private static PBotItem selectedItem;
 
@@ -40,14 +39,14 @@ public class PBotUtils {
 	 * @return False if path was not found, true if it was found
 	 */
 	public static boolean pfRightClick(PBotGob gob, int mod) {
-		gui.map.purusPfRightClick(gob.gob, -1, 3, mod, null);
+		PBotAPI.gui.map.purusPfRightClick(gob.gob, -1, 3, mod, null);
 		try {
-			gui.map.pastaPathfinder.join();
+			PBotAPI.gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		synchronized(gui.map) {
-			return gui.map.foundPath;
+		synchronized(PBotAPI.gui.map) {
+			return PBotAPI.gui.map.foundPath;
 		}
 	}
 
@@ -58,7 +57,7 @@ public class PBotUtils {
 	 * @return False if petal or flower menu with name could not be found
 	 */
 	public static boolean choosePetal(String name) {
-		FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
+		FlowerMenu menu = PBotAPI.gui.ui.root.findchild(FlowerMenu.class);
 		if(menu != null) {
 			for(FlowerMenu.Petal opt : menu.opts) {
 				if(opt.name.equals(name)) {
@@ -75,7 +74,7 @@ public class PBotUtils {
 	 * Closes flowermenu, if it is open
 	 */
 	public static void waitFlowermenuClose() {
-		while(gui.ui.root.findchild(FlowerMenu.class) != null)
+		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null)
 			sleep(25);
 	}
 
@@ -87,14 +86,14 @@ public class PBotUtils {
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
 	 */
 	public static void mapClick(int x, int y, int btn, int mod) {
-		gui.map.wdgmsg("click", getCenterScreenCoord(), new Coord2d(x, y).floor(posres), btn, mod);
+		PBotAPI.gui.map.wdgmsg("click", getCenterScreenCoord(), new Coord2d(x, y).floor(posres), btn, mod);
 	}
 
 	/**
 	 * Use item in hand to ground below player, for example, to plant carrot
 	 */
 	public static void mapInteractClick() {
-		gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), PBotGobAPI.player().getRcCoords().floor(posres), 3, gui.ui.modflags());
+		PBotAPI.gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), PBotGobAPI.player().getRcCoords().floor(posres), 3, PBotAPI.gui.ui.modflags());
 	}
 
 
@@ -104,7 +103,7 @@ public class PBotUtils {
 	 */
 	public static Coord getCenterScreenCoord() {
 		Coord sc, sz;
-		sz = gui.map.sz;
+		sz = PBotAPI.gui.map.sz;
 		sc = new Coord((int) Math.round(Math.random() * 200 + sz.x / 2 - 100),
 				(int) Math.round(Math.random() * 200 + sz.y / 2 - 100));
 		return sc;
@@ -118,14 +117,14 @@ public class PBotUtils {
 	 * @return False if path was not found, true if it was found
 	 */
 	public static boolean pfLeftClick(double x, double y) {
-		gui.map.purusPfLeftClick(new Coord2d(x, y), null);
+		PBotAPI.gui.map.purusPfLeftClick(new Coord2d(x, y), null);
 		try {
-			gui.map.pastaPathfinder.join();
+			PBotAPI.gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		synchronized(gui.map) {
-			return gui.map.foundPath;
+		synchronized(PBotAPI.gui.map) {
+			return PBotAPI.gui.map.foundPath;
 		}
 	}
 
@@ -138,9 +137,9 @@ public class PBotUtils {
 		openCraftingWnd(name);
 		loop:
 		while(true) {
-			for(Widget w : gui.ui.widgets.values()) {
+			for(Widget w : PBotAPI.gui.ui.widgets.values()) {
 				if (w instanceof Makewindow) {
-					gui.wdgmsg(w, "make", makeAll);
+					PBotAPI.gui.wdgmsg(w, "make", makeAll);
 					break loop;
 				}
 			}
@@ -152,7 +151,7 @@ public class PBotUtils {
 	 * Waits for flower menu to appear
 	 */
 	public static void waitForFlowerMenu() {
-		while(gui.ui.root.findchild(FlowerMenu.class) == null) {
+		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) == null) {
 			BotUtils.sleep(15);
 		}
 	}
@@ -161,12 +160,12 @@ public class PBotUtils {
 	 * Waits for the flower menu to disappear
 	 */
 	public static void closeFlowermenu() {
-		FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
+		FlowerMenu menu = PBotAPI.gui.ui.root.findchild(FlowerMenu.class);
 		if(menu != null) {
 			menu.choose(null);
 			menu.destroy();
 		}
-		while(gui.ui.root.findchild(FlowerMenu.class) != null) {
+		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null) {
 			BotUtils.sleep(15);
 		}
 	}
@@ -176,12 +175,12 @@ public class PBotUtils {
 	 * Also waits until the hourglass has been seen to change at least once
 	 */
 	public static void waitForHourglass() {
-		double prog = gui.prog;
-		while (prog == gui.prog) {
-			prog = gui.prog;
+		double prog = PBotAPI.gui.prog;
+		while (prog == PBotAPI.gui.prog) {
+			prog = PBotAPI.gui.prog;
 			sleep(5);
 		}
-		while (gui.prog >= 0) {
+		while (PBotAPI.gui.prog >= 0) {
 			sleep(50);
 		}
 	}
@@ -193,16 +192,16 @@ public class PBotUtils {
 	 * @param timeout Timeout in milliseconds
 	 */
 	public static boolean waitForHourglass(int timeout) {
-		double prog = gui.prog;
+		double prog = PBotAPI.gui.prog;
 		int retries = 0;
-		while(prog == gui.prog) {
+		while(prog == PBotAPI.gui.prog) {
 			if(retries > timeout/5)
 				return false;
 			retries++;
-			prog = gui.prog;
+			prog = PBotAPI.gui.prog;
 			sleep(5);
 		}
-		while (gui.prog >= 0) {
+		while (PBotAPI.gui.prog >= 0) {
 			sleep(25);
 		}
 		return true;
@@ -213,7 +212,7 @@ public class PBotUtils {
 	 * @return value of hourglass
 	 */
 	public static double getHourglass() {
-		return gui.prog;
+		return PBotAPI.gui.prog;
 	}
 
 	// TODO: Return false if drinking was not successful (no water found for example)
@@ -222,13 +221,13 @@ public class PBotUtils {
 	 * @param wait Wait for the drinking to finish
 	 */
 	public static boolean drink(boolean wait) {
-		if(!gui.drinkingWater) {
-			Thread t = new Thread(new DrinkWater(gui));
+		if(!PBotAPI.gui.drinkingWater) {
+			Thread t = new Thread(new DrinkWater(PBotAPI.gui));
 			t.start();
 			if(wait) {
 				try {
 					t.join();
-					if(!gui.lastDrinkingSucessful) {
+					if(!PBotAPI.gui.lastDrinkingSucessful) {
 						sysMsg("PBotUtils Warning: Couldn't drink, didn't find anything to drink!", Color.ORANGE);
 						return false;
 					}
@@ -251,7 +250,7 @@ public class PBotUtils {
 		if(wnd != null)
 			PBotWindowAPI.closeWindow(wnd);
 		PBotWindowAPI.waitForWindowClose("Crafting");
-		gui.wdgmsg("act", "craft", name);
+		PBotAPI.gui.wdgmsg("act", "craft", name);
 		PBotWindowAPI.waitForWindow("Crafting");
 	}
 
@@ -260,7 +259,7 @@ public class PBotUtils {
 	 * @param str Message to send
 	 */
 	public static void sysMsg(String str) {
-		gui.msg(str, Color.WHITE);
+		PBotAPI.gui.msg(str, Color.WHITE);
 	}
 
 	/**
@@ -269,7 +268,7 @@ public class PBotUtils {
 	 * @param col Color of the text
 	 */
 	public static void sysMsg(String str, Color col) {
-		gui.msg(str, col);
+		PBotAPI.gui.msg(str, col);
 	}
 
 	/**
@@ -280,7 +279,7 @@ public class PBotUtils {
 	 * @param b Amount of blue colour in the text
 	 */
 	public static void sysMsg(String str, int r, int g, int b) {
-		gui.msg(str, new Color(r, g, b));
+		PBotAPI.gui.msg(str, new Color(r, g, b));
 	}
 
 	/**
@@ -288,7 +287,7 @@ public class PBotUtils {
 	 * @return Inventory of the player
 	 */
 	public static PBotInventory playerInventory() {
-		return new PBotInventory(gui.maininv);
+		return new PBotInventory(PBotAPI.gui.maininv);
 	}
 
 	/**
@@ -297,7 +296,7 @@ public class PBotUtils {
 	 */
 	public static ArrayList<PBotInventory> getAllInventories() {
 		ArrayList<PBotInventory> ret = new ArrayList<>();
-		for(Widget window = gui.lchild; window != null; window = window.prev) {
+		for(Widget window = PBotAPI.gui.lchild; window != null; window = window.prev) {
 			if(window instanceof Window) {
 				for(Widget wdg = window.lchild; wdg != null; wdg = wdg.prev) {
 					if(wdg instanceof Inventory) {
@@ -319,7 +318,7 @@ public class PBotUtils {
 	 */
 	public static PBotWindow PBotWindow(String title, int height, int width, String id) {
 		PBotWindow window = new PBotWindow(new Coord(width, height), title, id);
-		gui.add(window, 300, 300);
+		PBotAPI.gui.add(window, 300, 300);
 		return window;
 	}
 
@@ -328,10 +327,10 @@ public class PBotUtils {
 	 * @return Item at hand
 	 */
 	public static PBotItem getItemAtHand() {
-		if(gui.vhand == null)
+		if(PBotAPI.gui.vhand == null)
 			return null;
 		else
-			return new PBotItem(gui.vhand);
+			return new PBotItem(PBotAPI.gui.vhand);
 	}
 
 
@@ -340,7 +339,7 @@ public class PBotUtils {
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
 	 */
 	public static void dropItemFromHand(int mod) {
-		gui.map.wdgmsg("drop", Coord.z, gui.map.player().rc.floor(posres), mod);
+		PBotAPI.gui.map.wdgmsg("drop", Coord.z, PBotAPI.gui.map.player().rc.floor(posres), mod);
 		while(getItemAtHand() != null)
 			sleep(25);
 	}
@@ -352,8 +351,8 @@ public class PBotUtils {
 	 */
 	public static void selectArea() {
 		sysMsg("Please select an area by dragging!", Color.ORANGE);
-		gui.map.PBotAPISelect = true;
-		while(gui.map.PBotAPISelect)
+		PBotAPI.gui.map.PBotAPISelect = true;
+		while(PBotAPI.gui.map.PBotAPISelect)
 			sleep(25);
 	}
 
@@ -395,8 +394,8 @@ public class PBotUtils {
 		double smallX = a.x < b.x ? a.x : b.x;
 		double bigY = a.y > b.y ? a.y : b.y;
 		double smallY = a.y < b.y ? a.y : b.y;
-		synchronized(gui.ui.sess.glob.oc) {
-			for(Gob gob : gui.ui.sess.glob.oc) {
+		synchronized(PBotAPI.gui.ui.sess.glob.oc) {
+			for(Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
 				if(gob.rc.x <= bigX && gob.rc.x >= smallX && gob.getres() != null && gob.rc.y <= bigY
 						&& gob.rc.y >= smallY) {
 					gobs.add(new PBotGob(gob));
@@ -416,8 +415,8 @@ public class PBotUtils {
 	public static String tileResnameAt(int x, int y) {
 		try {
 			Coord loc = new Coord(x, y);
-			int t = gui.map.glob.map.gettile(loc.div(11));
-			Resource res = gui.map.glob.map.tilesetr(t);
+			int t = PBotAPI.gui.map.glob.map.gettile(loc.div(11));
+			Resource res = PBotAPI.gui.map.glob.map.tilesetr(t);
 			if(res != null)
 				return res.name;
 			else

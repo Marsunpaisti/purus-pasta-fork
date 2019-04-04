@@ -6,7 +6,6 @@ public class PBotAPI {
 	
 	public static GameUI gui;
 
-
 /*	// Null if not found
 
 
