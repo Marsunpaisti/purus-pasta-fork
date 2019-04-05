@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.13.0
+	- Added some scripts
+	- Fixed bugs issues
 ### 3.12.1
 	- Reverted mirror everything
 ### 3.12.0
