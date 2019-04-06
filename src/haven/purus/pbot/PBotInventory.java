@@ -86,8 +86,8 @@ public class PBotInventory {
 		WItem item = itm.witem;
 		int[][] d = new int[inventoryMatrix.length][inventoryMatrix[0].length];
 
-		int sizeX = item.c.div(33).x;
-		int sizeY = item.c.div(33).y;
+		int sizeX = item.item.size().x;
+		int sizeY = item.item.size().y;
 		for(int i=0; i<inventoryMatrix.length; i++) {
 			for(int j=0; j<inventoryMatrix[0].length; j++) {
 				if(inventoryMatrix[i][j] == 1)
@@ -99,9 +99,7 @@ public class PBotInventory {
 
 		for(int i=0; i<inventoryMatrix[0].length; i++) {
 			int curLen = 0;
-			System.out.println();
 			for(int j=0; j<inventoryMatrix.length; j++) {
-				System.out.print(d[j][i]);
 				if(d[j][i] >= sizeY)
 					curLen++;
 				else
