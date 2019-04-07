@@ -101,7 +101,7 @@ const startBtn = () => {
 			}
 			PBotUtils.pfRightClick(clothStockpiles[0], 0);
 			PBotWindowAPI.waitForWindow("Stockpile");
-			const slots = PBotUtils.playerInventory().freeSlotsInv();
+			const slots = PBotWindowAPI.getStockpileTotalCapacity();
 			const used = PBotWindowAPI.getStockpileUsedCapacity();
 			const count = Math.min(clothInInv, slots-used);
 			PBotWindowAPI.putItemFromInventoryToStockpile(count);
