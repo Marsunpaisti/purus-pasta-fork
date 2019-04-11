@@ -185,4 +185,11 @@ public class PBotGobAPI {
 	public static void placeThing(double x, double y) {
 		PBotAPI.gui.map.wdgmsg("place", new Coord2d(x, y).floor(posres), 0, 1, 0);
 	}
+
+	/**
+	 * Use to cancel stockpile placing for example
+	 */
+	public static void cancelPlace() {
+		PBotAPI.gui.map.wdgmsg("place", new Coord2d(0, 0).floor(posres), 0, 3, 0);
+	}
 }
