@@ -26,6 +26,9 @@
 
 package haven;
 
+import haven.Surface.MeshVertex;
+import haven.Surface.Vertex;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

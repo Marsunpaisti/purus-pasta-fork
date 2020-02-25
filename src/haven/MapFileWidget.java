@@ -50,6 +50,9 @@ import haven.MapFile.Marker;
 import haven.MapFile.PMarker;
 import haven.MapFile.SMarker;
 import haven.MapFile.Segment;
+import java.util.*;
+
+import static haven.MCache.cmaps;
 
 public class MapFileWidget extends Widget {
     public final MapFile file;

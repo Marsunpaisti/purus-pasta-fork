@@ -167,12 +167,13 @@ public class TimerWdg extends Widget {
         }
 
         @Override
-        public boolean type(char key, java.awt.event.KeyEvent ev) {
+        public boolean keydown(java.awt.event.KeyEvent ev) {
+            int key = ev.getKeyCode();
             if (key == 27) {
                 reqdestroy();
                 return true;
             }
-            return super.type(key, ev);
+            return super.keydown(ev);
         }
     }
 }

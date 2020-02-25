@@ -59,12 +59,12 @@ public class BreakNotify {
 		}
 
 		@Override
-		public boolean type ( char key, KeyEvent ev){
-			if(key == KeyEvent.VK_ESCAPE) {
+		public boolean keydown ( KeyEvent ev){
+			if(ev.getKeyChar() == KeyEvent.VK_ESCAPE) {
 				wdgmsg(cbtn, "click");
 				return (true);
 			}
-			return (super.type(key, ev));
+			return super.keydown(ev);
 		}
 	}
 }

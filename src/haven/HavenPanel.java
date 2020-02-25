@@ -38,6 +38,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.Robot;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -61,13 +63,14 @@ import javax.media.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.awt.Screenshot;
 import haven.purus.BreakNotify;
 
-public class HavenPanel extends GLCanvas implements Runnable, Console.Directory {
+public class HavenPanel extends GLCanvas implements Runnable, Console.Directory, UI.Context  {
     UI ui;
     public static UI lui;
     boolean inited = false;
     public static int w, h;
     public boolean bgmode = false;
     public static long bgfd = Utils.getprefi("bghz", 200);
+    boolean iswap = true, aswap;
     long fd = 10, fps = 0;
     double uidle = 0.0, ridle = 0.0;
     Queue<InputEvent> events = new LinkedList<InputEvent>();
@@ -180,7 +183,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                             BGL gl = g.gl;
                             gl.glColor3f(1, 1, 1);
                             gl.glPointSize(4);
-                            gl.joglSetSwapInterval(1);
+                            gl.joglSetSwapInterval((aswap = iswap) ? 1 : 0);
                             gl.glEnable(GL.GL_BLEND);
                             //gl.glEnable(GL.GL_LINE_SMOOTH);
                             gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -327,7 +330,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
     UI newui(Session sess) {
         if (ui != null)
             ui.destroy();
-        ui = new UI(new Coord(w, h), sess);
+        ui = new UI(this, new Coord(w, h), sess);
         ui.root.guprof = uprof;
         ui.root.grprof = rprof;
         ui.root.ggprof = gprof;
@@ -369,7 +372,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         }
 
         if (Config.dbtext) {
-            int y = h - 165;
+            int y = h - 190;
             FastText.aprintf(g, new Coord(10, y -= 15), 0, 1, "FPS: %d (%d%%, %d%% idle)", fps, (int) (uidle * 100.0), (int) (ridle * 100.0));
             Runtime rt = Runtime.getRuntime();
             long free = rt.freeMemory(), total = rt.totalMemory();
@@ -428,7 +431,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             g.image(tt, pos);
         }
         ui.lasttip = tooltip;
-        Resource curs = ui.root.getcurs(mousepos);
+        Resource curs = ui.getcurs(mousepos);
         if (cursmode == "awt") {
             if (curs != lastcursor) {
                 try {
@@ -504,8 +507,12 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
             }
             f.doneat = System.currentTimeMillis();
         }
+
+        if(iswap != aswap)
+            gl.setSwapInterval((aswap = iswap) ? 1 : 0);
     }
 
+    private KeyEvent lastpress = null;
     void dispatch() {
         synchronized (events) {
             if (mousemv != null) {
@@ -527,11 +534,37 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                 } else if (e instanceof KeyEvent) {
                     KeyEvent ke = (KeyEvent) e;
                     if (ke.getID() == KeyEvent.KEY_PRESSED) {
+                        InputEvent ne = events.peek();
+                        if(ne instanceof KeyEvent) {
+                            /* This is an extension of the below hack
+                             * to handle dead keys (on Windows). It's
+                             * extremely ugly and error-prone and
+                             * should be dealt with, but I've no idea
+                             * what the alternative would be.*/
+                            KeyEvent nke = (KeyEvent)ne;
+                            if((nke.getID() == KeyEvent.KEY_TYPED) && (nke.getWhen() == ke.getWhen())) {
+                                ke.setKeyChar(nke.getKeyChar());
+                                events.remove();
+                            }
+                        }
                         ui.keydown(ke);
+                        lastpress = ke;
                     } else if (ke.getID() == KeyEvent.KEY_RELEASED) {
                         ui.keyup(ke);
                     } else if (ke.getID() == KeyEvent.KEY_TYPED) {
-                        ui.type(ke);
+                        KeyEvent lp = lastpress;
+                        if((lp != null) && (lp.getKeyChar() == ke.getKeyChar())) {
+                            /* Squelch this event. It certainly is an
+                             * ugly hack, but I just haven't found any
+                             * other way to disambiguate these
+                             * duplicate events. Also, apparently
+                             * getWhen() cannot be completely trusted
+                             * to have the same value for a
+                             * KEY_PRESSED and corresponding KEY_TYPED
+                             * event.*/
+                        } else {
+                            ui.keydown(ke);
+                        }
                     }
                 }
                 ui.lastevent = Utils.rtime();
@@ -654,14 +687,16 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
 
                     frames[framep] = now;
                     waited[framep] = fwaited;
-                    for (int i = 0, ckf = framep, twait = 0; i < frames.length; i++) {
-                        ckf = (ckf - 1 + frames.length) % frames.length;
-                        twait += waited[ckf];
-                        if (now - frames[ckf] > 1000) {
-                            fps = i;
-                            uidle = ((double) twait) / ((double) (now - frames[ckf]));
-                            break;
+                    {
+                        int i = 0, ckf = framep, twait = 0;
+                        for(; i < frames.length - 1; i++) {
+                            ckf = (ckf - 1 + frames.length) % frames.length;
+                            twait += waited[ckf];
+                            if(now - frames[ckf] > 1000)
+                                break;
                         }
+                        fps = (i * 1000) / (now - frames[ckf]);
+                        uidle = ((double)twait) / ((double)(now - frames[ckf]));
                     }
                     framep = (framep + 1) % frames.length;
 
@@ -686,6 +721,21 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
         return (getGraphicsConfiguration());
     }
 
+    private Robot awtrobot;
+    public void setmousepos(Coord c) {
+        java.awt.EventQueue.invokeLater(() -> {
+            if(awtrobot == null) {
+                try {
+                    awtrobot = new Robot(getGraphicsConfiguration().getDevice());
+                } catch(java.awt.AWTException e) {
+                    return;
+                }
+            }
+            Point rp = getLocationOnScreen();
+            awtrobot.mouseMove(rp.x + c.x, rp.y + c.y);
+        });
+    }
+
     private Map<String, Console.Command> cmdmap = new TreeMap<String, Console.Command>();
 
     {
@@ -699,6 +749,9 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory 
                 bgfd = 1000 / Integer.parseInt(args[1]);
                 Utils.setprefi("bghz", (int) bgfd);
             }
+        });
+        cmdmap.put("vsync", (cons, args) -> {
+            iswap = Utils.parsebool(args[1]);
         });
     }
 

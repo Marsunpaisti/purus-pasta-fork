@@ -88,11 +88,12 @@ public class TimersWnd extends Window {
     }
 
     @Override
-    public boolean type(char key, java.awt.event.KeyEvent ev) {
+    public boolean keydown(java.awt.event.KeyEvent ev) {
+        int key = ev.getKeyCode();
         if (key == 27) {
             hide();
             return true;
         }
-        return super.type(key, ev);
+        return super.keydown(ev);
     }
 }

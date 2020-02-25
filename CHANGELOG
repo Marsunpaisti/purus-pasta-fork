@@ -1,3 +1,87 @@
+Version 1.75.1
+    Fixed:
+        * Crash related to symbel items.
+
+Version 1.75.0
+    Fixed:
+        * Crash! Boom! Bang!
+
+    Misc:
+        * Upstream code merge.
+
+Version 1.74.1
+    Fixed:
+        * Crash! Boom! Bang!
+
+    Misc:
+        * Make Ctrl+S rebindable.
+
+Version 1.74.0
+    New:
+        * Display season details in the date widget.
+
+    Misc:
+        * Make drink hotkey rebindable. Option to disable tilde/back-tick key has been removed as the result.
+        * Upstream code merge.
+
+Version 1.73.1
+    Fixed:
+        * Shift key modifier.
+        * F belt not restoring properly on login.
+        * Crash under certain conditions.
+
+    Misc:
+        * Make 'switch combat opponent' key combination changeable.
+        * Organize key bindings window.
+        * Upstream code merge.
+
+Version 1.73.0
+    Misc:
+        * Upstream code merge.
+
+Version 1.72.3
+    Fixed:
+        * Restored miniature trees option.
+        * (probably) Tree growth stages.
+        * Random disconnects (thanks to FuriousFox)
+
+Version 1.72.2
+    Fixed:
+        * Crash related to trees (Miniature trees option is temporary gone as the result).
+
+Version 1.72.1
+    Misc:
+        * Upstream code merge.
+
+Version 1.72.0
+    Fixed:
+        * Crash when viewing certain gilded items.
+
+    Misc:
+        * Removed Yarrow from Jellyfish Sting treatments.
+        * Upstream code merge.
+
+Version 1.71.0
+    Misc:
+        * Updated wound treatments.
+        * Added Mayflower to trees list.
+        * Upstream code merge.
+
+Version 1.70.1
+    Misc:
+        * Updated stones list.
+        * Upstream code merge.
+
+Version 1.70.0
+    New:
+        * Minimap zoom and icon tooltips (by Ropston).
+        * Options to drop soil and everything from the inventory (by lcy03406).
+
+    Misc:
+        * Updated stones list.
+        * Updated wound treatments.
+        * Upstream code merge.
+
 Version 1.69.4
     Fixed:
         * Fix resource tooltip not disappearing after turning the resource viewer off.

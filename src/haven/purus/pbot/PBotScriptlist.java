@@ -24,7 +24,7 @@ public class PBotScriptlist extends GameUI.Hidewnd {
 		
 		search = new TextEntry(210, "") {
             @Override
-            public boolean type(char c, KeyEvent ev) {
+            public boolean keydown(KeyEvent ev) {
                 if (!parent.visible)
                     return false;
 

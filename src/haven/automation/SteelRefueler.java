@@ -271,13 +271,14 @@ public class SteelRefueler extends Window implements GobSelectCallback {
     }
 
     @Override
-    public boolean type(char key, KeyEvent ev) {
+    public boolean keydown(KeyEvent ev) {
+        int key = ev.getKeyCode();
         if (key == 27) {
             if (cbtn.visible)
                 reqdestroy();
             return true;
         }
-        return super.type(key, ev);
+        return super.keydown(ev);
     }
 
     public void terminate() {

@@ -223,10 +223,7 @@ public class FlowerMenu extends Widget {
     }
 
     public boolean keydown(java.awt.event.KeyEvent ev) {
-        return (true);
-    }
-
-    public boolean type(char key, java.awt.event.KeyEvent ev) {
+        char key = ev.getKeyChar();
         if (Config.userazerty)
             key = Utils.azerty2qwerty(key);
 

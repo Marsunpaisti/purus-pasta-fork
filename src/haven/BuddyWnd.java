@@ -424,7 +424,7 @@ public class BuddyWnd extends Widget implements Iterable<BuddyWnd.Buddy> {
         add(new Img(CharWnd.catf.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Kin")).tex()), new Coord(0, 0));
         search = add(new TextEntry(110, "") {
             @Override
-            public boolean type(char c, KeyEvent ev) {
+            public boolean keydown(KeyEvent ev) {
                 if (!parent.visible)
                     return false;
 

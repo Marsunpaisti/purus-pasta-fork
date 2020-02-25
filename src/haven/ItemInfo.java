@@ -54,6 +54,15 @@ import haven.factories.SeamarriageFactory;
 import haven.factories.WoodlandrealmFactory;
 import haven.res.ui.tt.ArmorFactory;
 import haven.res.ui.tt.WearFactory;
+import haven.factories.*;
+import haven.res.ui.tt.ArmorFactory;
+import haven.res.ui.tt.WearFactory;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
 
 public abstract class ItemInfo {
     public final Owner owner;

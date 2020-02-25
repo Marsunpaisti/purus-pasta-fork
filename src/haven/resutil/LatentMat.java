@@ -24,51 +24,44 @@
  *  Boston, MA 02111-1307 USA
  */
 
-package haven;
+package haven.resutil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import haven.*;
+import haven.glsl.*;
+import static haven.glsl.Cons.*;
+import static haven.glsl.Type.*;
 
-public class ResData {
-    public Indir<Resource> res;
-    public MessageBuf sdt;
+public class LatentMat extends GLState.Abstract {
+    public static final Slot<LatentMat> slot = new Slot<>(Slot.Type.DRAW, LatentMat.class);
+    public final GLState mat;
+    public final String id, act;
 
-    public ResData(Indir<Resource> res, Message sdt) {
-        this.res = res;
-        this.sdt = new MessageBuf(sdt);
+    public LatentMat(GLState mat, String id) {
+	this.mat = mat;
+	this.id = id;
+	this.act = null;
     }
 
-    public ResData clone() {
-        return (new ResData(res, sdt));
+    public LatentMat(String act) {
+	this.mat = null;
+	this.id = null;
+	this.act = act;
     }
 
-    public int hashCode() {
-	return(Objects.hash(res, sdt));
+    public void prep(Buffer buf) {
+	if((mat != null) && (id != null))
+	    buf.put(slot, this);
+	if(act != null) {
+	    LatentMat cur = buf.get(slot);
+	    if((cur != null) && (cur.id == act))
+		cur.mat.prep(buf);
+	}
     }
 
-    public boolean equals(Object other) {
-        if (!(other instanceof ResData))
-            return (false);
-        ResData o = (ResData) other;
-        return (res.equals(o.res) && sdt.equals(o.sdt));
-    }
-
-    public static List<ResData> wrap(List<? extends Indir<Resource>> in) {
-        List<ResData> ret = new ArrayList<ResData>(in.size());
-        for (Indir<Resource> res : in)
-            ret.add(new ResData(res, Message.nil));
-        return (ret);
-    }
-
-    public static ResData[] wrap(Indir<Resource>[] in) {
-        ResData[] ret = new ResData[in.length];
-        for (int i = 0; i < in.length; i++)
-            ret[i] = new ResData(in[i], Message.nil);
-        return (ret);
-    }
-
-    public String toString() {
-	    return(String.format("(%s, %s)", res, sdt));
+    @Material.ResName("latent")
+    public static class $latent implements Material.ResCons {
+	public GLState cons(Resource res, Object... args) {
+	    return(new LatentMat(((String)args[0]).intern()));
+	}
     }
 }

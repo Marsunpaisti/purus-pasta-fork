@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Session implements Resource.Resolver {
-    public static final int PVER = 17;
+    public static final int PVER = 23;
 
     public static final int MSG_SESS = 0;
     public static final int MSG_REL = 1;
@@ -467,7 +467,7 @@ public class Session implements Resource.Resolver {
                             }
                             PMessage msg = new PMessage(MSG_SESS);
                             msg.adduint16(2);
-                            msg.addstring("Hafen/Purus-Pasta");
+                            msg.addstring("Hafen/Purus-Pasta2");
                             msg.adduint16(PVER);
                             msg.addstring(username);
                             msg.adduint16(cookie.length);

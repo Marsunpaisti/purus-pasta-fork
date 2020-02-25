@@ -61,7 +61,7 @@ import haven.automation.TrellisDestroy;
 import haven.automation.TrellisHarvest;
 import haven.purus.*;
 
-public class MenuGrid extends Widget {
+public class MenuGrid extends Widget implements KeyBinding.Bindable {
     public final static Coord bgsz = Inventory.invsq.sz().add(-1, -1);
     public final static RichText.Foundry ttfnd = new RichText.Foundry(TextAttribute.FAMILY, Text.cfg.font.get("sans"), TextAttribute.SIZE, Text.cfg.tooltipCap); //aa(true)
     public final Set<Pagina> paginae = new HashSet<Pagina>();
@@ -72,7 +72,6 @@ public class MenuGrid extends Widget {
     private UI.Grab grab;
     private int curoff = 0;
     private boolean recons = true;
-    private Map<Character, PagButton> hotmap = new HashMap<>();
     private boolean togglestuff = true;
 
     @RName("scm")
@@ -85,15 +84,25 @@ public class MenuGrid extends Widget {
     public static class PagButton implements ItemInfo.Owner {
         public final Pagina pag;
         public final Resource res;
+        public final KeyBinding bind;
 
         public PagButton(Pagina pag) {
             this.pag = pag;
             this.res = pag.res();
+            this.bind = binding();
         }
 
         public BufferedImage img() {return(res.layer(Resource.imgc).img);}
         public String name() {return(res.layer(Resource.action).name);}
-        public char hotkey() {return(res.layer(Resource.action).hk);}
+        public KeyMatch hotkey() {
+            char hk = res.layer(Resource.action).hk;
+            if(hk == 0)
+                return(KeyMatch.nil);
+            return(KeyMatch.forchar(Character.toUpperCase(hk), 0));
+        }
+        public KeyBinding binding() {
+            return(KeyBinding.get("scm/" + res.name, hotkey()));
+        }
         public void use() {
             pag.scm.wdgmsg("act", (Object[])res.layer(Resource.action).ad);
         }
@@ -117,14 +126,19 @@ public class MenuGrid extends Widget {
         public <T> T context(Class<T> cl) {return(ctxr.context(cl, this));}
 
         public BufferedImage rendertt(boolean withpg) {
-            Resource.AButton ad = res.layer(Resource.action);
             Resource.Pagina pg = res.layer(Resource.pagina);
-            String tt = ad.name;
-            int pos = tt.toUpperCase().indexOf(Character.toUpperCase(ad.hk));
+            String tt = name();
+            KeyMatch key = bind.key();
+            int pos = -1;
+            char vkey = key.chr;
+            if((vkey == 0) && (key.keyname.length() == 1))
+                vkey = key.keyname.charAt(0);
+            if((vkey != 0) && (key.modmatch == 0))
+                pos = tt.toUpperCase().indexOf(Character.toUpperCase(vkey));
             if(pos >= 0)
                 tt = tt.substring(0, pos) + "$b{$col[255,128,0]{" + tt.charAt(pos) + "}}" + tt.substring(pos + 1);
-            else if(ad.hk != 0)
-                tt += " [" + ad.hk + "]";
+            else if(key != KeyMatch.nil)
+                tt += " [$b{$col[255,128,0]{" + key.name() + "}}]";
             BufferedImage ret = ttfnd.render(tt, 300).img;
             if(withpg) {
                 List<ItemInfo> info = info();
@@ -144,6 +158,8 @@ public class MenuGrid extends Widget {
     }
 
     public final PagButton next = new PagButton(new Pagina(this, Resource.local().loadwait("gfx/hud/sc-next").indir())) {
+        {pag.button = this;}
+
         public void use() {
             if((curoff + 14) >= curbtns.size())
                 curoff = 0;
@@ -151,20 +167,21 @@ public class MenuGrid extends Widget {
                 curoff += 14;
         }
 
-        public BufferedImage rendertt(boolean withpg) {
-            return(RichText.render("More... ($b{$col[255,128,0]{\u21e7N}})", 0).img);
-        }
+        public String name() {return("More...");}
+
+        public KeyBinding binding() {return(kb_next);}
     };
 
     public final PagButton bk = new PagButton(new Pagina(this, Resource.local().loadwait("gfx/hud/sc-back").indir())) {
+        {pag.button = this;}
         public void use() {
             pag.scm.cur = paginafor(pag.scm.cur.act().parent);
             curoff = 0;
         }
 
-        public BufferedImage rendertt(boolean withpg) {
-            return(RichText.render("Back ($b{$col[255,128,0]{Backspace}})", 0).img);
-        }
+        public String name() {return("Back");}
+
+        public KeyBinding binding() {return(kb_back);}
     };
 
     public static class Pagina {
@@ -193,7 +210,7 @@ public class MenuGrid extends Widget {
             this.res = res;
             state(State.ENABLED);
         }
-        
+
         public Resource res() {
             return(res.get());
         }
@@ -325,12 +342,6 @@ public class MenuGrid extends Widget {
             Collections.sort(cur, Comparator.comparing(PagButton::sortkey));
             this.curbtns = cur;
             int i = curoff;
-            hotmap.clear();
-            for(PagButton btn : cur) {
-                char hk = btn.hotkey();
-                if(hk != 0)
-                    hotmap.put(Character.toUpperCase(hk), btn);
-            }
             for(int y = 0; y < gsz.y; y++) {
                 for(int x = 0; x < gsz.x; x++) {
                     PagButton btn = null;
@@ -367,7 +378,15 @@ public class MenuGrid extends Widget {
                 PagButton btn = layout[x][y];
                 if(btn != null) {
                     Pagina info = btn.pag;
-                    Tex btex = info.img.get();
+                    Tex btex;
+                    try {
+                        btex = info.img.get();
+                        g.image(btex, p.add(1, 1));
+                    } catch(NullPointerException e) {
+                        System.err.println(btn);
+                        System.err.println(info.scm == this);
+                        throw(e);
+                    }
                     g.image(btex, p.add(1, 1));
                     if(info.meter > 0) {
                         double m = info.meter;
@@ -592,12 +611,13 @@ public class MenuGrid extends Widget {
                             }
 
                             @Override
-                            public boolean type(char key, KeyEvent ev) {
+                            public boolean keydown(KeyEvent ev) {
+                                int key = ev.getKeyCode();
                                 if (key == 27) {
                                     reqdestroy();
                                     return true;
                                 }
-                                return super.type(key, ev);
+                                return super.keydown(ev);
                             }
                         };
 
@@ -725,28 +745,44 @@ public class MenuGrid extends Widget {
         }
     }
 
+    public static final KeyBinding kb_root = KeyBinding.get("scm-root", KeyMatch.forcode(KeyEvent.VK_ESCAPE, 0));
+    public static final KeyBinding kb_back = KeyBinding.get("scm-back", KeyMatch.forcode(KeyEvent.VK_BACK_SPACE, 0));
+    public static final KeyBinding kb_next = KeyBinding.get("scm-next", KeyMatch.forchar('N', KeyMatch.S | KeyMatch.C | KeyMatch.M, KeyMatch.S));
     public boolean globtype(char k, KeyEvent ev) {
         if (ev.isShiftDown() || ev.isAltDown()) {
             return false;
-        } else if ((k == 27) && (this.cur != null)) {
+        } else if (kb_root.key().match(ev) && (this.cur != null)) {
             this.cur = null;
             curoff = 0;
             updlayout();
             return (true);
-        } else if ((k == 8) && (this.cur != null)) {
-            this.cur = paginafor(this.cur.act().parent);
-            curoff = 0;
-            updlayout();
+        } else if(kb_back.key().match(ev) && (this.cur != null)) {
+            use(bk, false);
             return (true);
-        } else if ((k == 'N') && (layout[gsz.x - 2][gsz.y - 1] == next)) {
+        } else if(kb_next.key().match(ev) && (layout[gsz.x - 2][gsz.y - 1] == next)) {
             use(next, false);
             return (true);
         }
-        PagButton r = hotmap.get(Character.toUpperCase(k));
-        if (r != null) {
-            use(r, true);
+        int cp = -1;
+        PagButton pag = null;
+        for(PagButton btn : curbtns) {
+            if(btn.bind.key().match(ev)) {
+                int prio = btn.bind.set() ? 1 : 0;
+                if((pag == null) || (prio > cp)) {
+                    pag = btn;
+                    cp = prio;
+                }
+            }
+        }
+        if(pag != null) {
+            use(pag, true);
             return (true);
         }
         return (false);
+    }
+
+    public KeyBinding getbinding(Coord cc) {
+        PagButton h = bhit(cc);
+        return((h == null) ? null : h.bind);
     }
 }

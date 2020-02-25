@@ -56,7 +56,8 @@ public class Widget {
     public Widget focused;
     public Indir<Resource> cursor = null;
     public Object tooltip = null;
-    public int gkey;
+    public KeyMatch gkey;
+    public KeyBinding kb_gkey;
     private Widget prevtt;
     static Map<String, Factory> types = new TreeMap<String, Factory>();
 
@@ -315,101 +316,122 @@ public class Widget {
     protected void added() {
     }
 
+    public static class RelposError extends RuntimeException {
+        public final String spec;
+        public final int pos;
+        public final Stack<Object> stack;
+
+        public RelposError(Throwable cause, String spec, int pos, Stack<Object> stack) {
+            super(cause);
+            this.spec = spec;
+            this.pos = pos;
+            this.stack = stack;
+        }
+
+        public String getMessage() {
+            return(String.format("Unhandled exception at %s+%d, stack is %s", spec, pos, stack));
+        }
+    }
+
     public Coord relpos(String spec, Object self, Object[] args, int off) {
         int i = 0;
         Stack<Object> st = new Stack<Object>();
-        while (i < spec.length()) {
-            char op = spec.charAt(i++);
-            if (Character.isDigit(op)) {
-                int e;
-                for (e = i; (e < spec.length()) && Character.isDigit(spec.charAt(e)); e++) ;
-                st.push(Integer.parseInt(spec.substring(i - 1, e)));
-                i = e;
-            } else if (op == '!') {
-                st.push(args[off++]);
-            } else if (op == '$') {
-                st.push(self);
-            } else if(op == '@') {
-                st.push(this);
-            } else if (op == '_') {
-                st.push(st.peek());
-            } else if (op == '.') {
-                st.pop();
-            } else if (op == '^') {
-                Object a = st.pop();
-                Object b = st.pop();
-                st.push(a);
-                st.push(b);
-            } else if (op == 'c') {
-                int y = (Integer) st.pop();
-                int x = (Integer) st.pop();
-                st.push(new Coord(x, y));
-            } else if (op == 'o') {
-                Widget w = (Widget) st.pop();
-                st.push(w.c.add(w.sz));
-            } else if (op == 'p') {
-                st.push(((Widget) st.pop()).c);
-            } else if(op == 'P') {
-                Widget parent = (Widget)st.pop();
-                st.push(((Widget)st.pop()).parentpos(parent));
-            } else if (op == 's') {
-                st.push(((Widget) st.pop()).sz);
-            } else if (op == 'w') {
-                synchronized (ui) {
-                    st.push(ui.widgets.get((Integer) st.pop()));
-                }
-            } else if (op == 'x') {
-                st.push(((Coord) st.pop()).x);
-            } else if (op == 'y') {
-                st.push(((Coord) st.pop()).y);
-            } else if (op == '+') {
-                Object b = st.pop();
-                Object a = st.pop();
-                if ((a instanceof Integer) && (b instanceof Integer)) {
-                    st.push((Integer) a + (Integer) b);
-                } else if ((a instanceof Coord) && (b instanceof Coord)) {
-                    st.push(((Coord) a).add((Coord) b));
+        try {
+            while(i < spec.length()) {
+                char op = spec.charAt(i++);
+                if(Character.isDigit(op)) {
+                    int e;
+                    for(e = i; (e < spec.length()) && Character.isDigit(spec.charAt(e)); e++);
+                    st.push(Integer.parseInt(spec.substring(i - 1, e)));
+                    i = e;
+                } else if(op == '!') {
+                    st.push(args[off++]);
+                } else if(op == '$') {
+                    st.push(self);
+                } else if(op == '@') {
+                    st.push(this);
+                } else if(op == '_') {
+                    st.push(st.peek());
+                } else if(op == '.') {
+                    st.pop();
+                } else if(op == '^') {
+                    Object a = st.pop();
+                    Object b = st.pop();
+                    st.push(a);
+                    st.push(b);
+                } else if(op == 'c') {
+                    int y = (Integer)st.pop();
+                    int x = (Integer)st.pop();
+                    st.push(new Coord(x, y));
+                } else if(op == 'o') {
+                    Widget w = (Widget)st.pop();
+                    st.push(w.c.add(w.sz));
+                } else if(op == 'p') {
+                    st.push(((Widget)st.pop()).c);
+                } else if(op == 'P') {
+                    Widget parent = (Widget)st.pop();
+                    st.push(((Widget)st.pop()).parentpos(parent));
+                } else if(op == 's') {
+                    st.push(((Widget)st.pop()).sz);
+                } else if(op == 'w') {
+                    synchronized(ui) {
+                        st.push(ui.widgets.get((Integer)st.pop()));
+                    }
+                } else if(op == 'x') {
+                    st.push(((Coord)st.pop()).x);
+                } else if(op == 'y') {
+                    st.push(((Coord)st.pop()).y);
+                } else if(op == '+') {
+                    Object b = st.pop();
+                    Object a = st.pop();
+                    if((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer)a + (Integer)b);
+                    } else if((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord)a).add((Coord)b));
+                    } else {
+                        throw(new RuntimeException("Invalid addition operands: " + a + " + " + b));
+                    }
+                } else if(op == '-') {
+                    Object b = st.pop();
+                    Object a = st.pop();
+                    if((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer)a - (Integer)b);
+                    } else if((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord)a).sub((Coord)b));
+                    } else {
+                        throw(new RuntimeException("Invalid subtraction operands: " + a + " - " + b));
+                    }
+                } else if(op == '*') {
+                    Object b = st.pop();
+                    Object a = st.pop();
+                    if((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer)a * (Integer)b);
+                    } else if((a instanceof Coord) && (b instanceof Integer)) {
+                        st.push(((Coord)a).mul((Integer)b));
+                    } else if((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord)a).mul((Coord)b));
+                    } else {
+                        throw(new RuntimeException("Invalid multiplication operands: " + a + " - " + b));
+                    }
+                } else if(op == '/') {
+                    Object b = st.pop();
+                    Object a = st.pop();
+                    if((a instanceof Integer) && (b instanceof Integer)) {
+                        st.push((Integer)a / (Integer)b);
+                    } else if((a instanceof Coord) && (b instanceof Integer)) {
+                        st.push(((Coord)a).div((Integer)b));
+                    } else if((a instanceof Coord) && (b instanceof Coord)) {
+                        st.push(((Coord)a).div((Coord)b));
+                    } else {
+                        throw(new RuntimeException("Invalid division operands: " + a + " - " + b));
+                    }
+                } else if(Character.isWhitespace(op)) {
                 } else {
-                    throw (new RuntimeException("Invalid addition operands: " + a + " + " + b));
+                    throw(new RuntimeException("Unknown position operation: " + op));
                 }
-            } else if (op == '-') {
-                Object b = st.pop();
-                Object a = st.pop();
-                if ((a instanceof Integer) && (b instanceof Integer)) {
-                    st.push((Integer) a - (Integer) b);
-                } else if ((a instanceof Coord) && (b instanceof Coord)) {
-                    st.push(((Coord) a).sub((Coord) b));
-                } else {
-                    throw (new RuntimeException("Invalid subtraction operands: " + a + " - " + b));
-                }
-            } else if (op == '*') {
-                Object b = st.pop();
-                Object a = st.pop();
-                if ((a instanceof Integer) && (b instanceof Integer)) {
-                    st.push((Integer) a * (Integer) b);
-                } else if ((a instanceof Coord) && (b instanceof Integer)) {
-                    st.push(((Coord) a).mul((Integer) b));
-                } else if ((a instanceof Coord) && (b instanceof Coord)) {
-                    st.push(((Coord) a).mul((Coord) b));
-                } else {
-                    throw (new RuntimeException("Invalid multiplication operands: " + a + " - " + b));
-                }
-            } else if (op == '/') {
-                Object b = st.pop();
-                Object a = st.pop();
-                if ((a instanceof Integer) && (b instanceof Integer)) {
-                    st.push((Integer) a / (Integer) b);
-                } else if ((a instanceof Coord) && (b instanceof Integer)) {
-                    st.push(((Coord) a).div((Integer) b));
-                } else if ((a instanceof Coord) && (b instanceof Coord)) {
-                    st.push(((Coord) a).div((Coord) b));
-                } else {
-                    throw (new RuntimeException("Invalid division operands: " + a + " - " + b));
-                }
-            } else if (Character.isWhitespace(op)) {
-            } else {
-                throw (new RuntimeException("Unknown position operation: " + op));
             }
+        } catch(RuntimeException e) {
+            throw(new RelposError(e, spec, i, st));
         }
         return ((Coord) st.pop());
     }
@@ -655,7 +677,17 @@ public class Widget {
                 };
             }
         } else if(msg == "gk") {
-            gkey = (Integer)args[0];
+            if(args[0] instanceof Integer) {
+                KeyMatch key = gkeymatch((Integer)args[0]);
+                if(args.length > 1) {
+                    int modign = 0;
+                    if(args.length > 2)
+                        modign = (Integer)args[2];
+                    kb_gkey = KeyBinding.get("wgk/" + (String)args[1], key, modign);
+                } else {
+                    gkey = key;
+                }
+            }
         } else {
             System.err.println("Unhandled widget message: " + msg);
         }
@@ -774,18 +806,26 @@ public class Widget {
             put(8, KeyEvent.VK_BACK_SPACE).put(9, KeyEvent.VK_TAB).put(13, KeyEvent.VK_ENTER).put(27, KeyEvent.VK_ESCAPE).
             put(128, KeyEvent.VK_UP).put(129, KeyEvent.VK_RIGHT).put(130, KeyEvent.VK_DOWN).put(131, KeyEvent.VK_LEFT).
             put(132, KeyEvent.VK_INSERT).put(133, KeyEvent.VK_HOME).put(134, KeyEvent.VK_PAGE_UP).put(135, KeyEvent.VK_DELETE).put(136, KeyEvent.VK_END).put(137, KeyEvent.VK_PAGE_DOWN).map();
-    public static boolean matchgkey(KeyEvent ev, int gkey) {
-        if((gkey & 0xf000) != 0) {
-            return(((UI.modflags(ev) & ((gkey & 0xf000) >> 12)) == ((gkey & 0x0f00) >> 8)) &&
-                    (ev.getKeyCode() == gkeys.get(gkey & 0xff)));
-        } else {
-            return(ev.getKeyChar() == (gkey & 0xff));
-        }
+    public static KeyMatch gkeymatch(int gkey) {
+        if(gkey == 0)
+            return(KeyMatch.nil);
+        int key = gkey & 0xff, modmask = (gkey & 0xf000) >> 12, modmatch = (gkey & 0x0f00) >> 8;
+        if(modmask == 0)
+            modmask = KeyMatch.MODS;
+        Integer code = gkeys.get(key);
+        if(code != null)
+            return(KeyMatch.forcode(code, modmask, modmatch));
+        if(gkey < 32)
+            return(KeyMatch.forchar((char)((int)'A' + gkey - 1), KeyMatch.C));
+        return(KeyMatch.forchar((char)key, modmask, modmatch));
     }
 
     public boolean globtype(char key, KeyEvent ev) {
-        if((gkey != 0) && matchgkey(ev, gkey)) {
-            wdgmsg("activate");
+        KeyMatch gkey = this.gkey;
+        if(kb_gkey != null)
+            gkey = kb_gkey.key();
+        if((gkey != null) && gkey.match(ev)) {
+            wdgmsg("activate", UI.modflags(ev));
             return(true);
         }
         for (Widget wdg = lchild; wdg != null; wdg = wdg.prev) {
@@ -795,7 +835,8 @@ public class Widget {
         return (false);
     }
 
-    public boolean type(char key, KeyEvent ev) {
+    public boolean keydown(KeyEvent ev) {
+        char key = ev.getKeyChar();
         if (canactivate) {
             if (key == 10) {
                 wdgmsg("activate");
@@ -810,7 +851,7 @@ public class Widget {
         }
         if (focusctl) {
             if (focused != null) {
-                if (focused.type(key, ev))
+                if(focused.keydown(ev))
                     return (true);
                 if (focustab) {
                     if (key == '\t' && !ev.isShiftDown()) {
@@ -834,26 +875,6 @@ public class Widget {
                 } else {
                     return (false);
                 }
-            } else {
-                return (false);
-            }
-        } else {
-            for (Widget wdg = child; wdg != null; wdg = wdg.next) {
-                if (wdg.visible) {
-                    if (wdg.type(key, ev))
-                        return (true);
-                }
-            }
-            return (false);
-        }
-    }
-
-    public boolean keydown(KeyEvent ev) {
-        if (focusctl) {
-            if (focused != null) {
-                if (focused.keydown(ev))
-                    return (true);
-                return (false);
             } else {
                 return (false);
             }

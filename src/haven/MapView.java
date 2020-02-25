@@ -378,6 +378,11 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
+    public static KeyBinding kb_camleft  = KeyBinding.get("cam-left",  KeyMatch.forcode(KeyEvent.VK_LEFT, 0));
+    public static KeyBinding kb_camright = KeyBinding.get("cam-right", KeyMatch.forcode(KeyEvent.VK_RIGHT, 0));
+    public static KeyBinding kb_camin    = KeyBinding.get("cam-in",    KeyMatch.forcode(KeyEvent.VK_UP, 0));
+    public static KeyBinding kb_camout   = KeyBinding.get("cam-out",   KeyMatch.forcode(KeyEvent.VK_DOWN, 0));
+    public static KeyBinding kb_camreset = KeyBinding.get("cam-reset", KeyMatch.forcode(KeyEvent.VK_HOME, 0));
     public class SOrthoCam extends OrthoCam {
         private Coord dragorig = null;
         private float anglorig;
@@ -603,6 +608,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     };
 
+    {
+        visol[6] = 1;
+    }
     private final Rendered mapol = new Rendered() {
         private final GLState[] mats;
 
@@ -614,6 +622,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             mats[3] = olmat(128, 0, 255, 32);
             mats[4] = olmat(255, 255, 255, 32);
             mats[5] = olmat(0, 255, 128, 32);
+            mats[6] = olmat(0, 0, 0, 64);
             mats[16] = olmat(0, 255, 0, 32);
             mats[17] = olmat(255, 255, 0, 32);
             mats[18] = olmat(29, 196, 51, 60);

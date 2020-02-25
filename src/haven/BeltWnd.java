@@ -93,7 +93,7 @@ public class BeltWnd extends Widget implements DTarget {
     }
 
     @Override
-    public boolean type(char key, java.awt.event.KeyEvent ev) {
+    public boolean keydown(java.awt.event.KeyEvent ev) {
         return false;
     }
 

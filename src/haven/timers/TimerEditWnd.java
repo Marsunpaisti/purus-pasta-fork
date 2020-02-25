@@ -29,9 +29,10 @@ public class TimerEditWnd extends Window {
         add(new Label("Hours"), new Coord(225, 10));
         final TextEntry txthours = new TextEntry(50, hours != 0 ? hours + "" : "") {
             @Override
-            public boolean type(char c, KeyEvent ev) {
+            public boolean keydown(KeyEvent ev) {
+                int c = ev.getKeyCode();
                 if (c == 0x8 || c == 0x7f || c == 0x09 || (c >= 0x30 && c <= 0x39 && text.length() <= 2))
-                    return super.type(c, ev);
+                    return super.keydown(ev);
                 return true;
             }
         };
@@ -40,9 +41,10 @@ public class TimerEditWnd extends Window {
         add(new Label("Minutes"), new Coord(285, 10));
         final TextEntry txtminutes = new TextEntry(50, minutes != 0 ? minutes + "" : "") {
             @Override
-            public boolean type(char c, KeyEvent ev) {
+            public boolean keydown(KeyEvent ev) {
+                int c = ev.getKeyCode();
                 if (c == 0x8 || c == 0x7f || c == 0x09 || (c >= 0x30 && c <= 0x39 && text.length() <= 1))
-                    return super.type(c, ev);
+                    return super.keydown(ev);
                 return true;
             }
         };
@@ -105,12 +107,13 @@ public class TimerEditWnd extends Window {
     }
 
     @Override
-    public boolean type(char key, java.awt.event.KeyEvent ev) {
+    public boolean keydown(KeyEvent ev) {
+        int key = ev.getKeyCode();
         if (key == 27) {
             reqdestroy();
             return true;
         }
-        return super.type(key, ev);
+        return super.keydown(ev);
     }
 
     public TimerEditWnd(String cap, final GameUI gui) {

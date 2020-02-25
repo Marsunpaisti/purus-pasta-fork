@@ -275,12 +275,17 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
 
     private void dropItMaybe() {
         Resource curs = ui.root.getcurs(Coord.z);
-        if (curs != null && curs.name.equals("gfx/hud/curs/mine")) {
+        if (Config.dropEverything) {
+            this.wdgmsg("drop", Coord.z);
+        } else {
             String name = this.resource().basename();
-            if (Config.dropMinedStones && Config.mineablesStone.contains(name) ||
+            if ((Config.dropSoil && name.equals("soil")))
+                this.wdgmsg("drop", Coord.z);
+            if (curs != null && curs.name.equals("gfx/hud/curs/mine") &&
+                    (Config.dropMinedStones && Config.mineablesStone.contains(name) ||
                     Config.dropMinedOre && Config.mineablesOre.contains(name) ||
                     Config.dropMinedOrePrecious && Config.mineablesOrePrecious.contains(name) ||
-                    Config.dropMinedCurios && Config.mineablesCurios.contains(name))
+                    Config.dropMinedCurios && Config.mineablesCurios.contains(name)))
                 this.wdgmsg("drop", Coord.z);
         }
     }
@@ -297,4 +302,5 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
             return new Coord(1, 1);
         }
     }
+
 }

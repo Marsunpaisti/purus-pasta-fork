@@ -40,11 +40,12 @@ public class UpdateWnd extends Window {
     }
 
     @Override
-    public boolean type(char key, KeyEvent ev) {
+    public boolean keydown(KeyEvent ev) {
+        int key = ev.getKeyCode();
         if (key == KeyEvent.VK_ESCAPE) {
             wdgmsg(cbtn, "click");
             return (true);
         }
-        return (super.type(key, ev));
+        return (super.keydown(ev));
     }
 }

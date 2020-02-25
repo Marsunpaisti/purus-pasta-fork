@@ -28,6 +28,10 @@ package haven;
 
 import static haven.Inventory.sqsz;
 import static haven.Text.num10Fnd;
+import haven.automation.WItemDestroyCallback;
+import haven.ItemInfo.AttrCache;
+import haven.res.ui.tt.Wear;
+import haven.res.ui.tt.q.qbuff.QBuff;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -42,6 +46,11 @@ import haven.ItemInfo.AttrCache;
 import haven.automation.WItemDestroyCallback;
 import haven.res.ui.tt.Wear;
 import haven.res.ui.tt.q.qbuff.QBuff;
+import java.util.*;
+import java.util.function.*;
+
+import static haven.Inventory.sqsz;
+import static haven.Text.num10Fnd;
 
 public class WItem extends Widget implements DTarget {
     public static final Resource missing = Resource.local().loadwait("gfx/invobjs/missing");

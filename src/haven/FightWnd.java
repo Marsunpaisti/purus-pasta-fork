@@ -30,11 +30,9 @@ import static haven.CharWnd.attrf;
 import static haven.Inventory.invsq;
 import static haven.Window.wbox;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -521,15 +519,9 @@ public class FightWnd extends Widget {
         }
 
         final Tex[] keystex = new Tex[10];
-        final Tex[] keysftex = new Tex[10];
         {
-            for(int i = 0; i < 10; i++) {
-                keystex[i] = Text.render(FightWnd.keys[i]).tex();
-                if (i < 5)
-                    keysftex[i] = keystex[i];
-                else
-                    keysftex[i] = Text.render(FightWnd.keysf[i - 5]).tex();
-            }
+            for(int i = 0; i < 10; i++)
+                keystex[i] = Text.render(Fightsess.kb_acts[i].key().nameShort()).tex();
         }
         
         final Tex[] keysfftex = new Tex[10];
@@ -576,20 +568,8 @@ public class FightWnd extends Widget {
                     }
                 } catch(Loading l) {}
                 g.chcolor(156, 180, 158, 255);
-                
-                Tex keytex;
-                if(Config.combatkeys == 0)
-                {
-                	keytex = keystex[i];
-                } else if (Config.combatkeys == 1)
-                {
-                	keytex = keystex[i];
-                } else
-                {
-                	keytex = keysfftex[i];
-                }
-                
-                g.aimage(keytex, c.add(invsq.sz().sub(2, 0)), 1, 1);
+
+                g.aimage(keystex[i], c.add(invsq.sz().sub(2, 0)), 1, 1);
                 g.chcolor();
             }
 
@@ -914,12 +894,12 @@ public class FightWnd extends Widget {
                     }
 
                     @Override
-                    public boolean type(char key, KeyEvent ev) {
-                        if (key == 27) {
+                    public boolean keydown(KeyEvent ev) {
+                        if (ev.getKeyChar() == 27) {
                             reqdestroy();
                             return true;
                         }
-                        return super.type(key, ev);
+                        return super.keydown(ev);
                     }
                 };
                 GameUI gui = gameui();
