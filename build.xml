@@ -3,7 +3,7 @@
 <project name="hafen" default="deftgt">
   <property name="name" value="amber"/>
 	<!-- MUISTA PÄIVITTÄÄ VERSIO -->
-  <property name="version" value="3.13.0"/>
+  <property name="version" value="3.14.0"/>
 
   <target name="build-env">
     <mkdir dir="build" />
@@ -131,7 +131,7 @@
     </copy>
   </target>
 
-	 <target name="dist" depends="rebuild">
+	 <target name="dist" depends="rebuild, doc">
 	    <zip destfile="build/update.zip" update="true">
 	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt, defaultAlarms, alarms/*, scripts/*"/>
 	    	<zipfileset dir="build/lib" includes="slf4j-api.jar, jackson-core.jar, sentry.jar, postgresql-jdbc.jar, amber-res.jar, l10n.jar, pasta-res.jar, graal-sdk.jar, graaljs.jar, tregex.jar, truffle-api.jar" prefix="lib/"/>
@@ -156,6 +156,12 @@
         <fileset dir="custom_res/"/>
     </copy>
   </target>
+
+	<target name="doc">
+		<javadoc destdir="doc/javadoc">
+			<fileset dir="src/haven/purus/pbot" />
+		</javadoc>
+	</target>
   
   <target name="profile" depends="jars">
     <nbprofiledirect>
