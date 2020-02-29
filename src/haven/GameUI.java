@@ -1044,10 +1044,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if (key == 9 && ev.isShiftDown())
                 return super.globtype(key, ev);
 
-            // ctrl + tab is used to rotate opponents
-            if (KeyBindings.cycleAggro.isThis(ev))
-                return true;
-
             if (gkey.key().match(ev)) {
                 click();
                 return (true);
@@ -1261,31 +1257,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_U) {
             TexGL.disableall = !TexGL.disableall;
             return true;
-        } else if(KeyBindings.toggleInventory.isThis(ev)) {
-            if ((invwnd != null) && invwnd.show(!invwnd.visible)) {
-                invwnd.raise();
-                fitwdg(invwnd);
-            }
-            return true;
-        } else if(KeyBindings.toggleCharactersheet.isThis(ev)) {
-            if ((chrwdg != null) && chrwdg.show(!chrwdg.visible)) {
-                chrwdg.raise();
-                fitwdg(chrwdg);
-            }
-            return true;
-        } else if(KeyBindings.toggleEquipment.isThis(ev)) {
-            if ((equwnd != null) && equwnd.show(!equwnd.visible)) {
-                equwnd.raise();
-                fitwdg(equwnd);
-            }
-            return true;
-        } else if(KeyBindings.toggleKin.isThis(ev)) {
-            if (zerg.show(!zerg.visible)) {
-                zerg.raise();
-                fitwdg(zerg);
-                setfocus(zerg);
-            }
-            return true;
         } else if(KeyBindings.toggleMenuSearch.isThis(ev)) {
             if (menuSearch.show(!menuSearch.visible)) {
                 menuSearch.raise();
@@ -1293,13 +1264,6 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 setfocus(menuSearch);
                 menuSearch.ignoreFirst = true;
                 return (true);
-            }
-            return true;
-        } else if(KeyBindings.toggleOptions.isThis(ev)) {
-            if (opts.show(!opts.visible)) {
-                opts.raise();
-                fitwdg(opts);
-                setfocus(opts);
             }
             return true;
         } else if(KeyBindings.crawlSpeed.isThis(ev)) {

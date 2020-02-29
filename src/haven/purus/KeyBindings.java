@@ -7,33 +7,21 @@ import java.util.ArrayList;
 
 public class KeyBindings {
 
-	public static KeyBinding toggleInventory = new KeyBinding("toggleInventory", KeyEvent.VK_TAB, false, false, false, "Inventory");
-	public static KeyBinding toggleEquipment = new KeyBinding("toggleEquipment", KeyEvent.VK_E, true, false, false, "Equipment");
 	public static KeyBinding toggleMenuSearch = new KeyBinding("toggleMenuSearch", KeyEvent.VK_S, false, true, false, "Menu search");
-	public static KeyBinding toggleKin = new KeyBinding("toggleKin", KeyEvent.VK_B, true, false, false, "Kith & Kin");
-	public static KeyBinding toggleCharactersheet = new KeyBinding("toggleCharactersheet", KeyEvent.VK_C, true, false, false, "Character sheet");
-	public static KeyBinding toggleOptions = new KeyBinding("toggleOptions", KeyEvent.VK_O, true, false, false, "Options");
 	public static KeyBinding crawlSpeed = new KeyBinding("crawlSpeed", KeyEvent.VK_Q, false, true, false, "Set crawl speed");
 	public static KeyBinding walkSpeed = new KeyBinding("walkSpeed", KeyEvent.VK_W, false, true, false, "Set walk speed");
 	public static KeyBinding runSpeed = new KeyBinding("runSpeed", KeyEvent.VK_E, false, true, false, "Set run speed");
 	public static KeyBinding sprintSpeed = new KeyBinding("sprintSpeed", KeyEvent.VK_R, false, true, false, "Set sprint speed");
-	public static KeyBinding cycleAggro = new KeyBinding("cycleAggro", KeyEvent.VK_TAB, true, false, false, "Cycle opponent");
 	public static KeyBinding autoDrink = new KeyBinding("autoDrink", KeyEvent.VK_A, false, true, false, "Toggle autodrink");
 
 
 	public static KeyBindingWnd initWnd() {
 		ArrayList<KeyBinding> kbList = new ArrayList<>();
-		kbList.add(toggleInventory);
-		kbList.add(toggleEquipment);
 		kbList.add(toggleMenuSearch);
-		kbList.add(toggleKin);
-		kbList.add(toggleCharactersheet);
-		kbList.add(toggleOptions);
 		kbList.add(crawlSpeed);
 		kbList.add(walkSpeed);
 		kbList.add(runSpeed);
 		kbList.add(sprintSpeed);
-		kbList.add(cycleAggro);
 		kbList.add(autoDrink);
 		return new KeyBindingWnd(kbList);
 	}
