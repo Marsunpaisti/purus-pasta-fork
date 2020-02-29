@@ -46,7 +46,8 @@
     <copy todir="build/classes/haven" file="etc/res-preload" />
     <copy todir="build/classes/haven" file="etc/res-bgload" />
     <copy todir="build/classes/haven" file="etc/icon.png" />
-    <copy todir="build" file="etc/grid_ids.txt" />
+	  <copy todir="build" file="etc/icons" />
+	  <copy todir="build" file="etc/grid_ids.txt" />
   	<copy todir="build" file="etc/run.sh" />
   </target>
 
@@ -133,7 +134,7 @@
 
 	 <target name="dist" depends="rebuild, doc">
 	    <zip destfile="build/update.zip" update="true">
-	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt, defaultAlarms, alarms/*, scripts/*"/>
+	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt, icons, defaultAlarms, alarms/*, scripts/*"/>
 	    	<zipfileset dir="build/lib" includes="slf4j-api.jar, jackson-core.jar, sentry.jar, postgresql-jdbc.jar, amber-res.jar, l10n.jar, pasta-res.jar, graal-sdk.jar, graaljs.jar, tregex.jar, truffle-api.jar" prefix="lib/"/>
 	    </zip>
 		 <exec executable="sh" >

@@ -27,6 +27,7 @@
 package haven;
 
 
+import haven.purus.Iconfinder;
 import haven.purus.KeyBindings;
 
 import java.awt.Color;
@@ -830,6 +831,12 @@ public class OptWnd extends Window {
         map.add(new Label("Show bushes:"), new Coord(165, 0));
         map.add(new Label("Show trees:"), new Coord(320, 0));
         map.add(new Label("Hide icons:"), new Coord(475, 0));
+
+        map.add(new Button(200, "Icon update (donotpress)") {
+            public void click() {
+                Iconfinder.updateConfig();
+            }
+        }, new Coord(425, 360));
 
         map.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         map.pack();

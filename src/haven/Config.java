@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import haven.purus.Iconfinder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -659,6 +660,8 @@ public class Config {
         }
 
         loadLogins();
+
+		Iconfinder.loadConfig();
     }
 
     private static void loadLogins() {
