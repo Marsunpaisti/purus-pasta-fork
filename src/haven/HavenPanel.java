@@ -69,9 +69,9 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
     boolean inited = false;
     public static int w, h;
     public boolean bgmode = false;
-    public static long bgfd = Utils.getprefi("bghz", 200);
+    public static long bgfd = 1000 / Config.fpsBackgroundLimit, fd = 1000 / Config.fpsLimit;
     public static boolean iswap = Config.vsyncOn, aswap;
-    long fd = 10, fps = 0;
+    long fps = 0;
     double uidle = 0.0, ridle = 0.0;
     Queue<InputEvent> events = new LinkedList<InputEvent>();
     private String cursmode = "tex";
@@ -742,17 +742,21 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
         cmdmap.put("hz", new Console.Command() {
             public void run(Console cons, String[] args) {
                 fd = 1000 / Integer.parseInt(args[1]);
+                Config.fpsLimit = Integer.parseInt(args[1]);
+                Utils.setprefi("fpsLimit", Integer.parseInt(args[1]));
             }
         });
         cmdmap.put("bghz", new Console.Command() {
             public void run(Console cons, String[] args) {
                 bgfd = 1000 / Integer.parseInt(args[1]);
-                Utils.setprefi("bghz", (int) bgfd);
+                Config.fpsBackgroundLimit = Integer.parseInt(args[1]);
+                Utils.setprefi("fpsBackgroundLimit", Integer.parseInt(args[1]));
             }
         });
         cmdmap.put("vsync", (cons, args) -> {
             iswap = Utils.parsebool(args[1]);
             Config.vsyncOn = Utils.parsebool(args[1]);
+            Utils.setpref("vsyncOn", args[1]);
         });
     }
 
