@@ -752,6 +752,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
         });
         cmdmap.put("vsync", (cons, args) -> {
             iswap = Utils.parsebool(args[1]);
+            Config.vsyncOn = Utils.parsebool(args[1]);
         });
     }
 
