@@ -597,8 +597,11 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
                 if (ad[0].equals("@")) {
                     use(ad);
                 } else {
-                    if (ad.length > 0 && (ad[0].equals("craft") || ad[0].equals("bp")))
+                    if (ad.length > 0 && (ad[0].equals("craft") || ad[0].equals("bp"))) {
                         gameui().histbelt.push(r.pag);
+                        if((ad[0].equals("craft")))
+                            gameui().makewnd.setLastAction(r.pag);
+                    }
 
                     if (Config.confirmmagic && r.res.name.startsWith("paginae/seid/")) {
                         Window confirmwnd = new Window(new Coord(225, 100), "Confirm") {

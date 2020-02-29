@@ -58,7 +58,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     private List<Widget> cmeters = new LinkedList<Widget>();
     private Text lastmsg;
     private double msgtime;
-    public Window invwnd, equwnd, makewnd;
+    public Window invwnd, equwnd;
     public Inventory maininv;
     public CharWnd chrwdg;
     public MapWnd mapfile;
@@ -102,6 +102,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public KeyBindingWnd keyBindingWnd;
     public AlarmWindow alarmWindow;
     private long lastAutodrink = 0;
+    public final CraftWindow makewnd;
 
     private static final OwnerContext.ClassResolver<BeltSlot> beltctxr = new OwnerContext.ClassResolver<BeltSlot>()
 	.add(Glob.class, slot -> slot.wdg().ui.sess.glob)
@@ -247,6 +248,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             statuswindow = new StatusWdg();
             add(statuswindow, new Coord(HavenPanel.w / 2 + 80, 10));
         }
+
+        makewnd = add(new CraftWindow(), new Coord(400, 200));
+        makewnd.hide();
 
         if (!chrid.equals("")) {
             Utils.loadprefchklist("boulderssel_" + chrid, Config.boulders);
@@ -717,26 +721,9 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if(Config.fepmeter)	
             	addcmeter(new FepMeter(chrwdg.feps));
         } else if (place == "craft") {
-            final Widget mkwdg = child;
-            makewnd = new Window(Coord.z, "Crafting", true) {
-                public void wdgmsg(Widget sender, String msg, Object... args) {
-                    if ((sender == this) && msg.equals("close")) {
-                        mkwdg.wdgmsg("close");
-                        return;
-                    }
-                    super.wdgmsg(sender, msg, args);
-                }
-
-                public void cdestroy(Widget w) {
-                    if (w == mkwdg) {
-                        ui.destroy(this);
-                        makewnd = null;
-                    }
-                }
-            };
-            makewnd.add(mkwdg, Coord.z);
+            makewnd.add(child);
             makewnd.pack();
-            add(makewnd, new Coord(400, 200));
+            makewnd.show();
         } else if (place == "buddy") {
             zerg.ntab(buddies = (BuddyWnd) child, zerg.kin);
         } else if (place == "pol") {

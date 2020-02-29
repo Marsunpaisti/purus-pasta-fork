@@ -13,6 +13,7 @@ public class KeyBindings {
 	public static KeyBinding runSpeed = new KeyBinding("runSpeed", KeyEvent.VK_E, false, true, false, "Set run speed");
 	public static KeyBinding sprintSpeed = new KeyBinding("sprintSpeed", KeyEvent.VK_R, false, true, false, "Set sprint speed");
 	public static KeyBinding autoDrink = new KeyBinding("autoDrink", KeyEvent.VK_A, false, true, false, "Toggle autodrink");
+	public static KeyBinding cycleCraftingTab = new KeyBinding("cycleCraftingTab", KeyEvent.VK_TAB, false, false, false, "Cycle crafting tab");
 
 
 	public static KeyBindingWnd initWnd() {
@@ -23,6 +24,7 @@ public class KeyBindings {
 		kbList.add(runSpeed);
 		kbList.add(sprintSpeed);
 		kbList.add(autoDrink);
+		kbList.add(cycleCraftingTab);
 		return new KeyBindingWnd(kbList);
 	}
 
