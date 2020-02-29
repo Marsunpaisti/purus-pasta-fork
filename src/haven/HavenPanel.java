@@ -70,7 +70,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
     public static int w, h;
     public boolean bgmode = false;
     public static long bgfd = Utils.getprefi("bghz", 200);
-    boolean iswap = true, aswap;
+    public static boolean iswap = Config.vsyncOn, aswap;
     long fd = 10, fps = 0;
     double uidle = 0.0, ridle = 0.0;
     Queue<InputEvent> events = new LinkedList<InputEvent>();

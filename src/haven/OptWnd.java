@@ -317,6 +317,18 @@ public class OptWnd extends Window {
                     }
                 });
 
+                appender.add(new CheckBox("Vsync") {
+                    {
+                        a = Config.vsyncOn;
+                    }
+                    public void set(boolean val) {
+                        Utils.setprefb("vsyncOn", val);
+                        Config.vsyncOn = val;
+                        a = val;
+                        HavenPanel.iswap = val;
+                    }
+                });
+
                 appender.add(new Label("Disable animations (req. restart):"));
                 CheckListbox disanimlist = new CheckListbox(320, Math.min(8, Config.disableanim.values().size()), 18 + Config.fontadd) {
                     @Override

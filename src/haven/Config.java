@@ -201,6 +201,7 @@ public class Config {
     public static String confid = "PurusPasta";
     public final static String chatfile = "chatlog.txt";
     public static PrintWriter chatlog = null;
+    public static boolean vsyncOn = Utils.getprefb("vsyncOn", true);
 
     public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(27) {{
         put("basalt", new CheckListboxItem("Basalt"));
