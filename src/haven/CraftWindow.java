@@ -2,7 +2,6 @@ package haven;
 
 import haven.purus.KeyBindings;
 
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
