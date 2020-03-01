@@ -4,7 +4,7 @@
     - Added map icons for trees, boulders and bushes
     - Added tabs to crafting window from previous Purus Pasta
     - Added option to disable vsync
-    - Added optioons to limit fps
+    - Added options to limit fps
     - Removed keybindings replaced by default client
 ### 3.14.0
     - Latest merges from Amber & Default client
