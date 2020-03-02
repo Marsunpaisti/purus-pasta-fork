@@ -1065,6 +1065,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+		appender.addRow(new Label("Map endpoint URL (requires restart)"),
+				new TextEntry(300, Config.navigationEndpoint) {
+					@Override
+					public boolean keydown(KeyEvent ev) {
+						if (!parent.visible)
+							return false;
+						boolean ret = buf.key(ev);
+						Utils.setpref("navigationEndpoint", text);
+						return ret;
+					}
+				}
+		);
         general.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         general.pack();
     }

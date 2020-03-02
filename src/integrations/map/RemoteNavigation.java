@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author APXEOLOG (Artyom Melnikov), at 31.01.2019
  */
 public class RemoteNavigation {
-    private static final String MAP_ENDPOINT = "http://example.com";
+    private static final String MAP_ENDPOINT = Config.navigationEndpoint;
     private static final String INDEX_FILE_URL = MAP_ENDPOINT + "/grids/mapdata_index";
     private static final String API_ENDPOINT = MAP_ENDPOINT + "/api";
 
