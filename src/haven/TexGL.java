@@ -412,45 +412,57 @@ public abstract class TexGL extends Tex {
 
     @Material.ResName("tex")
     public static class $tex implements Material.ResCons2 {
-        public Material.Res.Resolver cons(final Resource res, Object... args) {
-            final Indir<Resource> tres;
-            final int tid;
-            int a = 0;
-            if (args[a] instanceof String) {
-                tres = res.pool.load((String) args[a], (Integer) args[a + 1]);
-                tid = (Integer) args[a + 2];
-                a += 3;
-            } else {
-                tres = res.indir();
-                tid = (Integer) args[a];
-                a += 1;
-            }
-            boolean tclip = true;
-            while (a < args.length) {
-                String f = (String) args[a++];
-                if (f.equals("a"))
-                    tclip = false;
-            }
-            final boolean clip = tclip; /* ¦] */
-            return (new Material.Res.Resolver() {
-                public void resolve(Collection<GLState> buf) {
-                    Tex tex;
-                    TexR rt = tres.get().layer(TexR.class, tid);
-                    if (rt != null) {
-                        tex = rt.tex();
-                    } else {
-                        Resource.Image img = tres.get().layer(Resource.imgc, tid);
-                        if (img != null) {
-                            tex = img.tex();
-                        } else {
-                            throw (new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
-                        }
-                    }
-                    buf.add(tex.draw());
-                    if (clip)
-                        buf.add(tex.clip());
-                }
-            });
-        }
+	public static final boolean defclip = true;
+
+	public Material.Res.Resolver cons(final Resource res, Object... args) {
+	    final Indir<Resource> tres;
+	    final int tid;
+	    int a = 0;
+	    if(args[a] instanceof String) {
+		tres = res.pool.load((String)args[a], (Integer)args[a + 1]);
+		tid = (Integer)args[a + 2];
+		a += 3;
+	    } else {
+		tres = res.indir();
+		tid = (Integer)args[a];
+		a += 1;
+	    }
+	    boolean tclip = defclip;
+	    while(a < args.length) {
+		String f = (String)args[a++];
+		if(f.equals("a"))
+		    tclip = false;
+		else if(f.equals("c"))
+		    tclip = true;
+	    }
+	    final boolean clip = tclip; /* ¦] */
+	    return(new Material.Res.Resolver() {
+		    public void resolve(Collection<GLState> buf) {
+			Tex tex;
+			TexR rt = tres.get().layer(TexR.class, tid);
+			if(rt != null) {
+			    tex = rt.tex();
+			} else {
+			    Resource.Image img = tres.get().layer(Resource.imgc, tid);
+			    if(img != null) {
+				tex = img.tex();
+			    } else {
+				throw(new RuntimeException(String.format("Specified texture %d for %s not found in %s", tid, res, tres)));
+			    }
+			}
+			buf.add(tex.draw());
+			if(clip)
+			    buf.add(tex.clip());
+		    }
+		});
+	}
+    }
+	
+    static {
+	Console.setscmd("texdis", new Console.Command() {
+		public void run(Console cons, String[] args) {
+		    disableall = (Integer.parseInt(args[1]) != 0);
+		}
+	    });
     }
 }

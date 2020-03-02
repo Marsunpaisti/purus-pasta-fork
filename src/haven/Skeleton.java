@@ -889,136 +889,156 @@ public class Skeleton {
 
     @Resource.LayerName("skan")
     public static class ResPose extends Resource.Layer implements Resource.IDLayer<Integer> {
-        public final int id;
-        public final float len;
-        public final transient Track[] tracks;
-        public final transient FxTrack[] effects;
-        public final double nspeed;
-        public final WrapMode defmode;
+	public final int id;
+	public final float len;
+	public final transient Track[] tracks;
+	public final transient FxTrack[] effects;
+	public final double nspeed;
+	public final WrapMode defmode;
+	
+	private Track.Frame[] parseframes(int fmt, Message buf) {
+	    Track.Frame[] frames = new Track.Frame[buf.uint16()];
+	    if(fmt == 0) {
+		for(int i = 0; i < frames.length; i++) {
+		    float tm = (float)buf.cpfloat();
+		    float[] trans = new float[3];
+		    for(int o = 0; o < 3; o++)
+			trans[o] = (float)buf.cpfloat();
+		    float rang = (float)buf.cpfloat();
+		    float[] rax = new float[3];
+		    for(int o = 0; o < 3; o++)
+			rax[o] = (float)buf.cpfloat();
+		    frames[i] = new Track.Frame(tm, trans, rotasq(new float[4], rax, rang));
+		}
+	    } else if(fmt == 1) {
+		for(int i = 0; i < frames.length; i++) {
+		    float tm = (buf.uint16() / 65535.0f) * len;
+		    float[] trans = new float[3];
+		    for(int o = 0; o < 3; o++)
+			trans[o] = Utils.hfdec((short)buf.int16());
+		    float rang = (buf.uint16() / 65535.0f) * 2 * (float)Math.PI;
+		    float[] rax = new float[3];
+		    Utils.oct2uvec(rax, buf.int16() / 32767.0f, buf.int16() / 32767.0f);
+		    frames[i] = new Track.Frame(tm, trans, rotasq(new float[4], rax, rang));
+		}
+	    }
+	    return(frames);
+	}
 
-        private static Track.Frame[] parseframes(Message buf) {
-            Track.Frame[] frames = new Track.Frame[buf.uint16()];
-            for (int i = 0; i < frames.length; i++) {
-                float tm = (float) buf.cpfloat();
-                float[] trans = new float[3];
-                for (int o = 0; o < 3; o++)
-                    trans[o] = (float) buf.cpfloat();
-                float rang = (float) buf.cpfloat();
-                float[] rax = new float[3];
-                for (int o = 0; o < 3; o++)
-                    rax[o] = (float) buf.cpfloat();
-                frames[i] = new Track.Frame(tm, trans, rotasq(new float[4], rax, rang));
-            }
-            return (frames);
-        }
+	private FxTrack parsefx(int fmt, Message buf) {
+	    FxTrack.Event[] events = new FxTrack.Event[buf.uint16()];
+	    for(int i = 0; i < events.length; i++) {
+		float tm = (fmt == 0) ? (float)buf.cpfloat() : ((buf.uint16() / 65535.0f) * len);
+		int t = buf.uint8();
+		switch(t) {
+		case 0:
+		    String resnm = buf.string();
+		    int resver = buf.uint16();
+		    byte[] sdt = buf.bytes(buf.uint8());
+		    Indir<Resource> res = getres().pool.load(resnm, resver);
+		    events[i] = new FxTrack.SpawnSprite(tm, res, sdt, null);
+		    break;
+		case 1:
+		    String id = buf.string();
+		    events[i] = new FxTrack.Trigger(tm, id);
+		    break;
+		default:
+		    throw(new Resource.LoadException("Illegal control event: " + t, getres()));
+		}
+	    }
+	    return(new FxTrack(events));
+	}
 
-        private FxTrack parsefx(Message buf) {
-            FxTrack.Event[] events = new FxTrack.Event[buf.uint16()];
-            for (int i = 0; i < events.length; i++) {
-                float tm = (float) buf.cpfloat();
-                int t = buf.uint8();
-                switch (t) {
-                    case 0:
-                        String resnm = buf.string();
-                        int resver = buf.uint16();
-                        byte[] sdt = buf.bytes(buf.uint8());
-                        Indir<Resource> res = getres().pool.load(resnm, resver);
-                        events[i] = new FxTrack.SpawnSprite(tm, res, sdt, null);
-                        break;
-                    case 1:
-                        String id = buf.string();
-                        events[i] = new FxTrack.Trigger(tm, id);
-                        break;
-                    default:
-                        throw (new Resource.LoadException("Illegal control event: " + t, getres()));
-                }
-            }
-            return (new FxTrack(events));
-        }
+	public ResPose(Resource res, Message buf) {
+	    res.super();
+	    this.id = buf.int16();
+	    int fl = buf.uint8();
+	    int fmt = (fl & 6) >> 1;
+	    int mode = buf.uint8();
+	    if(mode == 0)
+		defmode = WrapMode.ONCE;
+	    else if(mode == 1)
+		defmode = WrapMode.LOOP;
+	    else if(mode == 2)
+		defmode = WrapMode.PONG;
+	    else if(mode == 3)
+		defmode = WrapMode.PONGLOOP;
+	    else
+		throw(new Resource.LoadException("Illegal animation mode: " + mode, getres()));
+	    if(fmt == 0)
+		this.len = (float)buf.cpfloat();
+	    else
+		this.len = buf.float32();
+	    if((fl & 1) != 0) {
+		if(fmt == 0)
+		    nspeed = buf.cpfloat();
+		else
+		    nspeed = buf.float32();
+	    } else {
+		nspeed = -1;
+	    }
+	    Collection<Track> tracks = new LinkedList<Track>();
+	    Collection<FxTrack> fx = new LinkedList<FxTrack>();
+	    while(!buf.eom()) {
+		String bnm = buf.string();
+		if(bnm.equals("{ctl}")) {
+		    fx.add(parsefx(fmt, buf));
+		} else {
+		    tracks.add(new Track(bnm, parseframes(fmt, buf)));
+		}
+	    }
+	    this.tracks = tracks.toArray(new Track[0]);
+	    this.effects = fx.toArray(new FxTrack[0]);
+	}
 
-        public ResPose(Resource res, Message buf) {
-            res.super();
-            this.id = buf.int16();
-            int fl = buf.uint8();
-            int mode = buf.uint8();
-            if (mode == 0)
-                defmode = WrapMode.ONCE;
-            else if (mode == 1)
-                defmode = WrapMode.LOOP;
-            else if (mode == 2)
-                defmode = WrapMode.PONG;
-            else if (mode == 3)
-                defmode = WrapMode.PONGLOOP;
-            else
-                throw (new Resource.LoadException("Illegal animation mode: " + mode, getres()));
-            this.len = (float) buf.cpfloat();
-            if ((fl & 1) != 0)
-                nspeed = buf.cpfloat();
-            else
-                nspeed = -1;
-            Collection<Track> tracks = new LinkedList<Track>();
-            Collection<FxTrack> fx = new LinkedList<FxTrack>();
-            while (!buf.eom()) {
-                String bnm = buf.string();
-                if (bnm.equals("{ctl}")) {
-                    fx.add(parsefx(buf));
-                } else {
-                    tracks.add(new Track(bnm, parseframes(buf)));
-                }
-            }
-            this.tracks = tracks.toArray(new Track[0]);
-            this.effects = fx.toArray(new FxTrack[0]);
-        }
+	private Track[] iaIaCthulhuFhtagn(Skeleton skel) {
+	    Track[] remap = new Track[skel.blist.length];
+	    for(Track t : tracks) {
+		Skeleton.Bone b = skel.bones.get(t.bone);
+		if(b == null)
+		    throw(new RuntimeException("Bone \"" + t.bone + "\" in animation reference does not exist in skeleton " + skel));
+		remap[b.idx] = t;
+	    }
+	    return(remap);
+	}
 
-        private Track[] iaIaCthulhuFhtagn(Skeleton skel) {
-            Track[] remap = new Track[skel.blist.length];
-            for (Track t : tracks) {
-                Skeleton.Bone b = skel.bones.get(t.bone);
-                if (b == null)
-                    throw (new RuntimeException("Bone \"" + t.bone + "\" in animation reference does not exist in skeleton " + skel));
-                remap[b.idx] = t;
-            }
-            return (remap);
-        }
+	public class ResMod extends TrackMod {
+	    public ResMod(ModOwner owner, Skeleton skel, WrapMode mode) {
+		skel.super(owner, iaIaCthulhuFhtagn(skel), ResPose.this.effects, ResPose.this.len, mode);
+		if(ResPose.this.nspeed > 0) {
+		    this.speedmod = true;
+		    this.nspeed = ResPose.this.nspeed;
+		}
+	    }
 
-        public class ResMod extends TrackMod {
-            public ResMod(ModOwner owner, Skeleton skel, WrapMode mode) {
-                skel.super(owner, iaIaCthulhuFhtagn(skel), ResPose.this.effects, ResPose.this.len, mode);
-                if (ResPose.this.nspeed > 0) {
-                    this.speedmod = true;
-                    this.nspeed = ResPose.this.nspeed;
-                }
-            }
+	    public ResMod(ModOwner owner, Skeleton skel) {
+		this(owner, skel, defmode);
+	    }
 
-            public ResMod(ModOwner owner, Skeleton skel) {
-                this(owner, skel, defmode);
-            }
+	    public String toString() {
+		return(String.format("#<pose %d in %s>", id, getres().name));
+	    }
+	}
 
-            public String toString() {
-                return (String.format("#<pose %d in %s>", id, getres().name));
-            }
-        }
+	public TrackMod forskel(ModOwner owner, Skeleton skel, WrapMode mode) {
+	    return(new ResMod(owner, skel, mode));
+	}
 
-        public TrackMod forskel(ModOwner owner, Skeleton skel, WrapMode mode) {
-            return (new ResMod(owner, skel, mode));
-        }
+	@Deprecated
+	public TrackMod forskel(Skeleton skel, WrapMode mode) {
+	    return(forskel(ModOwner.nil, skel, mode));
+	}
 
-        @Deprecated
-        public TrackMod forskel(Skeleton skel, WrapMode mode) {
-            return (forskel(ModOwner.nil, skel, mode));
-        }
-
-        @Deprecated
-        public TrackMod forgob(Skeleton skel, WrapMode mode, Gob gob) {
-            return (forskel(gob, skel, mode));
-        }
-
-        public Integer layerid() {
-            return (id);
-        }
-
-        public void init() {
-        }
+	@Deprecated
+	public TrackMod forgob(Skeleton skel, WrapMode mode, Gob gob) {
+	    return(forskel(gob, skel, mode));
+	}
+	
+	public Integer layerid() {
+	    return(id);
+	}
+	
+	public void init() {}
     }
 
     @Resource.LayerName("boneoff")

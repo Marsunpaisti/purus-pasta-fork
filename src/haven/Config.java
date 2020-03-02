@@ -59,6 +59,7 @@ public class Config {
     public static boolean dbtext = false;
     public static boolean profile = false;
     public static boolean profilegpu = false;
+    public static String resdir = getprop("haven.resdir", System.getenv("HAFEN_RESDIR"));
     public static boolean nopreload = false;
     public static int mainport = 1870;
     public static int authport = 1871;

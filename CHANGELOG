@@ -1,3 +1,10 @@
+Version 1.75.2
+    Fixed:
+        * Stage indicator for fallow plants.
+
+    Misc:
+        * Upstream code merge.
+
 Version 1.75.1
     Fixed:
         * Crash related to symbel items.

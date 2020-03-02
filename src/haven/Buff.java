@@ -206,17 +206,17 @@ public class Buff extends Widget implements ItemInfo.ResOwner, Bufflist.Managed 
     }
 
     public void reqdestroy() {
-        anims.clear();
-        final Coord o = this.c;
-        dest = true;
-        new NormAnim(0.5) {
-            public void ntick(double a) {
-                Buff.this.a = 255 - (int) (255 * a);
-                Buff.this.c = o.add(0, (int) (a * a * cframe.sz().y));
-                if (a == 1.0)
-                    destroy();
-            }
-        };
+	anims.clear();
+	final Coord o = this.c;
+	dest = true;
+	new NormAnim(0.35) {
+	    public void ntick(double a) {
+		Buff.this.a = 255 - (int)(255 * a);
+		Buff.this.c = o.add(0, (int)(a * a * cframe.sz().y));
+		if(a == 1.0)
+		    destroy();
+	    }
+	};
     }
 
     public void move(Coord c, double off) {
