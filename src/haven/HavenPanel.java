@@ -26,42 +26,19 @@
 
 package haven;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.GraphicsConfiguration;
-import java.awt.Toolkit;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.Robot;
-import java.awt.Point;
+import com.jogamp.opengl.util.awt.Screenshot;
+import haven.purus.BreakNotify;
+import integrations.map.RemoteNavigation;
+
+import javax.media.opengl.*;
+import javax.media.opengl.awt.GLCanvas;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
-import java.util.TreeMap;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL3;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLCapabilitiesChooser;
-import javax.media.opengl.GLContext;
-import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
-
-import com.jogamp.opengl.util.awt.Screenshot;
-import haven.purus.BreakNotify;
+import java.util.*;
 
 public class HavenPanel extends GLCanvas implements Runnable, Console.Directory, UI.Context  {
     UI ui;
@@ -110,6 +87,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
             setContextCreationFlags(getContextCreationFlags() | GLContext.CTX_OPTION_DEBUG);
         setSize(this.w = w, this.h = h);
         newui(null);
+        RemoteNavigation.getInstance();
         initgl();
         if (Toolkit.getDefaultToolkit().getMaximumCursorColors() >= 256 || Config.hwcursor)
             cursmode = "awt";

@@ -80,6 +80,10 @@ public class Coord2d implements Comparable<Coord2d>, java.io.Serializable {
 	return(add(b.x, b.y));
     }
 
+    public Coord2d add(Coord c) {
+        return add(c.x, c.y);
+    }
+
     public Coord2d inv() {
 	return(new Coord2d(-x, -y));
     }
@@ -168,6 +172,19 @@ public class Coord2d implements Comparable<Coord2d>, java.io.Serializable {
 
     public static Coord2d sc(double a, double r) {
 	return(new Coord2d(Math.cos(a) * r, Math.sin(a) * r));
+    }
+
+    public Coord toGridUnit() {
+        return new Coord(((int)x / 1100) * 1100, ((int)y / 1100) * 1100);
+    }
+
+    public Coord toGridCoordinate() {
+        return new Coord(((int)x / 1100), ((int)y / 1100));
+    }
+
+    public Coord2d gridOffset() {
+        Coord gridUnit = toGridUnit();
+        return new Coord2d(x - gridUnit.x, y - gridUnit.y);
     }
 
     public String toString() {

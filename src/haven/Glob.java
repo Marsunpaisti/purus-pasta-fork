@@ -26,14 +26,9 @@
 
 package haven;
 
-import java.awt.Color;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Observable;
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 public class Glob {
     public static final double SERVER_TIME_RATIO = 3.29d;
@@ -60,6 +55,12 @@ public class Glob {
     public String servertime;
     public Tex servertimetex;
 
+    private static WeakReference<Glob> reference = new WeakReference<>(null);
+
+    public static Glob getByReference() {
+        return reference.get();
+    }
+
     static {
         timersThread = new haven.timers.TimersThread();
         timersThread.start();
@@ -69,6 +70,7 @@ public class Glob {
         this.sess = sess;
         map = new MCache(sess);
         party = new Party(this);
+        reference = new WeakReference<>(this);
     }
 
     @Resource.PublishedCode(name = "wtr")

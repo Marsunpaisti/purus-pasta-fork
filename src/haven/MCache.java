@@ -26,6 +26,9 @@
 
 package haven;
 
+import integrations.map.Navigation;
+import integrations.map.RemoteNavigation;
+
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.Collection;
@@ -123,6 +126,7 @@ public class MCache {
         private int olseq = -1;
         private final Cut cuts[];
         private Collection<Gob>[] fo = null;
+        public Navigation.GridType gridType = Navigation.GridType.UNKNOWN;
 
         private class Cut {
             MapMesh mesh;
@@ -347,16 +351,54 @@ public class MCache {
             }
             Message blob = new ZMessage(msg);
             id = blob.int64();
+            HashSet<Integer> waterTileIds = new HashSet<>();
+            HashSet<Integer> pavingTileIds = new HashSet<>();
+            int nilTileId = -1;
             while (true) {
                 int tileid = blob.uint8();
                 if (tileid == 255)
                     break;
                 String resnm = blob.string();
                 int resver = blob.uint16();
+                if (Navigation.UNDERGROUND_TILES.contains(resnm)) {
+                    gridType = Navigation.GridType.CAVE;
+                }
+                if (Navigation.WATER_TILES.contains(resnm)) {
+                    waterTileIds.add(tileid);
+                }
+                if (resnm.contains("gfx/tiles/paving/")) {
+                    pavingTileIds.add(tileid);
+                }
+                if (resnm.equals("gfx/tiles/nil")) {
+                    nilTileId = tileid;
+                }
                 nsets[tileid] = new Resource.Spec(Resource.remote(), resnm, resver);
             }
-            for (int i = 0; i < tiles.length; i++)
+            int waterTilesCount = 0;
+            int pavingTilesCount = 0;
+            int nilTilesCount = 0;
+            for (int i = 0; i < tiles.length; i++) {
                 tiles[i] = blob.uint8();
+                if (waterTileIds.contains(tiles[i])) {
+                    waterTilesCount++;
+                } else if (pavingTileIds.contains(tiles[i])) {
+                    pavingTilesCount++;
+                } else if (tiles[i] == nilTileId) {
+                    nilTilesCount++;
+                }
+            }
+            if (gridType == Navigation.GridType.UNKNOWN) {
+                if (waterTilesCount == cmaps.x * cmaps.y) {
+                    gridType = Navigation.GridType.UNKNOWN_WATER;
+                } else if (pavingTilesCount == cmaps.x * cmaps.y) {
+                    gridType = Navigation.GridType.UNKNOWN_PAVING;
+                } else if (nilTilesCount > (cmaps.x * cmaps.y) * 0.9d) {
+                    gridType = Navigation.GridType.HOUSE;
+                } else {
+                    gridType = Navigation.GridType.SURFACE;
+                }
+            }
+            Navigation.receiveGridData(gc, id, gridType);
             for (int i = 0; i < z.length; i++)
                 z[i] = blob.int16();
             for (int i = 0; i < ol.length; i++)
@@ -397,6 +439,7 @@ public class MCache {
                 }
             }
             invalidate();
+            RemoteNavigation.getInstance().receiveGrid(this);
             seq++;
         }
     }
@@ -430,6 +473,7 @@ public class MCache {
             trim(ul, lr);
         } else if (type == 2) {
             trimall();
+            Navigation.mapdataReset();
         }
     }
 

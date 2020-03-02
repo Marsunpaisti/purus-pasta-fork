@@ -26,7 +26,9 @@
 
 package haven;
 
-import java.awt.Color;
+import integrations.map.Navigation;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -91,11 +93,13 @@ public class Party {
                 if (m != null)
                     leader = m;
             } else if (type == PD_MEMBER) {
-                Member m = memb.get((long) msg.int32());
+                long gobId = msg.int32();
+                Member m = memb.get(gobId);
                 Coord2d c = null;
                 boolean vis = msg.uint8() == 1;
                 if (vis)
                     c = msg.coord().mul(OCache.posres);
+                Navigation.addPartyCoordinates(gobId, c);
                 Color col = msg.color();
                 if (m != null) {
                     m.c = c;

@@ -1043,6 +1043,28 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+        appender.add(new CheckBox("Enable navigation tracking") {
+            {
+                a = Config.enableNavigationTracking;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("enableNavigationTracking", val);
+                Config.enableNavigationTracking = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Upload custom GREEN markers to map") {
+            {
+                a = Config.sendCustomMarkers;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("sendCustomMarkers", val);
+                Config.sendCustomMarkers = val;
+                a = val;
+            }
+        });
         general.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         general.pack();
     }

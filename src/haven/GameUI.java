@@ -26,13 +26,6 @@
 
 package haven;
 
-import static haven.Inventory.invsq;
-
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.awt.image.WritableRaster;
-import java.util.*;
-
 import haven.automation.ErrorSysMsgCallback;
 import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
@@ -41,6 +34,15 @@ import haven.purus.alarms.AlarmWindow;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
+import integrations.map.RemoteNavigation;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.WritableRaster;
+import java.util.List;
+import java.util.*;
+
+import static haven.Inventory.invsq;
 
 public class GameUI extends ConsoleHost implements Console.Directory {
     public static final Text.Foundry msgfoundry = new Text.Foundry(Text.dfont, Text.cfg.msg);
@@ -661,6 +663,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             mmap = minimapWnd.mmap;
             if(ResCache.global != null) {
                 MapFile file = MapFile.load(ResCache.global, mapfilename());
+                RemoteNavigation.getInstance().uploadMarkerData(file);
                 mmap.save(file);
                 mapfile = new MapWnd(mmap.save, map, new Coord(700, 500), "Map");
                 mapfile.hide();
