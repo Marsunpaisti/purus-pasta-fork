@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.16.0
+	- Added support for APXEOLOG's mapper service (check General settings)
+	- Latest merges from Amber & Default client
 ### 3.15.0
     - Added map icons for trees, boulders and bushes
     - Added tabs to crafting window from previous Purus Pasta
