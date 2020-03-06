@@ -7,6 +7,7 @@ import haven.resutil.FoodInfo;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -23,8 +24,8 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class FoodService {
-    private static final String API_ENDPOINT = "https://food-api.havenandhearth.link";
-    private static final String FOOD_DATA_URL = "https://food.havenandhearth.link/data/food-info.json";
+    private static final String API_ENDPOINT = "https://vatsul.com/foodproxy/food-api/";
+    private static final String FOOD_DATA_URL = "https://vatsul.com/foodproxy/food-info/data/food-info.json";
     private static final File FOOD_DATA_CACHE_FILE = new File("food_data.json");
 
     private static final Map<String, ParsedFoodInfo> cachedItems = new ConcurrentHashMap<>();
@@ -67,7 +68,8 @@ public class FoodService {
             }
             if (System.currentTimeMillis() - lastModified > TimeUnit.MINUTES.toMillis(30)) {
                 try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(FOOD_DATA_URL).openConnection();
+                    HttpsURLConnection connection = (HttpsURLConnection) new URL(FOOD_DATA_URL).openConnection();
+					connection.setRequestProperty("User-Agent", "H&H Client");
                     connection.setRequestProperty("Cache-Control", "no-cache");
                     StringBuilder stringBuilder = new StringBuilder();
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -169,11 +171,12 @@ public class FoodService {
 
         if (!toSend.isEmpty()) {
             try {
-                HttpURLConnection connection =
-                        (HttpURLConnection) new URL(API_ENDPOINT + "/food").openConnection();
-                connection.setRequestMethod("POST");
+                HttpsURLConnection connection =
+                        (HttpsURLConnection) new URL(API_ENDPOINT + "/food").openConnection();
+				connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
-                connection.setDoOutput(true);
+				connection.setRequestProperty("User-Agent", "H&H Client");
+				connection.setDoOutput(true);
                 try (OutputStream out = connection.getOutputStream()) {
                     out.write(new JSONArray(toSend.toArray()).toString().getBytes(StandardCharsets.UTF_8));
                 }
