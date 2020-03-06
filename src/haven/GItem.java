@@ -26,15 +26,16 @@
 
 package haven;
 
-import static haven.Text.num10Fnd;
+import haven.res.ui.tt.q.qbuff.QBuff;
+import integrations.food.FoodService;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import haven.res.ui.tt.q.qbuff.QBuff;
+import static haven.Text.num10Fnd;
 
 public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owner {
     public Indir<Resource> res;
@@ -202,7 +203,12 @@ public class GItem extends AWidget implements ItemInfo.SpriteOwner, GSprite.Owne
     public List<ItemInfo> info() {
         if (info == null && rawinfo != null) {
             info = ItemInfo.buildinfo(this, rawinfo);
-            info.add(new ItemInfo.AdHoc(this, (Config.resinfo ? ("\n" + this.getres().name) : "")));
+			info.add(new ItemInfo.AdHoc(this, (Config.resinfo ? ("\n" + this.getres().name) : "")));
+			try {
+                // getres() can throw Loading, ignore it
+                FoodService.checkFood(info, getres().name);
+            } catch (Exception ex) {
+			}
         }
         return (info);
     }
