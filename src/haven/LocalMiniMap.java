@@ -282,6 +282,7 @@ public class LocalMiniMap extends Widget {
                     if(AlarmManager.play(res.name))
                         sgobs.add(gob.id);
 
+                    /*
                     if (gob.type == Gob.Type.FU_YE_CURIO) {
                         sgobs.add(gob.id);
                         Audio.play(foragablesfx, Config.alarmonforagablesvol);
@@ -312,7 +313,7 @@ public class LocalMiniMap extends Widget {
                     } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
-                    }
+                    }*/
 
                 } catch (Loading l) {
                 }
