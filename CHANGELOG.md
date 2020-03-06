@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.17.0
+    - Added APXEOLOG's food service
+    - Fixed alarms and error logging
 ### 3.16.0
 	- Added support for APXEOLOG's mapper service (check General settings)
 	- Latest merges from Amber & Default client
