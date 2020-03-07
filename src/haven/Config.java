@@ -209,6 +209,7 @@ public class Config {
     public static boolean vsyncOn = Utils.getprefb("vsyncOn", true);
     public static int fpsLimit = Utils.getprefi("fpsLimit", 200);
     public static int fpsBackgroundLimit = Utils.getprefi("fpsBackgroundLimit", 200);
+    public static boolean debugWdgmsg = Utils.getprefb("debugWdgmsg", false);
 
     public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(27) {{
         put("basalt", new CheckListboxItem("Basalt"));

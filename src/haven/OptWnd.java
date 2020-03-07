@@ -52,7 +52,7 @@ public class OptWnd extends Window {
     public static final int VERTICAL_MARGIN = 10;
     public static final int HORIZONTAL_MARGIN = 5;
     public static final int VERTICAL_AUDIO_MARGIN = 5;
-    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms, hidesettings, keybind;
+    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms, hidesettings, keybind, debugmenu;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -437,6 +437,7 @@ public class OptWnd extends Window {
         soundalarms = add(new Panel());
         hidesettings = add(new Panel());
         keybind = add(new Panel());
+        debugmenu = add(new Panel());
 
         initMain(gopts);
         initAudio();
@@ -451,6 +452,7 @@ public class OptWnd extends Window {
         initSoundAlarms();
         initHideMenu();
         initKeyBind();
+        initDebugMenu();
 
         chpanel(main);
     }
@@ -469,6 +471,7 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
         main.add(new PButton(200, "Hide settings", 'h', hidesettings), new Coord(420, 90));
         main.add(new PButton(200, "Key Bindings", 'b', keybind), new Coord(420, 120));
+        main.add(new PButton(200, "Debug settings", 'r', debugmenu), new Coord(0, 150));
         if(gopts) {
             main.add(new Button(200, "Keybindings") {
                 public void click() {
@@ -1591,6 +1594,29 @@ public class OptWnd extends Window {
         flowermenus.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         flowermenus.pack();
     }
+
+	private void initDebugMenu() {
+		final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(debugmenu, new Coord(620, 350)));
+
+		appender.setVerticalMargin(VERTICAL_MARGIN);
+		appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+
+		appender.add(new Label("Toggle hide by pressing ctrl + h"));
+
+		appender.add(new CheckBox("Print wdgmsg info") {
+			{
+				a = Config.debugWdgmsg;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("debugWdgmsg", val);
+				Config.debugWdgmsg = val;
+				a = val;
+			}
+		});
+		debugmenu.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+		debugmenu.pack();
+	}
     
     private void initHideMenu() {
         final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(hidesettings, new Coord(620, 350)));
