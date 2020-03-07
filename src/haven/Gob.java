@@ -68,9 +68,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     public Type type = null;
 
     public enum Type {
-        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), BAT(8), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
+        OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
         PLANT(16), MULTISTAGE_PLANT(17), PLANT_FALLOW(18),
-        MOB(32), WOLF(33), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39),
+        MOB(32), WOLF(33), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39), BAT(40),
         WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), WAGON(600), WALL(602), DREAMCATCHER(603), HOUSE(604);
 
         public final int value;
@@ -671,7 +671,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 }
             }
 
-            if (Config.showanimalrad && Type.MOB.has(type)) {
+            if (Config.showanimalrad && (Type.MOB.has(type))) {
                 boolean hasradius = ols.contains(animalradius);
                 if ((knocked == null || knocked == Boolean.FALSE) && !hasradius)
                     ols.add(animalradius);
