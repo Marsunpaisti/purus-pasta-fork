@@ -201,7 +201,10 @@ public class Window extends Widget implements DTarget {
 				int y = 285;
 				List<Entry<String, Double>> lst = studyTimes.entrySet().stream().sorted((e1, e2)-> e1.getValue().compareTo(e2.getValue())).collect(Collectors.toList());
 				for(Entry<String, Double> entry : lst) {
-					g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue())).tex(), new Coord(30, y));
+					if(entry.getValue() > 24*60)
+						g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue()), Color.green).tex(), new Coord(30, y));
+					else
+						g.image(Text.labelFnd.render(entry.getKey() + ": " + sensibleTimeFormat(entry.getValue()), Color.red).tex(), new Coord(30, y));
 					y += 15;
 					sizeY += 15;
 				}
