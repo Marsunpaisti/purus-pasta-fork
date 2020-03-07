@@ -1,5 +1,10 @@
 ## Changelog
 
+### 3.18.2
+    - Added radius to bats
+    - Added attribute sums to equipment menu
+    - Added colors to studytable
+    - Minor fix to debug settings
 ### 3.18.1
     - Added colors to studytable indicating whether a certain type of curiosity lasts for more than 24 hours or less than 24 hours
 ### 3.18.0
