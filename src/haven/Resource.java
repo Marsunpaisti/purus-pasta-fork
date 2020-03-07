@@ -1294,7 +1294,7 @@ public class Resource implements Serializable {
                                         if(Config.debugDecodeRes) {
                                         	File destF = new File("debug/res/" + Resource.this.name +"/");
 											destF.mkdirs();
-											File dest = new File(destF + name + ".class");
+											File dest = new File(destF + "/" + name + ".class");
 											try {
 												Files.write(dest.toPath(), c.data, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
 											} catch(IOException e) {
