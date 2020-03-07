@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.18.1
+    - Added colors to studytable indicating whether a certain type of curiosity lasts for more than 24 hours or less than 24 hours
 ### 3.18.0
     - Added distance estimation to quest giver arrows
     - Added some debug settings
