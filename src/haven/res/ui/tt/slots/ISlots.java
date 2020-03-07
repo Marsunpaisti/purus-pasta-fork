@@ -1,3 +1,5 @@
+package haven.res.ui.tt.slots;
+
 import haven.GItem.NumberInfo;
 import haven.ItemInfo.Tip;
 
@@ -39,7 +41,7 @@ public class ISlots extends Tip implements NumberInfo {
         super(var1);
         this.left = var2;
         this.pmin = var3;
-        this.pmax = var5;
+		this.pmax = var5;
         this.attrs = var7;
     }
 

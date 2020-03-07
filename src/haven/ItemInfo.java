@@ -57,6 +57,8 @@ import haven.res.ui.tt.WearFactory;
 import haven.factories.*;
 import haven.res.ui.tt.ArmorFactory;
 import haven.res.ui.tt.WearFactory;
+import haven.res.ui.tt.attrmod.AttrMod;
+import haven.res.ui.tt.slots.SlotFactory;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -274,6 +276,8 @@ public abstract class ItemInfo {
         }
     }
 
+
+
     public static class Contents extends Tip {
         public final List<ItemInfo> sub;
         private static final Text.Line ch = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Contents:"));
@@ -425,7 +429,11 @@ public abstract class ItemInfo {
 
         customFactories.put("ui/tt/armor", new ArmorFactory());
         customFactories.put("ui/tt/wear", new WearFactory());
-    }
+
+        customFactories.put("ui/tt/attrmod", new AttrMod.Fac());
+
+		customFactories.put("ui/tt/slots", new SlotFactory());
+	}
 
     public static List<ItemInfo> buildinfo(Owner owner, Raw raw) {
         List<ItemInfo> ret = new ArrayList<ItemInfo>();

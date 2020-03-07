@@ -26,15 +26,18 @@
 
 package haven;
 
-import static haven.Inventory.invsq;
+import haven.res.ui.tt.Armor;
+import haven.res.ui.tt.attrmod.AttrMod;
+import haven.res.ui.tt.slots.ISlots;
 
-import java.awt.Color;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import haven.res.ui.tt.Armor;
+import static haven.Inventory.invsq;
 
 public class Equipory extends Widget implements DTarget {
     private static final Tex bg = Resource.loadtex("gfx/hud/equip/bg");
@@ -108,8 +111,8 @@ public class Equipory extends Widget implements DTarget {
     }
 
     public Equipory(long gobid) {
-        super(isz);
-        ava = add(new Avaview(bg.sz(), gobid, "equcam") {
+        super(isz.add(150, 0));
+		ava = add(new Avaview(bg.sz(), gobid, "equcam") {
             public boolean mousedown(Coord c, int button) {
                 return (false);
             }
@@ -248,20 +251,22 @@ public class Equipory extends Widget implements DTarget {
     }
 
     public Object tooltip(Coord c, Widget prev) {
-        Object tt = super.tooltip(c, prev);
-        if (tt != null)
-            return (tt);
-        int sl = epat(c);
-        if (sl >= 0)
-            return (etts[sl]);
-        return (null);
-    }
+		Object tt = super.tooltip(c, prev);
+		if(tt != null)
+			return (tt);
+		int sl = epat(c);
+		if(sl >= 0)
+			return (etts[sl]);
+		return (null);
+	}
 
+	private HashMap<String, AttrMod.Mod> gildBuffs = new HashMap<>();
     public void draw(GOut g) {
         drawslots(g);
         super.draw(g);
 
         if (armorclass == null) {
+        	gildBuffs.clear();
             int h = 0, s = 0;
             try {
                 for (int i = 0; i < quickslots.length; i++) {
@@ -272,7 +277,25 @@ public class Equipory extends Widget implements DTarget {
                                 h += ((Armor)info).hard;
                                 s += ((Armor)info).soft;
                                 break;
-                            }
+                            } else if(info instanceof AttrMod) {
+                            	for(AttrMod.Mod mod : ((AttrMod) info).mods) {
+                            		String attributeName = mod.attr.layer(Resource.tooltip).t;
+                            		gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, mod.mod));
+                            		gildBuffs.get(attributeName).mod += mod.mod;
+								}
+							} else if(info instanceof ISlots) {
+                            	((ISlots) info).s.forEach((sitem) -> {
+                            		sitem.info.forEach((sitemInfo) -> {
+                            			if(sitemInfo instanceof AttrMod) {
+											for(AttrMod.Mod mod : ((AttrMod) sitemInfo).mods) {
+												String attributeName = mod.attr.layer(Resource.tooltip).t;
+												gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, mod.mod));
+												gildBuffs.get(attributeName).mod += mod.mod;
+											}
+										}
+									});
+								});
+							}
                         }
                     }
                 }
@@ -282,7 +305,19 @@ public class Equipory extends Widget implements DTarget {
         }
         if (armorclass != null)
             g.image(armorclass, new Coord(acx - armorclass.sz().x / 2, bg.sz().y - armorclass.sz().y));
-    }
+		int ofsY = 15;
+		for(Map.Entry<String, AttrMod.Mod> e : gildBuffs.entrySet()) {
+			if(e.getValue().mod == 0)
+				continue;
+			BufferedImage bufferedImage1 = (RichText.render(String.format("%s $col[%s]{%s%d}", new Object[] { ((Resource.Tooltip)e.getValue().attr.layer(Resource.tooltip)).t, (e.getValue().mod < 0) ? AttrMod.debuff : AttrMod.buff,
+					(char)((e.getValue().mod < 0) ? 45 : 43), Integer.valueOf(Math.abs(e.getValue().mod)) }), 0, new Object[0])).img;
+			BufferedImage bufferedImage2 = PUtils.convolvedown(((Resource.Image)e.getValue().attr.layer(Resource.imgc)).img, new Coord(bufferedImage1
+					.getHeight(), bufferedImage1.getHeight()), CharWnd.iconfilter);
+			BufferedImage combined = AttrMod.catimgsh(0, new BufferedImage[] { bufferedImage2, bufferedImage1 });
+			g.image(combined, new Coord(320, ofsY += 15));
+		}
+		g.image(Text.labelFnd.render("Total attributes: ").tex(), new Coord(300, 0));
+	}
 
     public boolean iteminteract(Coord cc, Coord ul) {
         return (false);
