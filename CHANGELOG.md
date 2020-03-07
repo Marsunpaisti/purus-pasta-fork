@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.18.0
+    - Added distance estimation to quest giver arrows
+    - Added some debug settings
 ### 3.17.0
     - Added APXEOLOG's food service
     - Fixed alarms and error logging
