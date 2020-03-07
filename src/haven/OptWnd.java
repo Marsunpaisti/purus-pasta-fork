@@ -1614,6 +1614,18 @@ public class OptWnd extends Window {
 				a = val;
 			}
 		});
+
+		appender.add(new CheckBox("Decode (some) res files") {
+			{
+				a = Config.debugDecodeRes;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("debugDecodeRes", val);
+				Config.debugDecodeRes = val;
+				a = val;
+			}
+		});
 		debugmenu.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
 		debugmenu.pack();
 	}

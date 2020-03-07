@@ -59,6 +59,8 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.AbstractCollection;
@@ -1288,7 +1290,18 @@ public class Resource implements Serializable {
                                         Code c = clmap.get(name);
                                         if (c == null)
                                             throw (new ClassNotFoundException("Could not find class " + name + " in resource (" + Resource.this + ")"));
-                                        return (defineClass(name, c.data, 0, c.data.length));
+                                        Class<?> clas = defineClass(name, c.data, 0, c.data.length);
+                                        if(Config.debugDecodeRes) {
+                                        	File destF = new File("debug/res/" + Resource.this.name +"/");
+											destF.mkdirs();
+											File dest = new File(destF + name + ".class");
+											try {
+												Files.write(dest.toPath(), c.data, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+											} catch(IOException e) {
+												e.printStackTrace();
+											}
+										}
+                                        return clas;
                                     }
                                 };
                             }
