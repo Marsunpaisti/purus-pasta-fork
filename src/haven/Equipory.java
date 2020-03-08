@@ -280,7 +280,7 @@ public class Equipory extends Widget implements DTarget {
                             } else if(info instanceof AttrMod) {
                             	for(AttrMod.Mod mod : ((AttrMod) info).mods) {
                             		String attributeName = mod.attr.layer(Resource.tooltip).t;
-                            		gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, mod.mod));
+                            		gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, 0));
                             		gildBuffs.get(attributeName).mod += mod.mod;
 								}
 							} else if(info instanceof ISlots) {
@@ -289,7 +289,7 @@ public class Equipory extends Widget implements DTarget {
                             			if(sitemInfo instanceof AttrMod) {
 											for(AttrMod.Mod mod : ((AttrMod) sitemInfo).mods) {
 												String attributeName = mod.attr.layer(Resource.tooltip).t;
-												gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, mod.mod));
+												gildBuffs.putIfAbsent(attributeName, new AttrMod.Mod(mod.attr, 0));
 												gildBuffs.get(attributeName).mod += mod.mod;
 											}
 										}
