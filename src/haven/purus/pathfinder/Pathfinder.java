@@ -158,7 +158,7 @@ public class Pathfinder extends Thread {
 									continue;
 								if(destGob != null && gob.id == destGob.id)
 									accessMatrix[(k)/11][(i)/11] = -1;
-								else
+								else if(accessMatrix[(k)/11][(i)/11] != -1)
 									accessMatrix[(k)/11][(i)/11] = 1;
 							}
 							if(left == right) {
