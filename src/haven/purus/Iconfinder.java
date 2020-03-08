@@ -35,7 +35,7 @@ public class Iconfinder {
 		for(Map.Entry<String, CheckListboxItem> entry: Config.trees.entrySet()) {
 			String icon = null;
 			if(entry.getKey().equals("corkoak")) {
-				icon = "cork";
+				icon = "gfx/invobjs/cork";
 			}
 			if(entry.getKey().contains("tree"))
 				icon = findTreeIcon(entry.getKey().replaceAll("tree", ""));
