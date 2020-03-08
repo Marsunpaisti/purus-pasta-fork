@@ -69,7 +69,9 @@ public class Curiosity extends ItemInfo.Tip {
             buf.append(String.format("LP/EXP: $col[192,192,255]{%s}\n", Utils.thformat(exp/enc)));
         if(time > 0)
             buf.append(String.format("LP/Weight: $col[192,192,255]{%s}\n", Utils.thformat((Math.round(exp/mw)))));
-        if(owner instanceof GItem) {
+        if(mw > 0 && time > 0)
+			buf.append(String.format("LP/Hour/Weight: $col[192,192,255]{%s}\n", Utils.thformat((Math.round(exp/(time/60)/mw)))));
+		if(owner instanceof GItem) {
             Coord isz = ((GItem)owner).size();
             buf.append(String.format("LP/Hour/Size: $col[192,192,255]{%s}", Utils.thformat(Math.round(exp/(time/60))/(isz.x*isz.y))));
         }
