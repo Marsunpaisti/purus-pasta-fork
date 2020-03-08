@@ -1,5 +1,10 @@
 ## Changelog
 
+### 3.18.3
+    - Added lp/hour/weight to curios
+    - Added jellyfish to be picked by Q
+    - Fixed cork icon
+    - Fixed equipment attributes
 ### 3.18.2
     - Added radius to bats
     - Added attribute sums to equipment menu
