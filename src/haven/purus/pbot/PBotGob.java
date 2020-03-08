@@ -111,16 +111,20 @@ public class PBotGob {
 	}
 
 	/**
-	 * Right click a gob with pathfinder, wait until pathfinder is finished
+	 * Click a gob with pathfinder, with given button, wait until pathfinder is finished
 	 * @param btn 1 = left click, 3 = right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @return True if path was found, or false if not
 	 */
-	public void pfClick(int btn, int mod) {
-		PBotAPI.gui.map.purusPfRightClick(this.gob, -1, btn, mod, null);
+	public boolean pfClick(int btn, int mod) {
+		PBotAPI.gui.map.purusPfRightClick(gob, -1, btn, mod, null);
 		try {
 			PBotAPI.gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
+		}
+		synchronized(PBotAPI.gui.map) {
+			return PBotAPI.gui.map.foundPath;
 		}
 	}
 
