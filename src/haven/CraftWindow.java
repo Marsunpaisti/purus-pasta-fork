@@ -79,7 +79,7 @@ public class CraftWindow extends Window {
 	}
 
 	public boolean globtype(char ch, java.awt.event.KeyEvent ev) {
-		if(visible && KeyBindings.cycleCraftingTab.isThis(ev)) {
+		if(visible && KeyBindings.cycleCraftingTab.isThis(ev) && tabStrip.getButtonCount() > 0) {
 			int nextIndex = (tabStrip.getSelectedButtonIndex() + 1) % tabStrip.getButtonCount();
 			tabStrip.select(nextIndex);
 			if(hasfocus)
