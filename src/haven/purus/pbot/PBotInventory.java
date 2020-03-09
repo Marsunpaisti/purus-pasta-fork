@@ -4,6 +4,7 @@ import haven.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PBotInventory {
 
@@ -47,15 +48,19 @@ public class PBotInventory {
 	}
 
 	/**
-	 * Returns list of items with specific resfile name(s) from the inventory
-	 * @return List of items found
+	 * @param resnames List of regular expressions
+	 * @return List of items with resname matching to one of the expressions given in the list
 	 */
 	public List<PBotItem> getInventoryItemsByResnames(List<String> resnames) {
 		List<PBotItem> items = new ArrayList<>();
+		List<Pattern> nameExs = new ArrayList<>();
+		for(String s : resnames) {
+			nameExs.add(Pattern.compile(s));
+		}
 		for(PBotItem item : getInventoryContents()) {
 			String name = item.getResname();
-			for(String s : resnames) {
-				if(s.equals(name))
+			for(Pattern p : nameExs) {
+				if(p.matcher(name).matches())
 					items.add(item);
 			}
 		}
