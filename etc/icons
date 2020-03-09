@@ -7,6 +7,7 @@ alder;gfx/invobjs/seed-alder
 buckthorn;gfx/invobjs/seed-buckthorn
 terebinth;gfx/invobjs/seed-terebinth
 linden;gfx/invobjs/seed-linden
+blackpine;gfx/invobjs/seed-blackpine
 laurel;gfx/invobjs/leaf-laurel
 hornbeam;gfx/invobjs/seed-hornbeam
 birch;gfx/invobjs/seed-birch
@@ -17,6 +18,7 @@ juniper;gfx/invobjs/seed-juniper
 plumtree;gfx/invobjs/plum
 willow;gfx/invobjs/seed-willow
 medlartree;gfx/invobjs/medlar
+strawberrytree;gfx/invobjs/woodstrawberry
 sorbtree;gfx/invobjs/sorbapple
 baywillow;gfx/invobjs/seed-baywillow
 persimmontree;gfx/invobjs/persimmon
@@ -31,6 +33,7 @@ poplar;gfx/invobjs/seed-poplar
 olivetree;gfx/invobjs/olive
 appletree;gfx/invobjs/apple
 pine;gfx/invobjs/seed-pine
+stonepine;gfx/invobjs/stonepinecone
 cedar;gfx/invobjs/seed-cedar
 conkertree;gfx/invobjs/leaf-conkertree
 oak;gfx/invobjs/oakapple
@@ -41,6 +44,7 @@ larch;gfx/invobjs/seed-larch
 spruce;gfx/invobjs/seed-spruce
 crabappletree;gfx/invobjs/seed-crabappletree
 yew;gfx/invobjs/seed-yew
+oldtrunk;gfx/invobjs/wblock-mirkwood
 cypress;gfx/invobjs/seed-cypress
 hazel;gfx/invobjs/hazelnut
 sallow;gfx/invobjs/seed-sallow
@@ -49,9 +53,11 @@ beech;gfx/invobjs/seed-beech
 ash;gfx/invobjs/seed-ash
 maple;gfx/invobjs/leaf-maple
 treeheath;gfx/invobjs/seed-treeheath
+lemontree;gfx/invobjs/lemon
 mayflower;gfx/invobjs/seed-mayflower
 rowan;gfx/invobjs/rowanberry
 corkoak;gfx/invobjs/cork
+mastic;gfx/invobjs/masticfruit
 hawthorn;gfx/invobjs/seed-hawthorn
 gorse;gfx/invobjs/seed-gorse
 sandthorn;gfx/invobjs/seed-sandthorn
@@ -87,14 +93,17 @@ alabaster;gfx/invobjs/alabaster
 fluorospar;gfx/invobjs/fluorospar
 schist;gfx/invobjs/schist
 limestone;gfx/invobjs/limestone
+arkose;gfx/invobjs/arkose
 gabbro;gfx/invobjs/gabbro
 kyanite;gfx/invobjs/kyanite
 corund;gfx/invobjs/corund
+breccia;gfx/invobjs/breccia
 hornblende;gfx/invobjs/hornblende
 quartz;gfx/invobjs/quartz
 zincspar;gfx/invobjs/zincspar
 gneiss;gfx/invobjs/gneiss
 microlite;gfx/invobjs/microlite
+diabase;gfx/invobjs/diabase
 porphyry;gfx/invobjs/porphyry
 sodalite;gfx/invobjs/sodalite
 marble;gfx/invobjs/marble

@@ -32,12 +32,19 @@ public class Iconfinder {
 	public static void updateConfig() {
 		StringBuilder sb = new StringBuilder();
 
+		HashMap<String, String> exceptions = new HashMap<String, String>() {{
+			put("corkoak", "gfx/invobjs/cork");
+			put("stonepine", "gfx/invobjs/stonepinecone");
+			put("strawberrytree", "gfx/invobjs/woodstrawberry");
+			put("oldtrunk", "gfx/invobjs/wblock-mirkwood");
+		}};
+
 		for(Map.Entry<String, CheckListboxItem> entry: Config.trees.entrySet()) {
 			String icon = null;
-			if(entry.getKey().equals("corkoak")) {
-				icon = "gfx/invobjs/cork";
+			if(exceptions.containsKey(entry.getKey())) {
+				icon = exceptions.get(entry.getKey());
 			}
-			if(entry.getKey().contains("tree"))
+			if(icon == null && entry.getKey().contains("tree"))
 				icon = findTreeIcon(entry.getKey().replaceAll("tree", ""));
 			if(icon == null)
 				icon = findTreeIcon(entry.getKey());
