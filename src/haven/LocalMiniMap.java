@@ -30,7 +30,7 @@ import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
 import static haven.OCache.posres;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,6 +73,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource eaglesfx = Resource.local().loadwait("sfx/eagle");
     private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
 	private final HashSet<Long> sgobs = new HashSet<Long>();
+	TexI loadedGrid = null;
 	
 	private float zoom = 1f; //zoom multiplier
 	private float iconZoom = 1f; //zoom multiplier for minimap icons
@@ -186,6 +187,15 @@ public class LocalMiniMap extends Widget {
     public LocalMiniMap(Coord sz, MapView mv) {
         super(sz);
         this.mv = mv;
+        // Initialize gob visibility box
+		BufferedImage bi = new BufferedImage(84, 84, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D gr = bi.createGraphics();
+		gr.setColor(new Color(0, 103, 255, 42));
+		gr.fillRect(0, 0, bi.getWidth()-1, bi.getHeight()-1);
+		gr.setColor(Color.BLUE);
+		gr.drawRect(0, 0, bi.getWidth()-1, bi.getHeight()-1);
+		gr.drawImage(bi, null, 0, 0);
+		loadedGrid = new TexI(bi);
     }
 
     public void save(MapFile file) {
@@ -506,8 +516,10 @@ public class LocalMiniMap extends Widget {
 
             if (Config.mapshowviewdist) {
                 Gob player = mv.player();
-                if (player != null)
-                    g.image(gridblue, p2c(player.rc).add(delta).sub((int)(44 * zoom), (int)(44 * zoom)), gridblue.dim.mul(zoom));
+                if (player != null) {
+					Coord pos = p2c(player.rc.floor().div(100).mul(new Coord2d(100, 100)).add(45, 45)).add(delta).sub((int) (82/2 * zoom), (int) (82/2 * zoom));
+					g.image(loadedGrid, pos, new Coord(84, 84).mul(zoom));
+				}
             }
         }
         drawicons(g);
