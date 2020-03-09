@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.18.5
+    - Updated 1map icons to include new boulders, bushes etc.
+    - Latest merges from Amber client
 ### 3.18.4
     - Minor PBot change
     - Fix craftwindow bug
