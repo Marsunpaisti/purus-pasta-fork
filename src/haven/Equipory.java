@@ -276,7 +276,6 @@ public class Equipory extends Widget implements DTarget {
                             if (info instanceof Armor) {
                                 h += ((Armor)info).hard;
                                 s += ((Armor)info).soft;
-                                break;
                             } else if(info instanceof AttrMod) {
                             	for(AttrMod.Mod mod : ((AttrMod) info).mods) {
                             		String attributeName = mod.attr.layer(Resource.tooltip).t;
