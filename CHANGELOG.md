@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.18.4
+    - Minor PBot change
+    - Fix craftwindow bug
+    - Fix attribute sums with armors
 ### 3.18.3
     - Added lp/hour/weight to curios
     - Added jellyfish to be picked by Q
