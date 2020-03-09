@@ -461,7 +461,6 @@ public class OptWnd extends Window {
     private void initMain(boolean gopts) {
 		List<PButton> mainButtons = Arrays.asList(
 				new PButton(200, "Video settings", 'v', video),
-				new PButton(200, "Video settings", 'v', video),
 				new PButton(200, "Audio settings", 'a', audio),
 				new PButton(200, "Display settings", 'd', display),
 				new PButton(200, "Minimap settings", 'm', map),
