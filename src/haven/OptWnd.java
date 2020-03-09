@@ -459,21 +459,34 @@ public class OptWnd extends Window {
     }
 
     private void initMain(boolean gopts) {
-        main.add(new PButton(200, "Video settings", 'v', video), new Coord(0, 0));
-        main.add(new PButton(200, "Audio settings", 'a', audio), new Coord(0, 30));
-        main.add(new PButton(200, "Display settings", 'd', display), new Coord(0, 60));
-        main.add(new PButton(200, "Minimap settings", 'm', map), new Coord(0, 90));
-        main.add(new PButton(200, "General settings", 'g', general), new Coord(210, 0));
-        main.add(new PButton(200, "Combat settings", 'c', combat), new Coord(210, 30));
-        main.add(new PButton(200, "Control settings", 'k', control), new Coord(210, 60));
-        main.add(new PButton(200, "Mapping settings", 'e', mapping), new Coord(210, 90));
-        main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 120));
-        main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
-        main.add(new PButton(200, "Menu settings", 'f', flowermenus), new Coord(420, 30));
-        main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
-        main.add(new PButton(200, "Hide settings", 'h', hidesettings), new Coord(420, 90));
-        main.add(new PButton(200, "Key Bindings", 'b', keybind), new Coord(420, 120));
-        main.add(new PButton(200, "Debug settings", 'r', debugmenu), new Coord(0, 150));
+		List<PButton> mainButtons = Arrays.asList(
+				new PButton(200, "Video settings", 'v', video),
+				new PButton(200, "Video settings", 'v', video),
+				new PButton(200, "Audio settings", 'a', audio),
+				new PButton(200, "Display settings", 'd', display),
+				new PButton(200, "Minimap settings", 'm', map),
+				new PButton(200, "General settings", 'g', general),
+				new PButton(200, "Combat settings", 'c', combat),
+				new PButton(200, "Control settings", 'k', control),
+				new PButton(200, "Mapping settings", 'e', mapping),
+				new PButton(200, "UI settings", 'u', uis),
+				new PButton(200, "Quality settings", 'q', quality),
+				new PButton(200, "Menu settings", 'f', flowermenus),
+				new PButton(200, "Sound alarms", 's', soundalarms),
+				new PButton(200, "Hide settings", 'h', hidesettings),
+				new PButton(200, "Key Bindings", 'b', keybind),
+				new PButton(200, "Debug settings", 'r', debugmenu)
+		);
+		int yOfs = 0;
+		int xOfs = 0;
+		for(PButton button : mainButtons) {
+			if(xOfs > 420) {
+				xOfs = 0;
+				yOfs += 30;
+			}
+			main.add(button, new Coord(xOfs, yOfs));
+			xOfs += 210;
+		}
         if(gopts) {
             main.add(new Button(200, "Keybindings") {
                 public void click() {
