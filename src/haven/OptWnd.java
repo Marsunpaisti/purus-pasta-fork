@@ -459,7 +459,7 @@ public class OptWnd extends Window {
     }
 
     private void initMain(boolean gopts) {
-		List<PButton> mainButtons = Arrays.asList(
+		ArrayList<Button> mainButtons = new ArrayList<>(Arrays.asList(
 				new PButton(200, "Video settings", 'v', video),
 				new PButton(200, "Audio settings", 'a', audio),
 				new PButton(200, "Display settings", 'd', display),
@@ -475,10 +475,35 @@ public class OptWnd extends Window {
 				new PButton(200, "Hide settings", 'h', hidesettings),
 				new PButton(200, "Key Bindings", 'b', keybind),
 				new PButton(200, "Debug settings", 'r', debugmenu)
-		);
+		));
+		if(gopts) {
+			mainButtons.add(new Button(200, "Keybindings") {
+				public void click() {
+					GameUI gui = gameui();
+					if(gui.keyBindingWnd.visible) {
+						gui.keyBindingWnd.hide();
+					} else {
+						gui.keyBindingWnd.show();
+						gui.keyBindingWnd.raise();
+					}
+				}
+			});
+			mainButtons.add(new Button(200, "Alarms") {
+				public void click() {
+					GameUI gui = gameui();
+					if(gui.alarmWindow.visible) {
+						gui.alarmWindow.hide();
+					} else {
+						gui.alarmWindow.show();
+						gui.alarmWindow.raise();
+					}
+				}
+			});
+		}
+
 		int yOfs = 0;
 		int xOfs = 0;
-		for(PButton button : mainButtons) {
+		for(Button button : mainButtons) {
 			if(xOfs > 420) {
 				xOfs = 0;
 				yOfs += 30;
@@ -486,30 +511,6 @@ public class OptWnd extends Window {
 			main.add(button, new Coord(xOfs, yOfs));
 			xOfs += 210;
 		}
-        if(gopts) {
-            main.add(new Button(200, "Keybindings") {
-                public void click() {
-                    GameUI gui = gameui();
-                    if(gui.keyBindingWnd.visible) {
-                        gui.keyBindingWnd.hide();
-                    } else {
-                        gui.keyBindingWnd.show();
-                        gui.keyBindingWnd.raise();
-                    }
-                }
-            }, new Coord(0, 120));
-            main.add(new Button(200, "Alarms") {
-                public void click() {
-                    GameUI gui = gameui();
-                    if(gui.alarmWindow.visible) {
-                        gui.alarmWindow.hide();
-                    } else {
-                        gui.alarmWindow.show();
-                        gui.alarmWindow.raise();
-                    }
-                }
-            }, new Coord(210, 120));
-        }
         if (gopts) {
             main.add(new Button(200, "Switch character") {
                 public void click() {
