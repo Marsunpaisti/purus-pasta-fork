@@ -24,9 +24,8 @@ import java.util.stream.Collectors;
  * @author APXEOLOG (Artyom Melnikov), at 31.01.2019
  */
 public class RemoteNavigation {
-    private static final String MAP_ENDPOINT = Config.navigationEndpoint;
-    private static final String INDEX_FILE_URL = MAP_ENDPOINT + "/grids/mapdata_index";
-    private static final String API_ENDPOINT = MAP_ENDPOINT + "/api";
+    private static final String INDEX_FILE_URL = Config.mapperUrl + "/grids/mapdata_index";
+    private static final String API_ENDPOINT = Config.mapperUrl + "/api";
 
     private final File localMapdataIndexFile = new File(System.getProperty("user.dir"), "mapdata_index_local");
 
@@ -169,7 +168,7 @@ public class RemoteNavigation {
     public void openBrowserMap(Coord gridCoord) {
         try {
             WebBrowser.self.show(new URL(
-                    String.format(MAP_ENDPOINT + "/#/grid/%d/%d/6", gridCoord.x, gridCoord.y)));
+                    String.format(Config.mapperUrl + "/#/grid/%d/%d/6", gridCoord.x, gridCoord.y)));
         } catch (Exception ex) {}
     }
 
@@ -377,10 +376,11 @@ public class RemoteNavigation {
                         HttpURLConnection connection =
                                 (HttpURLConnection) new URL(API_ENDPOINT + "/v2/updateCharacter").openConnection();
                         connection.setRequestMethod("POST");
-                        connection.setRequestProperty("Content-Type", "application/json");
+                        connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         connection.setDoOutput(true);
                         try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
-                            out.writeBytes(new JSONObject(dataToSend).toString());
+                            String json = new JSONObject(dataToSend).toString();
+                            out.write(json.getBytes(StandardCharsets.UTF_8));
                         }
                         connection.getResponseCode();
                     } catch (Exception ex) { }
@@ -474,7 +474,7 @@ public class RemoteNavigation {
                         HttpURLConnection connection = (HttpURLConnection)
                                 new URL(API_ENDPOINT + "/v1/uploadMarkers").openConnection();
                         connection.setRequestMethod("POST");
-                        connection.setRequestProperty("Content-Type", "application/json");
+                        connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                         connection.setDoOutput(true);
                         try (OutputStream outputStream = connection.getOutputStream()) {
                             Collection collection = loadedMarkers.stream()

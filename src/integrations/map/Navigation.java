@@ -1,9 +1,14 @@
 package integrations.map;
 
+import haven.Config;
 import haven.Coord;
 import haven.Coord2d;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,7 +75,18 @@ public class Navigation {
         if (lastPlayerCoordinates != null) {
             setSessionType(GridType.CHARACTER_SWITCH);
         }
-        characterName = name;
+        if (Config.mapperHashName) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] hash = digest.digest(name.getBytes(StandardCharsets.UTF_8));
+                characterName = Base64.getEncoder().encodeToString(hash);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                characterName = "(ง'̀-'́)ง";
+            }
+        } else {
+            characterName = name;
+        }
     }
 
     public static String getCharacterName() {

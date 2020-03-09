@@ -28,10 +28,8 @@ package haven;
 
 
 import haven.purus.Iconfinder;
-import haven.purus.KeyBindings;
 
-import java.awt.Color;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -49,10 +47,11 @@ import java.util.prefs.BackingStoreException;
 import java.util.stream.Collectors;
 
 public class OptWnd extends Window {
+    private static final Text.Foundry sectionfndr = new Text.Foundry(Text.dfont.deriveFont(Font.BOLD, Text.cfg.label));
     public static final int VERTICAL_MARGIN = 10;
     public static final int HORIZONTAL_MARGIN = 5;
     public static final int VERTICAL_AUDIO_MARGIN = 5;
-    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms, hidesettings, keybind, debugmenu;
+    public final Panel main, video, audio, display, map, general, combat, control, uis, quality, flowermenus, soundalarms, hidesettings, keybind, mapping, debugmenu;
     public Panel current;
 
     public void chpanel(Panel p) {
@@ -431,6 +430,7 @@ public class OptWnd extends Window {
         general = add(new Panel());
         combat = add(new Panel());
         control = add(new Panel());
+        mapping = add(new Panel());
         uis = add(new Panel());
         quality = add(new Panel());
         flowermenus = add(new Panel());
@@ -442,7 +442,7 @@ public class OptWnd extends Window {
         initMain(gopts);
         initAudio();
         initDisplay();
-        initMap();
+        initMinimap();
         initGeneral();
         initCombat();
         initControl();
@@ -453,6 +453,7 @@ public class OptWnd extends Window {
         initHideMenu();
         initKeyBind();
         initDebugMenu();
+        initMapping();
 
         chpanel(main);
     }
@@ -461,11 +462,12 @@ public class OptWnd extends Window {
         main.add(new PButton(200, "Video settings", 'v', video), new Coord(0, 0));
         main.add(new PButton(200, "Audio settings", 'a', audio), new Coord(0, 30));
         main.add(new PButton(200, "Display settings", 'd', display), new Coord(0, 60));
-        main.add(new PButton(200, "Map settings", 'm', map), new Coord(0, 90));
+        main.add(new PButton(200, "Minimap settings", 'm', map), new Coord(0, 90));
         main.add(new PButton(200, "General settings", 'g', general), new Coord(210, 0));
         main.add(new PButton(200, "Combat settings", 'c', combat), new Coord(210, 30));
         main.add(new PButton(200, "Control settings", 'k', control), new Coord(210, 60));
-        main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 90));
+        main.add(new PButton(200, "Mapping settings", 'e', mapping), new Coord(210, 90));
+        main.add(new PButton(200, "UI settings", 'u', uis), new Coord(210, 120));
         main.add(new PButton(200, "Quality settings", 'q', quality), new Coord(420, 0));
         main.add(new PButton(200, "Menu settings", 'f', flowermenus), new Coord(420, 30));
         main.add(new PButton(200, "Sound alarms", 's', soundalarms), new Coord(420, 60));
@@ -829,7 +831,7 @@ public class OptWnd extends Window {
         });
     }
 
-    private void initMap() {
+    private void initMinimap() {
         map.add(new Label("Show boulders:"), new Coord(10, 0));
         map.add(new Label("Show bushes:"), new Coord(165, 0));
         map.add(new Label("Show trees:"), new Coord(320, 0));
@@ -867,18 +869,6 @@ public class OptWnd extends Window {
                     } catch (Exception e) {
                     }
                 }
-            }
-        });
-        appender.add(new CheckBox("Save map tiles to disk") {
-            {
-                a = Config.savemmap;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("savemmap", val);
-                Config.savemmap = val;
-                MapGridSave.mgs = null;
-                a = val;
             }
         });
         appender.add(new CheckBox("Show timestamps in chats") {
@@ -1046,40 +1036,18 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Enable navigation tracking") {
+       /* Always send
+        appender.add(new CheckBox("Send food details to the food service (https://food.havenandhearth.link)") {
             {
-                a = Config.enableNavigationTracking;
+                a = Config.foodService;
             }
 
             public void set(boolean val) {
-                Utils.setprefb("enableNavigationTracking", val);
-                Config.enableNavigationTracking = val;
+                Utils.setprefb("foodService", val);
+                Config.foodService = val;
                 a = val;
             }
-        });
-        appender.add(new CheckBox("Upload custom GREEN markers to map") {
-            {
-                a = Config.sendCustomMarkers;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("sendCustomMarkers", val);
-                Config.sendCustomMarkers = val;
-                a = val;
-            }
-        });
-		appender.addRow(new Label("Map endpoint URL (requires restart)"),
-				new TextEntry(300, Config.navigationEndpoint) {
-					@Override
-					public boolean keydown(KeyEvent ev) {
-						if (!parent.visible)
-							return false;
-						boolean ret = buf.key(ev);
-						Utils.setpref("navigationEndpoint", text);
-						return ret;
-					}
-				}
-		);
+        });*/
         general.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         general.pack();
     }
@@ -1995,6 +1963,79 @@ public class OptWnd extends Window {
 
         soundalarms.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         soundalarms.pack();
+    }
+
+    private void initMapping() {
+        final WidgetVerticalAppender appender = new WidgetVerticalAppender(withScrollport(mapping, new Coord(620, 350)));
+
+        appender.setVerticalMargin(VERTICAL_MARGIN);
+        appender.setHorizontalMargin(HORIZONTAL_MARGIN);
+
+        appender.add(new Label("Online Auto-Mapper Service:", sectionfndr));
+
+        appender.addRow(new Label("Mapping server URL (req. restart):"),
+                new TextEntry(240, Config.mapperUrl) {
+                    @Override
+                    public boolean keydown(KeyEvent ev) {
+                        if (!parent.visible)
+                            return false;
+                        Utils.setpref("mapperUrl", text);
+                        return buf.key(ev);
+                    }
+                }
+        );
+        appender.add(new CheckBox("Hide character name") {
+            {
+                a = Config.mapperHashName;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("mapperHashName", val);
+                Config.mapperHashName = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Enable navigation tracking") {
+            {
+                a = Config.enableNavigationTracking;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("enableNavigationTracking", val);
+                Config.enableNavigationTracking = val;
+                a = val;
+            }
+        });
+        appender.add(new CheckBox("Upload custom GREEN markers to map") {
+            {
+                a = Config.sendCustomMarkers;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("sendCustomMarkers", val);
+                Config.sendCustomMarkers = val;
+                a = val;
+            }
+        });
+
+        appender.add(new Label(""));
+        appender.add(new Label("Locally saved map tiles for 3rd party tools:", sectionfndr));
+
+        appender.add(new CheckBox("Save map tiles to disk") {
+            {
+                a = Config.savemmap;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("savemmap", val);
+                Config.savemmap = val;
+                MapGridSave.mgs = null;
+                a = val;
+            }
+        });
+
+        mapping.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
+        mapping.pack();
     }
 
     private static final Text kbtt = RichText.render("$col[255,255,0]{Escape}: Cancel input\n" +

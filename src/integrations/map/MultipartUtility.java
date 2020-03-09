@@ -1,5 +1,7 @@
 package integrations.map;
 
+import haven.Config;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,7 +41,7 @@ public class MultipartUtility {
         httpConn.setDoInput(true);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
-        httpConn.setRequestProperty("User-Agent", "H&H Client");
+        httpConn.setRequestProperty("User-Agent", Config.confid);
         outputStream = httpConn.getOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset),
                 true);
