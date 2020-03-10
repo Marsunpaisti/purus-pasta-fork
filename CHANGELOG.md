@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.18.6
+    - New alarms to boar, bat and salt
+    - Improved minimap view distance box
+    - Fixed quest pointers not working on sides
 ### 3.18.5
     - Updated 1map icons to include new boulders, bushes etc.
     - Latest merges from Amber client
