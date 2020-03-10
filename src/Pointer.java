@@ -57,24 +57,43 @@ public class Pointer extends Widget {
 			}
 		Coord coord3 = coord2.sub(paramCoord).norm(30.0D);
 		coord2 = coord2.add(coord1);
+
+		Coord loc1 = coord2.add(coord3);
+		if(loc1.x > this.sz.x) {
+			float ratio = (ui.gui.map.sz.y/2*1.0f - loc1.y)/loc1.x;
+			loc1 = new Coord(this.sz.x-(this.licon != null ? this.licon.sz().x : 5), (int)(ui.gui.map.sz.y/2 - (ui.gui.map.sz.x)*ratio));
+		} else if(loc1.x < 0) {
+			float ratio = (ui.gui.map.sz.y/2*1.0f - loc1.y)/-(loc1.x-ui.gui.map.sz.x);
+			loc1 = new Coord(0+(this.licon != null ? this.licon.sz().x : 5), (int)(ui.gui.map.sz.y/2 - (ui.gui.map.sz.x)*ratio));
+		}
+
+		Coord loc2 = coord2;
+		if(loc2.x > this.sz.x) {
+			float ratio = (ui.gui.map.sz.y/2*1.0f - loc2.y)/loc2.x;
+			loc2 = new Coord(this.sz.x, (int)(ui.gui.map.sz.y/2 - (ui.gui.map.sz.x)*ratio));
+		} else if(loc2.x < 0) {
+			float ratio = (ui.gui.map.sz.y/2*1.0f - loc2.y)/-(loc2.x-ui.gui.map.sz.x);
+			loc2 = new Coord(0, (int)(ui.gui.map.sz.y/2 - (ui.gui.map.sz.x)*ratio));
+		}
+
 		BGL bGL = paramGOut.gl;
 		paramGOut.state2d();
 		paramGOut.state((GLState)col);
 		paramGOut.apply();
 		bGL.glEnable(2881);
 		bGL.glBegin(4);
-		paramGOut.vertex(coord2);
-		paramGOut.vertex(coord2.add(coord3).add(-coord3.y / 3, coord3.x / 3));
-		paramGOut.vertex(coord2.add(coord3).add(coord3.y / 3, -coord3.x / 3));
+		paramGOut.vertex(loc2);
+		paramGOut.vertex(loc1.add(-coord3.y / 3, coord3.x / 3));
+		paramGOut.vertex(loc1.add(coord3.y / 3, -coord3.x / 3));
 		bGL.glEnd();
 		bGL.glDisable(2881);
 		if (this.icon != null)
 			try {
 				if (this.licon == null)
 					this.licon = ((Resource.Image)((Resource)this.icon.get()).layer(Resource.imgc)).tex();
-				paramGOut.aimage(this.licon, coord2.add(coord3), 0.5D, 0.5D);
+				paramGOut.aimage(this.licon, loc1, 0.5D, 0.5D);
 			} catch (Loading loading) {}
-		this.lc = coord2.add(coord3);
+		this.lc = loc1;
 	}
 
 	public void draw(GOut paramGOut) {
