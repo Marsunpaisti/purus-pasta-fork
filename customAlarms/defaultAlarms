@@ -2,6 +2,8 @@ gfx/terobjs/vehicle/wreckingball;wball.wav;50
 gfx/terobjs/herbs/clay-cave;curio.wav;50
 gfx/terobjs/woodheart;voiveljet.wav;50
 gfx/terobjs/herbs/edelweiss;curio.wav;50
+gfx/kritter/boar/boar;boar.wav;50
+gfx/kritter/bat/bat;bat.wav;50
 gfx/kritter/bear/bear;karhu.wav;50
 gfx/kritter/mammoth/mammoth;mammoth.wav;50
 gfx/terobjs/herbs/chimingbluebell;curio.wav;50
@@ -10,7 +12,7 @@ gfx/terobjs/guanopile;voiveljet.wav;50
 gfx/terobjs/icespire;voiveljet.wav;50
 gfx/terobjs/jotunmussel;voiveljet.wav;50
 gfx/terobjs/herbs/flotsam;curio.wav;50
-gfx/terobjs/saltbasin;voiveljet.wav;50
+gfx/terobjs/saltbasin;salt.wav;50
 gfx/terobjs/herbs/camomile;curio.wav;50
 gfx/kritter/greyseal/greyseal;viikset.wav;50
 gfx/kritter/wolf/wolf;wolf.wav;50
