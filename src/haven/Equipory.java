@@ -313,7 +313,7 @@ public class Equipory extends Widget implements DTarget {
 			BufferedImage bufferedImage2 = PUtils.convolvedown(((Resource.Image)e.getValue().attr.layer(Resource.imgc)).img, new Coord(bufferedImage1
 					.getHeight(), bufferedImage1.getHeight()), CharWnd.iconfilter);
 			BufferedImage combined = AttrMod.catimgsh(0, new BufferedImage[] { bufferedImage2, bufferedImage1 });
-			g.image(combined, new Coord(320, ofsY += 15));
+			g.image(combined, new Coord(300, ofsY += 15));
 		}
 		g.image(Text.labelFnd.render("Total attributes: ").tex(), new Coord(300, 0));
 	}
