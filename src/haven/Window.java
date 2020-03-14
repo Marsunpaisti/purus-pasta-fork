@@ -192,7 +192,9 @@ public class Window extends Widget implements DTarget {
 	    			if(wdg instanceof Inventory) {
 	    				for(WItem item:((Inventory)wdg).wmap.values()) {
 	    					Curiosity ci = ItemInfo.find(Curiosity.class, item.item.info());
-	    					totalLP += ci.exp;
+	    					if(ci != null) {
+								totalLP += ci.exp;
+							}
 	    					studyTimes.put(item.item.getname(), studyTimes.get(item.item.getname()) == null ? item.item.studytime : studyTimes.get(item.item.getname())+item.item.studytime);
 	    				}
 	    			}
