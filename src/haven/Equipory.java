@@ -111,7 +111,7 @@ public class Equipory extends Widget implements DTarget {
     }
 
     public Equipory(long gobid) {
-        super(isz.add(150, 0));
+        super(isz.add(160, 0));
 		ava = add(new Avaview(bg.sz(), gobid, "equcam") {
             public boolean mousedown(Coord c, int button) {
                 return (false);
