@@ -67,6 +67,7 @@ public class LoginScreen extends Widget {
         GameUI.swimon = false;
         GameUI.trackon = false;
         GameUI.crimeon = false;
+        GameUI.siegepointerson = false;
     }
 
     private static abstract class Login extends Widget {

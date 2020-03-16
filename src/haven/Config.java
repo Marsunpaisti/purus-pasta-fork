@@ -133,6 +133,7 @@ public class Config {
     public static boolean showservertime = Utils.getprefb("showservertime", false);
     public static boolean enabletracking = Utils.getprefb("enabletracking", false);
     public static boolean enablecrime = Utils.getprefb("enablecrime", false);
+    public static boolean enablesiegepointers = Utils.getprefb("enablesiegepointers", true);
     public static boolean resinfo = Utils.getprefb("resinfo", false);
     public static boolean showanimalrad = Utils.getprefb("showanimalrad", true);
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
@@ -212,6 +213,7 @@ public class Config {
     public static int fpsBackgroundLimit = Utils.getprefi("fpsBackgroundLimit", 200);
     public static boolean debugWdgmsg = Utils.getprefb("debugWdgmsg", false);
 	public static boolean debugDecodeRes = Utils.getprefb("debugDecodeRes", false);
+	public static boolean pastaMapper = Utils.getprefb("pastaMapper", false);
 
     public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(30) {{
         put("basalt", new CheckListboxItem("Basalt"));

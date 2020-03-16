@@ -983,6 +983,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+		appender.add(new CheckBox("Enable siege engine pointers on login") {
+			{
+				a = Config.enablesiegepointers;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("enablesiegepointers", val);
+				Config.enablesiegepointers = val;
+				a = val;
+			}
+		});
         appender.add(new CheckBox("Drop mined stones") {
             {
                 a = Config.dropMinedStones;

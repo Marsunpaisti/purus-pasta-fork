@@ -675,8 +675,12 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
                 gui.crimeautotgld = true;
                 wdgmsg("act", new Object[]{"crime"});
             }
-            togglestuff = false;
-        }
+            if( Config.enablesiegepointers && !GameUI.siegepointerson) {
+            	gui.siegepointerson = true;
+				wdgmsg("act", new Object[]{"siegeptr"});
+			}
+			togglestuff = false;
+		}
     }
 
     public boolean mouseup(Coord c, int button) {

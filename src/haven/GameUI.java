@@ -91,6 +91,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public static boolean crimeon = false;
     public static boolean trackon = false;
     public static boolean partyperm = false;
+    public static boolean siegepointerson = false;
     public boolean crimeautotgld = false;
     public boolean trackautotgld = false;
     public FBelt fbelt;
@@ -895,6 +896,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 crimeon = true;
             else if (name.equals("tracking"))
                 trackon = true;
+            else if(name.equals("siegeptr"))
+            	siegepointerson = true;
         } else if (err.endsWith("off.")) {
             Buff tgl = buffs.gettoggle(name);
             if (tgl != null)
@@ -905,6 +908,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 crimeon = false;
             else if (name.equals("tracking"))
                 trackon = false;
+			else if(name.equals("siegeptr"))
+				siegepointerson = false;
         }
     }
 
