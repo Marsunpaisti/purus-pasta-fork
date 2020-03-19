@@ -26,7 +26,7 @@ public class BotUtils {
 	
 	public static int getAmount(GItem item) {
 		int ret = -1;
-
+		
 		synchronized(item.ui) {
 			List<ItemInfo> li = item.info();
 			if(li == null)

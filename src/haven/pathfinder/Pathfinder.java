@@ -84,9 +84,6 @@ public class Pathfinder implements Runnable {
                 if (this.gob != null && this.gob.id == gob.id)
                     continue;
                 GobHitbox.BBox box = GobHitbox.getBBox(gob);
-                //Add clearance
-                box.a = box.a.sub(6, 6);
-                box.b = box.b.add(6,6);
                 if (box != null && isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor())) {
                     m.excludeGob(gob);
                     continue;
