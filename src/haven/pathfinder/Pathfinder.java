@@ -83,12 +83,19 @@ public class Pathfinder implements Runnable {
                 // need to exclude destination gob so it won't get into TO candidates list
                 if (this.gob != null && this.gob.id == gob.id)
                     continue;
+
                 GobHitbox.BBox box = GobHitbox.getBBox(gob);
-                //Add clearance
-                box.a = box.a.sub(6, 6);
-                box.b = box.b.add(6,6);
+                int shrink = 0;
                 if (box != null && isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor())) {
-                    m.excludeGob(gob);
+                    do {
+                        //"Shrink" box until player is no longer considered to be inside it
+                        shrink++;
+                        box = GobHitbox.getBBox(gob);
+                        box.a = box.a.add(shrink, shrink);
+                        box.b = box.b.sub(shrink, shrink);
+
+                    } while (isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor()));
+                    m.addGobAndShrink(gob, new Coord(shrink, shrink));
                     continue;
                 }
                 m.addGob(gob);
