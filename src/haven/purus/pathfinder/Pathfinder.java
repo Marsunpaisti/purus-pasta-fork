@@ -20,7 +20,8 @@ public class Pathfinder extends Thread {
 	private Coord2d dest;
 	private Gob destGob;
 	private String action;
-	private boolean DEBUG = false, stop;
+	private boolean DEBUG = false; //stop;
+	private boolean stop = false;
 
 	// Move to center of the location tile
 	public Pathfinder(GameUI gui, Coord2d dest, String action) {
