@@ -38,9 +38,9 @@ public class PBotCharacterAPI {
 	 * Act can be used for example to choose a cursor
 	 * Some acts:
 	 * dig, mine, carry, destroy, fish, inspect, repair, crime, swim, tracking, aggro, shoot
-	 * @param act Act to choose
+	 * @param act Act(s) to choose
 	 */
-	public static void doAct(String act) {
+	public static void doAct(String... act) {
 		PBotAPI.gui.menu.wdgmsg("act", act);
 	}
 
