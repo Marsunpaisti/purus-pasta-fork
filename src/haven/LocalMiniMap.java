@@ -57,7 +57,7 @@ public class LocalMiniMap extends Widget {
     private Coord delta = Coord.z;
     private static final Resource alarmplayerWhite = Resource.local().loadwait("sfx/alarms/whitePlayer");
     private static final Resource alarmplayerRed = Resource.local().loadwait("sfx/alarms/redPlayer");
-	private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
+	/*private static final Resource alarmplayersfx = Resource.local().loadwait("sfx/alarmplayer");
     private static final Resource foragablesfx = Resource.local().loadwait("sfx/awwyeah");
     private static final Resource voiveljet = Resource.local().loadwait("sfx/alarms/voiveljet");
     private static final Resource wolf1 = Resource.local().loadwait("sfx/alarms/wolf1");
@@ -72,6 +72,7 @@ public class LocalMiniMap extends Widget {
     private static final Resource doomedsfx = Resource.local().loadwait("sfx/alarms/bram");
     private static final Resource eaglesfx = Resource.local().loadwait("sfx/eagle");
     private static final Resource swagsfx = Resource.local().loadwait("sfx/swag");
+    private static final Resource wolfsfx = Resource.local().loadwait("sfx/wolf");*/
 	private final HashSet<Long> sgobs = new HashSet<Long>();
 	TexI loadedGrid = null;
 	
@@ -323,8 +324,11 @@ public class LocalMiniMap extends Widget {
                     } else if (Config.alarmbram && gob.type == Gob.Type.SIEGE_MACHINE) {
                         sgobs.add(gob.id);
                         Audio.play(doomedsfx, Config.alarmbramvol);
-                    }*/
-
+                    } else if (gob.type == Gob.Type.WOLF && gob.knocked == Boolean.FALSE) {
+                        sgobs.add(gob.id);
+                        Audio.play(wolfsfx, 0.8);
+                    }
+						*/
                 } catch (Loading l) {
                 }
             }

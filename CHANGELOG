@@ -1,3 +1,18 @@
+Version 1.77.3
+    Misc:
+        * Update ru i10n (by supremko).
+        * Add Sand Flea to icons list.
+        * Update wound treatments.
+        * Add wolf sfx.
+
+Version 1.77.2
+    Misc:
+        * Update boulders and stones list.
+        * Make drink hotkey work with belts (only when 'alternative equipment belt window' is toggled on).
+        * Add Cave Fern to icons list.
+        * Update en l10n.
+        * Upstream code merge.
+
 Version 1.77.1
     Fixed:
         * Server date widget size.

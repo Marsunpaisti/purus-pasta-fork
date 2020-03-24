@@ -884,17 +884,6 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Show timestamps in chats") {
-            {
-                a = Config.chattimestamp;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("chattimestamp", val);
-                Config.chattimestamp = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Notify when kin comes online") {
             {
                 a = Config.notifykinonline;

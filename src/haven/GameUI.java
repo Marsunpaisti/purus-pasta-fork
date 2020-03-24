@@ -1242,7 +1242,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Utils.setprefb("showfarmrad", Config.showfarmrad);
             return true;
         } else if (kb_drink.key().match(ev)) {
-            maininv.drink(100);
+            if (!maininv.drink(100)) {
+                for (Widget w = lchild; w != null; w = w.prev) {
+                    if (w instanceof BeltWnd && w.child instanceof InventoryBelt) {
+                        ((InventoryBelt)w.child).drink(100);
+                        break;
+                    }
+                }
+            }
             return true;
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_A) {
             if (mapfile != null && mapfile.show(!mapfile.visible)) {

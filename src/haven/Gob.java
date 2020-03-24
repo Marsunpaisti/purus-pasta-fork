@@ -472,6 +472,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.BEAR;
         else if (name.endsWith("/lynx"))
             type = Type.LYNX;
+        else if (name.endsWith("/wolf"))
+            type = Type.WOLF;
         else if (name.endsWith("/walrus"))
             type = Type.WALRUS;
         else if (name.endsWith("/greyseal"))
