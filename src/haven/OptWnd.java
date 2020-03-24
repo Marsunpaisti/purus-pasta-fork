@@ -2042,6 +2042,33 @@ public class OptWnd extends Window {
             }
         });
 
+		appender.add(new Label(""));
+		appender.add(new Label("Pasta mapper:", sectionfndr));
+
+		appender.addRow(new Label("Pasta mapper server URL (req. restart):"),
+				new TextEntry(240, Utils.getpref("pastaMapperUrl", "")) {
+					@Override
+					public boolean keydown(KeyEvent ev) {
+						if (!parent.visible)
+							return false;
+						Utils.setpref("pastaMapperUrl", text);
+						return buf.key(ev);
+					}
+				}
+		);
+
+		appender.add(new CheckBox("Enable pasta mapper (req. restart)") {
+			{
+				a = Config.pastaMapper;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("pastaMapper", val);
+				Config.pastaMapper = val;
+				a = val;
+			}
+		});
+
         appender.add(new Label(""));
         appender.add(new Label("Locally saved map tiles for 3rd party tools:", sectionfndr));
 

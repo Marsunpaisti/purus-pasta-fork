@@ -26,6 +26,7 @@
 
 package haven;
 
+import haven.purus.mapper.Mapper;
 import integrations.map.Navigation;
 
 import java.util.ArrayList;
@@ -142,6 +143,8 @@ public class Charlist extends Widget {
                     if (sender == c.plb) {
                         wdgmsg("play", c.name);
                         Navigation.setCharacterName(c.name);
+                        Mapper.setCharacterName(c.name);
+                        Mapper.setHat(null, true);
                     }
                 }
             }

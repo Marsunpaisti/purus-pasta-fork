@@ -31,6 +31,7 @@ import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.*;
 import haven.purus.alarms.AlarmWindow;
+import haven.purus.mapper.Mapper;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
@@ -665,6 +666,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if(ResCache.global != null) {
                 MapFile file = MapFile.load(ResCache.global, mapfilename());
                 RemoteNavigation.getInstance().uploadMarkerData(file);
+                if(Config.pastaMapper)
+					Mapper.sendMarkerData(file);
                 mmap.save(file);
                 mapfile = new MapWnd(mmap.save, map, new Coord(700, 500), "Map");
                 mapfile.hide();

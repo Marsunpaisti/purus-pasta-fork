@@ -26,6 +26,7 @@
 
 package haven;
 
+import haven.purus.mapper.Mapper;
 import haven.res.ui.tt.Armor;
 import haven.res.ui.tt.attrmod.AttrMod;
 import haven.res.ui.tt.slots.ISlots;
@@ -172,6 +173,13 @@ public class Equipory extends Widget implements DTarget {
             WItem[] v = new WItem[args.length];
             for (int i = 0; i < args.length; i++) {
                 int ep = (Integer) args[i];
+                try {
+					if(ep == 0) {
+						Mapper.setHat(g.res.get().name, false);
+					} else if(ep == 16) {
+						Mapper.setHat(g.res.get().name, true);
+					}
+                } catch(Loading l) {}
                 v[i] = quickslots[ep] = add(new WItem(g), ecoords[ep].add(1, 1));
             }
             wmap.put(g, v);

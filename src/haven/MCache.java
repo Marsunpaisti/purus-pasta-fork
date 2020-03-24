@@ -26,6 +26,7 @@
 
 package haven;
 
+import haven.purus.mapper.Mapper;
 import integrations.map.Navigation;
 import integrations.map.RemoteNavigation;
 
@@ -440,6 +441,8 @@ public class MCache {
             }
             invalidate();
             RemoteNavigation.getInstance().receiveGrid(this);
+            if(Config.pastaMapper)
+            	Mapper.receiveGrid(this, grids.get(this.gc.add(1, 0)), grids.get(this.gc.add(0, 1)), grids.get(this.gc.add(0, -1)), grids.get(this.gc.add(-1, 0)));
             seq++;
         }
     }
