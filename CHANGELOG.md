@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.18.8
+    - Fix questgiver npe when peeking trails
 ### 3.18.7
     - Option for toggling siege pointers on login
     - Added caverat to danger radius list
