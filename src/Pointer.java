@@ -143,7 +143,7 @@ public class Pointer extends Widget {
 	}
 
 	public Object tooltip(Coord paramCoord, Widget paramWidget) {
-		if (this.lc != null && this.lc.dist(paramCoord) < 20.0D) {
+		if (this.lc != null && this.lc.dist(paramCoord) < 20.0D && this.ui.gui.map.player() != null) {
 			if(this.tooltip instanceof Text) {
 				int dist = (int)this.tc.dist(this.ui.gui.map.player().rc)/11;
 				return Text.render(((Text)this.tooltip).text + ", Distance: " + (dist < 990 ? dist : "> 990") + " tiles");
