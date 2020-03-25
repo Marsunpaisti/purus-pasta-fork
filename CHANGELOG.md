@@ -1,5 +1,8 @@
 ## Changelog
 
+### 3.18.9
+    - Start using lanczos mipmapper for sketches
+    - Do not disable quality/mineradius toggles in adventure menu
 ### 3.18.8
     - Fix questgiver npe when peeking trails
 ### 3.18.7
