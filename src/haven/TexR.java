@@ -90,6 +90,8 @@ public class TexR extends Resource.Layer implements Resource.IDLayer<Integer> {
             magfilter = GL.GL_LINEAR;
         if (minfilter == -1)
             minfilter = (tex.mipmap == null) ? GL.GL_LINEAR : GL.GL_LINEAR_MIPMAP_LINEAR;
+		if(res.name.startsWith("dyn/"))
+			tex.mipmap(new Mipmapper[]{Mipmapper.lanczos}[0]);
         tex.magfilter(magfilter);
         tex.minfilter(minfilter);
     }
