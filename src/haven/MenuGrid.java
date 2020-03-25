@@ -732,14 +732,6 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
                         else
                             pag.rawinfo = new Object[0];
 
-                        // this is very crappy way to do this. needs to be redone probably
-                        try {
-                            Resource res = pag.res.get();
-                            if (res.name.equals("ui/tt/q/quality") || res.name.equals("gfx/fx/msrad"))
-                                continue;
-                        } catch (Loading l) {
-                        }
-
                         paginae.add(pag);
                     } else {
                         paginae.remove(pag);
