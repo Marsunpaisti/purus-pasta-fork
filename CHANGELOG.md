@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.18.10
+    - Fix pastamapper url
 ### 3.18.9
     - Start using lanczos mipmapper for sketches
     - Do not disable quality/mineradius toggles in adventure menu
