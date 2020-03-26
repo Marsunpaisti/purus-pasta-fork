@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Mapper {
-	public static String apiURL = Config.pastaMapperUrl;
+	public static String apiURL = Config.pastaMapperUrl + "//";
 
 	private static ScheduledExecutorService executor;
 
@@ -124,7 +124,7 @@ public class Mapper {
 					}
 
 
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/waypoints/client/markers").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "waypoints/client/markers").openConnection();
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
