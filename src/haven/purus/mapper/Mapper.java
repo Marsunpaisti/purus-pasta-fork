@@ -33,7 +33,7 @@ public class Mapper {
 					if(charname.get() == null || playerGridOfs.get() == null)
 						return;
 					try {
-						HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/charloc").openConnection();
+						HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "charloc").openConnection();
 						conn.setRequestMethod("POST");
 						conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 						conn.setDoOutput(true);
@@ -147,7 +147,7 @@ public class Mapper {
 				if(grids.length <= 1)
 					return;
 				try {
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/grid").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "grid").openConnection();
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
@@ -180,7 +180,8 @@ public class Mapper {
 			@Override
 			public void run() {
 				try {
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/maptile").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "maptile").openConnection();
+					System.out.println(conn.getURL());
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
