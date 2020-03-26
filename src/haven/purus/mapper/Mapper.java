@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Mapper {
-	public static String apiURL = Utils.getprop("pastaMapperUrl", "http://localhost:4664/");
+	public static String apiURL = Config.pastaMapperUrl;
 
 	private static ScheduledExecutorService executor;
 

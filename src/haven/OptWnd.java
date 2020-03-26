@@ -2041,6 +2041,7 @@ public class OptWnd extends Window {
 						if (!parent.visible)
 							return false;
 						Utils.setpref("pastaMapperUrl", text);
+						Config.pastaMapperUrl = text;
 						return buf.key(ev);
 					}
 				}

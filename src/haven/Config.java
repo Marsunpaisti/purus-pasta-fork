@@ -213,6 +213,7 @@ public class Config {
     public static boolean debugWdgmsg = Utils.getprefb("debugWdgmsg", false);
 	public static boolean debugDecodeRes = Utils.getprefb("debugDecodeRes", false);
 	public static boolean pastaMapper = Utils.getprefb("pastaMapper", false);
+	public static String pastaMapperUrl = Utils.getpref("pastaMapperUrl", "http://localhost:4664/");
 
     public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(31) {{
         put("basalt", new CheckListboxItem("Basalt"));
