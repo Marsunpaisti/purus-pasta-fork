@@ -467,12 +467,7 @@ public class UI {
     }
 
     public Resource getcurs(Coord c) {
-        // should synchronize instead, but we are not looking for proper ways here!
-        // thus, just iterate over an array copy to avoid concurrent modification exception
-        Grab[] mousegrabCopy = mousegrab.toArray(new Grab[mousegrab.size()]);
-        for(Grab g : mousegrabCopy) {
-            if (g == null || g.wdg == null)
-                continue;
+        for(Grab g : mousegrab) {
             Resource ret = g.wdg.getcurs(wdgxlate(c, g.wdg));
             if(ret != null)
                 return(ret);

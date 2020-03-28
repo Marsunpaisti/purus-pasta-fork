@@ -1,5 +1,15 @@
 ## Changelog
 
+### 3.18.9
+    - Start using lanczos mipmapper for sketches
+    - Do not disable quality/mineradius toggles in adventure menu
+### 3.18.8
+    - Fix questgiver npe when peeking trails
+### 3.18.7
+    - Option for toggling siege pointers on login
+    - Added caverat to danger radius list
+    - Minor fixes
+    - Latest merges from Amber & Default client 
 ### 3.18.6
     - New alarms to boar, bat and salt
     - Improved minimap view distance box

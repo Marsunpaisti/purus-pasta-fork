@@ -884,17 +884,6 @@ public class OptWnd extends Window {
                 }
             }
         });
-        appender.add(new CheckBox("Show timestamps in chats") {
-            {
-                a = Config.chattimestamp;
-            }
-
-            public void set(boolean val) {
-                Utils.setprefb("chattimestamp", val);
-                Config.chattimestamp = val;
-                a = val;
-            }
-        });
         appender.add(new CheckBox("Notify when kin comes online") {
             {
                 a = Config.notifykinonline;
@@ -983,6 +972,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+		appender.add(new CheckBox("Enable siege engine pointers on login") {
+			{
+				a = Config.enablesiegepointers;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("enablesiegepointers", val);
+				Config.enablesiegepointers = val;
+				a = val;
+			}
+		});
         appender.add(new CheckBox("Drop mined stones") {
             {
                 a = Config.dropMinedStones;
@@ -2030,6 +2030,33 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+
+		appender.add(new Label(""));
+		appender.add(new Label("Pasta mapper:", sectionfndr));
+
+		appender.addRow(new Label("Pasta mapper server URL (req. restart):"),
+				new TextEntry(240, Utils.getpref("pastaMapperUrl", "")) {
+					@Override
+					public boolean keydown(KeyEvent ev) {
+						if (!parent.visible)
+							return false;
+						Utils.setpref("pastaMapperUrl", text);
+						return buf.key(ev);
+					}
+				}
+		);
+
+		appender.add(new CheckBox("Enable pasta mapper (req. restart)") {
+			{
+				a = Config.pastaMapper;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("pastaMapper", val);
+				Config.pastaMapper = val;
+				a = val;
+			}
+		});
 
         appender.add(new Label(""));
         appender.add(new Label("Locally saved map tiles for 3rd party tools:", sectionfndr));

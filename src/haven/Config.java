@@ -76,7 +76,6 @@ public class Config {
     public static boolean savemmap = Utils.getprefb("savemmap", false);
     public static boolean studylock = Utils.getprefb("studylock", false);
     public static boolean chatsave = Utils.getprefb("chatsave", false);
-    public static boolean chattimestamp = Utils.getprefb("chattimestamp", true);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
     public static double alarmunknownvol = Utils.getprefd("alarmunknownvol", 0.32);
     public static boolean alarmred = Utils.getprefb("alarmred", false);
@@ -133,6 +132,7 @@ public class Config {
     public static boolean showservertime = Utils.getprefb("showservertime", false);
     public static boolean enabletracking = Utils.getprefb("enabletracking", false);
     public static boolean enablecrime = Utils.getprefb("enablecrime", false);
+    public static boolean enablesiegepointers = Utils.getprefb("enablesiegepointers", true);
     public static boolean resinfo = Utils.getprefb("resinfo", false);
     public static boolean showanimalrad = Utils.getprefb("showanimalrad", true);
     public static boolean hwcursor = Utils.getprefb("hwcursor", false);
@@ -212,8 +212,9 @@ public class Config {
     public static int fpsBackgroundLimit = Utils.getprefi("fpsBackgroundLimit", 200);
     public static boolean debugWdgmsg = Utils.getprefb("debugWdgmsg", false);
 	public static boolean debugDecodeRes = Utils.getprefb("debugDecodeRes", false);
+	public static boolean pastaMapper = Utils.getprefb("pastaMapper", false);
 
-    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(30) {{
+    public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(31) {{
         put("basalt", new CheckListboxItem("Basalt"));
         put("schist", new CheckListboxItem("Schist"));
         put("dolomite", new CheckListboxItem("Dolomite"));
@@ -244,6 +245,7 @@ public class Config {
         put("breccia", new CheckListboxItem("Breccia"));
         put("diabase", new CheckListboxItem("Diabase"));
         put("arkose", new CheckListboxItem("Arkose"));
+        put("diorite", new CheckListboxItem("Diorite"));
     }};
 
     public final static HashMap<String, CheckListboxItem> bushes = new HashMap<String, CheckListboxItem>(24) {{
@@ -335,7 +337,7 @@ public class Config {
         put("strawberrytree", new CheckListboxItem("Wood Strawberry"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(49) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(51) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -386,6 +388,8 @@ public class Config {
         put("mistletoe", new CheckListboxItem("Mistletoe"));
         put("waterstrider", new CheckListboxItem("Waterstrider"));
         put("firefly", new CheckListboxItem("Firefly"));
+        put("duskfern", new CheckListboxItem("Cave Fern"));
+        put("sandflea", new CheckListboxItem("Sand Flea"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(19) {{
@@ -484,9 +488,14 @@ public class Config {
             "soapstone",
             "sodalite",
             "olivine",
-            "alabaster"
+            "alabaster",
+            "breccia",
+            "diabase",
+            "arkose",
+            "diorite",
+            "kyanite",
+            "slate"
     ));
-
 
     public final static Set<String> mineablesOre = new HashSet<String>(Arrays.asList(
             "cassiterite",
@@ -600,7 +609,8 @@ public class Config {
         put("paginae/wound/infectedsore", new String[]{
                 "gfx/invobjs/camomilecompress",
                 "gfx/invobjs/soapbar",
-                "gfx/invobjs/opium"
+                "gfx/invobjs/opium",
+                "gfx/invobjs/antpaste"
         });
         put("paginae/wound/nastylaceration", new String[]{
                 "gfx/invobjs/stitchpatch",
@@ -608,13 +618,15 @@ public class Config {
         });
         put("paginae/wound/sealfinger", new String[]{
                 "gfx/invobjs/hartshornsalve",
-                "gfx/invobjs/kelpcream"
+                "gfx/invobjs/kelpcream",
+                "gfx/invobjs/antpaste"
         });
         put("paginae/wound/coalcough", new String[]{
                 "gfx/invobjs/opium"
         });
         put("paginae/wound/beesting", new String[]{
-                "gfx/invobjs/kelpcream"
+                "gfx/invobjs/kelpcream",
+                "gfx/invobjs/antpaste"
         });
         put("paginae/wound/leechburns", new String[]{
                 "gfx/invobjs/toadbutter"
@@ -624,6 +636,9 @@ public class Config {
         });
         put("paginae/wound/sandfleabites", new String[]{
                 "gfx/invobjs/herbs/yarrow"
+        });
+        put("paginae/wound/crabcaressed", new String[]{
+                "gfx/invobjs/antpaste"
         });
     }};
 

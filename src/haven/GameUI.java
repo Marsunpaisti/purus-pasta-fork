@@ -31,6 +31,7 @@ import haven.automation.PickForageable;
 import haven.livestock.LivestockManager;
 import haven.purus.*;
 import haven.purus.alarms.AlarmWindow;
+import haven.purus.mapper.Mapper;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
 import haven.resutil.FoodInfo;
@@ -91,6 +92,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public static boolean crimeon = false;
     public static boolean trackon = false;
     public static boolean partyperm = false;
+    public static boolean siegepointerson = false;
     public boolean crimeautotgld = false;
     public boolean trackautotgld = false;
     public FBelt fbelt;
@@ -664,6 +666,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             if(ResCache.global != null) {
                 MapFile file = MapFile.load(ResCache.global, mapfilename());
                 RemoteNavigation.getInstance().uploadMarkerData(file);
+                if(Config.pastaMapper)
+					Mapper.sendMarkerData(file);
                 mmap.save(file);
                 mapfile = new MapWnd(mmap.save, map, new Coord(700, 500), "Map");
                 mapfile.hide();
@@ -895,6 +899,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 crimeon = true;
             else if (name.equals("tracking"))
                 trackon = true;
+            else if(name.equals("siegeptr"))
+            	siegepointerson = true;
         } else if (err.endsWith("off.")) {
             Buff tgl = buffs.gettoggle(name);
             if (tgl != null)
@@ -905,6 +911,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
                 crimeon = false;
             else if (name.equals("tracking"))
                 trackon = false;
+			else if(name.equals("siegeptr"))
+				siegepointerson = false;
         }
     }
 
@@ -1234,7 +1242,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
             Utils.setprefb("showfarmrad", Config.showfarmrad);
             return true;
         } else if (kb_drink.key().match(ev)) {
-            maininv.drink(100);
+            if (!maininv.drink(100)) {
+                for (Widget w = lchild; w != null; w = w.prev) {
+                    if (w instanceof BeltWnd && w.child instanceof InventoryBelt) {
+                        ((InventoryBelt)w.child).drink(100);
+                        break;
+                    }
+                }
+            }
             return true;
         } else if (ev.isControlDown() && ev.getKeyCode() == KeyEvent.VK_A) {
             if (mapfile != null && mapfile.show(!mapfile.visible)) {

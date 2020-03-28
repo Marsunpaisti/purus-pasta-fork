@@ -678,8 +678,12 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
                 gui.crimeautotgld = true;
                 wdgmsg("act", new Object[]{"crime"});
             }
-            togglestuff = false;
-        }
+            if( Config.enablesiegepointers && !GameUI.siegepointerson) {
+            	gui.siegepointerson = true;
+				wdgmsg("act", new Object[]{"siegeptr"});
+			}
+			togglestuff = false;
+		}
     }
 
     public boolean mouseup(Coord c, int button) {
@@ -730,14 +734,6 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
                             pag.rawinfo = (Object[])args[a++];
                         else
                             pag.rawinfo = new Object[0];
-
-                        // this is very crappy way to do this. needs to be redone probably
-                        try {
-                            Resource res = pag.res.get();
-                            if (res.name.equals("ui/tt/q/quality") || res.name.equals("gfx/fx/msrad"))
-                                continue;
-                        } catch (Loading l) {
-                        }
 
                         paginae.add(pag);
                     } else {

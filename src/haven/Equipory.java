@@ -26,6 +26,7 @@
 
 package haven;
 
+import haven.purus.mapper.Mapper;
 import haven.res.ui.tt.Armor;
 import haven.res.ui.tt.attrmod.AttrMod;
 import haven.res.ui.tt.slots.ISlots;
@@ -111,7 +112,7 @@ public class Equipory extends Widget implements DTarget {
     }
 
     public Equipory(long gobid) {
-        super(isz.add(150, 0));
+        super(isz.add(160, 0));
 		ava = add(new Avaview(bg.sz(), gobid, "equcam") {
             public boolean mousedown(Coord c, int button) {
                 return (false);
@@ -172,6 +173,13 @@ public class Equipory extends Widget implements DTarget {
             WItem[] v = new WItem[args.length];
             for (int i = 0; i < args.length; i++) {
                 int ep = (Integer) args[i];
+                try {
+					if(ep == 0) {
+						Mapper.setHat(g.res.get().name, false);
+					} else if(ep == 16) {
+						Mapper.setHat(g.res.get().name, true);
+					}
+                } catch(Loading l) {}
                 v[i] = quickslots[ep] = add(new WItem(g), ecoords[ep].add(1, 1));
             }
             wmap.put(g, v);
@@ -313,7 +321,7 @@ public class Equipory extends Widget implements DTarget {
 			BufferedImage bufferedImage2 = PUtils.convolvedown(((Resource.Image)e.getValue().attr.layer(Resource.imgc)).img, new Coord(bufferedImage1
 					.getHeight(), bufferedImage1.getHeight()), CharWnd.iconfilter);
 			BufferedImage combined = AttrMod.catimgsh(0, new BufferedImage[] { bufferedImage2, bufferedImage1 });
-			g.image(combined, new Coord(320, ofsY += 15));
+			g.image(combined, new Coord(300, ofsY += 15));
 		}
 		g.image(Text.labelFnd.render("Total attributes: ").tex(), new Coord(300, 0));
 	}
