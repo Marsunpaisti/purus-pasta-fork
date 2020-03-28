@@ -330,6 +330,7 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
             p.add(paginafor(Resource.local().load("paginae/purus/drinkWater")));
             p.add(paginafor(Resource.local().load("paginae/purus/transferToObject")));
             p.add(paginafor(Resource.local().load("paginae/purus/flowerPicker")));
+            p.add(paginafor(Resource.local().load("paginae/purus/herbPicker")));
             // PBot Scripts
             p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
@@ -578,6 +579,8 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
             gui.transferingObjectThread.start();
         } else if(ad[1].equals("flowerPicker")) {
             new Thread(new FlowerPicker(gui)).start();
+        } else if(ad[1].equals("herbPicker")) {
+            new Thread(new herbPicker(gui)).start();
         }
     }
 
