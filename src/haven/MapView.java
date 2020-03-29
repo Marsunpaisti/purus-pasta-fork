@@ -1028,17 +1028,20 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     	        Coord pltc = new Coord((int)player().getc().x / 11, (int)player().getc().y / 11);
     	        for (int x = -44; x < 44; x++) {
     	            for (int y = -44; y < 44; y++) {
-    	                int t = glob.map.gettile(pltc.sub(x, y));
-    	                Resource res = glob.map.tilesetr(t);
-    	                if (res == null)
-    	                    continue;
-    	
-    	                String name = res.name;
-    	                if (name.equals("gfx/tiles/mine") ||
-    	                		name.equals("gfx/tiles/boards")) {
-    	                	skyb = false;
-    	                	break;
-    	                }
+    	            	try {
+							int t = glob.map.gettile(pltc.sub(x, y));
+							Resource res = glob.map.tilesetr(t);
+							if(res == null)
+								continue;
+
+							String name = res.name;
+							if(name.equals("gfx/tiles/mine") || name.equals("gfx/tiles/boards")) {
+								skyb = false;
+								break;
+							}
+						} catch(Loading l) {
+
+						}
     	                
     	            }
     	        }
