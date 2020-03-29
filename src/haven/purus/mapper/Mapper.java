@@ -181,7 +181,6 @@ public class Mapper {
 			public void run() {
 				try {
 					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "maptile").openConnection();
-					System.out.println(conn.getURL());
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
