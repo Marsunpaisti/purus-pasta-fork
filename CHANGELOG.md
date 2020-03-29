@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.18.11
+    - Minor bugfixes
 ### 3.18.10
     - Fix pastamapper url
 ### 3.18.9
