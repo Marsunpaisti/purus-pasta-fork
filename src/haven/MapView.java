@@ -1024,7 +1024,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         // This solution is bad but currently no better avaible
         if(!Config.hidesky) {
             boolean skyb = true;
-            if(player()!=null) {
+            if(player() != null && player().getc() != null) {
     	        Coord pltc = new Coord((int)player().getc().x / 11, (int)player().getc().y / 11);
     	        for (int x = -44; x < 44; x++) {
     	            for (int y = -44; y < 44; y++) {
