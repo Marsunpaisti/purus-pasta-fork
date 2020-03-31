@@ -1171,6 +1171,18 @@ public class OptWnd extends Window {
             }
         });
 
+		appender.add(new CheckBox("Aggro kritters in proximity to the mouse cursor") {
+			{
+				a = Config.kritterproximityaggro;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("kritterproximityaggro", val);
+				Config.kritterproximityaggro = val;
+				a = val;
+			}
+		});
+
         combat.add(new PButton(200, "Back", 27, main), new Coord(210, 360));
         combat.pack();
     }

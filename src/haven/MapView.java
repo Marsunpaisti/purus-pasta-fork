@@ -1809,15 +1809,24 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 }
             }
 
-            if (Config.proximityaggro && clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/atk")) {
+            if ((Config.kritterproximityaggro || Config.proximityaggro) && clickb == 1 && curs != null && curs.name.equals("gfx/hud/curs/atk")) {
                 Gob target = null;
                 synchronized (glob.oc) {
                     for (Gob gob : glob.oc) {
-                        if (gob.type == Gob.Type.PLAYER && !gob.isplayer()) {
+                        if (Config.proximityaggro && gob.type == Gob.Type.PLAYER && !gob.isplayer()) {
                             double dist = gob.rc.dist(mc);
                             if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
                                 target = gob;
-                        }
+                        } else if(Config.kritterproximityaggro) {
+                        	try {
+								Resource res = gob.getres();
+								if(res != null && res.name.startsWith("gfx/kritter/")) {
+									double dist = gob.rc.dist(mc);
+									if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
+										target = gob;
+								}
+							} catch(Exception e) {}
+						}
                     }
                 }
                 if (target != null) {
