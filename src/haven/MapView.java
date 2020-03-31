@@ -1817,7 +1817,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                             double dist = gob.rc.dist(mc);
                             if ((target == null || dist < target.rc.dist(mc)) && dist <= 5 * tilesz.x)
                                 target = gob;
-                        } else if(Config.kritterproximityaggro) {
+                        } else if(Config.kritterproximityaggro && (target == null || target.type != Gob.Type.PLAYER)) {
                         	try {
 								Resource res = gob.getres();
 								if(res != null && res.name.startsWith("gfx/kritter/")) {
