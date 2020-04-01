@@ -183,6 +183,7 @@ public class Config {
     public static int fontadd = Utils.getprefi("fontadd", 0);
     public static boolean proximityaggro = Utils.getprefb("proximityaggro", false);
 	public static boolean kritterproximityaggro = Utils.getprefb("kritterproximityaggro", false);
+	public static boolean togglereaggro = Utils.getprefb("togglereaggro", false);
 
 	public static boolean autodrink = Utils.getprefb("autodrink", false);
     public static boolean pf = false;
