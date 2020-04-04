@@ -302,7 +302,7 @@ public class HavenPanel extends GLCanvas implements Runnable, Console.Directory,
             }
         });
         inited = true;
-		BreakNotify.start();
+		//BreakNotify.start();
     }
 
     UI newui(Session sess) {
