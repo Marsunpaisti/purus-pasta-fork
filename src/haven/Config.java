@@ -81,7 +81,7 @@ public class Config {
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);
     public static boolean showkinnames = Utils.getprefb("showkinnames", true);
-    public static boolean savemmap = Utils.getprefb("savemmap", false);
+    public static boolean savemmap = Utils.getprefb("savemmap", true);
     public static boolean studylock = Utils.getprefb("studylock", false);
     public static boolean chatsave = Utils.getprefb("chatsave", false);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
