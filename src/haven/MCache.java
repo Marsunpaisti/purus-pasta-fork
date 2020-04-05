@@ -440,9 +440,10 @@ public class MCache {
                 }
             }
             invalidate();
-            RemoteNavigation.getInstance().receiveGrid(this);
             if(Config.pastaMapper)
             	Mapper.receiveGrid(this, grids.get(this.gc.add(1, 0)), grids.get(this.gc.add(0, 1)), grids.get(this.gc.add(0, -1)), grids.get(this.gc.add(-1, 0)));
+            if(Config.mapperEnabled)
+            	RemoteNavigation.getInstance().receiveGrid(this);
             seq++;
         }
     }

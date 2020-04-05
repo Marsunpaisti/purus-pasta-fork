@@ -28,6 +28,7 @@ package haven;
 
 import haven.purus.mapper.Mapper;
 import haven.resutil.BPRadSprite;
+import integrations.mapv4.MappingClient;
 import integrations.map.Navigation;
 
 import java.awt.*;
@@ -284,12 +285,14 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             m.move(c);
         this.rc = c;
         if (isplayer()) {
-            Navigation.setPlayerCoordinates(c);
             if(Config.pastaMapper && this.glob.map.grids != null) {
             	MCache.Grid g = this.glob.map.grids.get(c.floor().div(11*100));
             	if(g != null)
 					Mapper.setPlayerLoc(c, g.id);
 			}
+			if(Config.mapperEnabled)
+				Navigation.setPlayerCoordinates(c);
+            if(Config.vendanMapv4) MappingClient.getInstance().CheckGridCoord(c);
         }
         this.a = a;
     }

@@ -394,7 +394,6 @@ public class RemoteNavigation {
         Coord gridOffset;
         String image = null;
         Long objectId;
-        Indir<MapFile.Grid> indirGrid;
         long gridId;
         long gridTime;
         Color color;
@@ -425,7 +424,9 @@ public class RemoteNavigation {
         @Override
         public void run() {
             if (mapFile.lock.readLock().tryLock()) {
-                List<MarkerData> markers = mapFile.markers.stream()
+                List<MarkerData> markers;
+                try {
+                    markers= mapFile.markers.stream()
                         .map(marker -> {
                             Coord markerGridOffset = new Coord((int) Math.floor(marker.tc.x / 100.0),
                                     (int) Math.floor(marker.tc.y / 100.0));
@@ -433,7 +434,7 @@ public class RemoteNavigation {
                             MarkerData markerData = new MarkerData();
                             markerData.name = marker.nm;
                             markerData.gridOffset = marker.tc.sub(markerGridOffset.mul(100));
-                            markerData.indirGrid = segment.grid(markerGridOffset);
+                            markerData.gridId = segment.map.get(markerGridOffset);
                             if (marker instanceof MapFile.SMarker) {
                                 markerData.image = ((MapFile.SMarker) marker).res.name;
                                 markerData.objectId = ((MapFile.SMarker) marker).oid;
@@ -442,24 +443,21 @@ public class RemoteNavigation {
                             }
                             return markerData;
                         }).collect(Collectors.toList());
-                mapFile.lock.readLock().unlock();
+                } finally {
+                    mapFile.lock.readLock().unlock();
+                }
                 ArrayList<MarkerData> loadedMarkers = new ArrayList<>();
                 while (!markers.isEmpty()) {
                     Iterator<MarkerData> iterator = markers.iterator();
                     while (iterator.hasNext()) {
                         MarkerData markerData = iterator.next();
                         try {
-                            MapFile.Grid grid = markerData.indirGrid.get();
-                            markerData.gridId = grid.id;
-                            markerData.gridTime = grid.mtime;
-                            if (grid.mtime > 1549065600000L) {
-                                if (markerData.color != null) {
-                                    if (Config.sendCustomMarkers && markerData.color.equals(Color.GREEN)) {
-                                        loadedMarkers.add(markerData);
-                                    }
-                                } else {
+                            if (markerData.color != null) {
+                                if (Config.sendCustomMarkers && markerData.color.equals(Color.GREEN)) {
                                     loadedMarkers.add(markerData);
                                 }
+                            } else {
+                                loadedMarkers.add(markerData);
                             }
                             iterator.remove();
                         } catch (Loading ex) { }

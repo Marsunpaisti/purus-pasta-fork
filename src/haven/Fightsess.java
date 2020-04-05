@@ -473,6 +473,11 @@ public class Fightsess extends Widget {
             }
         }
 
+        if(Config.togglereaggro && ev.getKeyCode() == KeyEvent.VK_SPACE) {
+        	if(fv != null && fv.current != null && fv.current.give != null)
+        		fv.current.give.wdgmsg("click", 1);
+		}
+
         int fn = n;
         if ((n >= 0) && (n < actions.length)) {
             MapView map = getparent(GameUI.class).map;

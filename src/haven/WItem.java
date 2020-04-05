@@ -332,6 +332,10 @@ public class WItem extends Widget implements DTarget {
             else
                 item.wdgmsg("take", c);
             return (true);
+        } else if (btn == 2) {
+            if (ui.modmeta)
+                wdgmsg("transfer-identical-eq", this.item);
+            return (true);
         } else if (btn == 3) {
             if (ui.modmeta && !(parent instanceof Equipory))
                 wdgmsg("transfer-identical-asc", this.item);

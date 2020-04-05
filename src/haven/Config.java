@@ -27,6 +27,11 @@
 package haven;
 
 import static haven.Utils.getprop;
+import haven.error.ErrorHandler;
+import integrations.mapv4.MappingClient;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
@@ -70,10 +75,13 @@ public class Config {
 	public static boolean hideflocomplete = Utils.getprefb("hideflocomplete", false);
     public static String mapperUrl = Utils.getpref("mapperUrl", Utils.getpref("navigationEndpoint", "http://example.com"));
     public static boolean mapperHashName = Utils.getprefb("mapperHashName", true);
+    public static boolean mapperEnabled = Utils.getprefb("mapperEnabled", true);
+    public static boolean vendanMapv4 = Utils.getprefb("vendan-mapv4", false);
+    public static boolean vendanGreenMarkers = Utils.getprefb("vendan-mapv4-green-markers", false);
     public static boolean hideflovisual = Utils.getprefb("hideflovisual", false);
     public static boolean daylight = Utils.getprefb("daylight", false);
     public static boolean showkinnames = Utils.getprefb("showkinnames", true);
-    public static boolean savemmap = Utils.getprefb("savemmap", false);
+    public static boolean savemmap = Utils.getprefb("savemmap", true);
     public static boolean studylock = Utils.getprefb("studylock", false);
     public static boolean chatsave = Utils.getprefb("chatsave", false);
     public static boolean alarmunknown = Utils.getprefb("alarmunknown", false);
@@ -182,7 +190,10 @@ public class Config {
     public static String font = Utils.getpref("font", "SansSerif");
     public static int fontadd = Utils.getprefi("fontadd", 0);
     public static boolean proximityaggro = Utils.getprefb("proximityaggro", false);
-    public static boolean autodrink = Utils.getprefb("autodrink", false);
+	public static boolean kritterproximityaggro = Utils.getprefb("kritterproximityaggro", false);
+	public static boolean togglereaggro = Utils.getprefb("togglereaggro", false);
+
+	public static boolean autodrink = Utils.getprefb("autodrink", false);
     public static boolean pf = false;
     public static String playerposfile;
     public static byte[] authck = null;
@@ -213,6 +224,7 @@ public class Config {
     public static boolean debugWdgmsg = Utils.getprefb("debugWdgmsg", false);
 	public static boolean debugDecodeRes = Utils.getprefb("debugDecodeRes", false);
 	public static boolean pastaMapper = Utils.getprefb("pastaMapper", false);
+	public static String pastaMapperUrl = Utils.getpref("pastaMapperUrl", "http://localhost:4664/");
 
     public final static HashMap<String, CheckListboxItem> boulders = new HashMap<String, CheckListboxItem>(31) {{
         put("basalt", new CheckListboxItem("Basalt"));
@@ -337,7 +349,7 @@ public class Config {
         put("strawberrytree", new CheckListboxItem("Wood Strawberry"));
     }};
 
-    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(51) {{
+    public final static HashMap<String, CheckListboxItem> icons = new HashMap<String, CheckListboxItem>(52) {{
         put("dandelion", new CheckListboxItem("Dandelion"));
         put("chantrelle", new CheckListboxItem("Chantrelle"));
         put("blueberry", new CheckListboxItem("Blueberry"));
@@ -388,8 +400,9 @@ public class Config {
         put("mistletoe", new CheckListboxItem("Mistletoe"));
         put("waterstrider", new CheckListboxItem("Waterstrider"));
         put("firefly", new CheckListboxItem("Firefly"));
-        put("duskfern", new CheckListboxItem("Cave Fern"));
+        put("duskfern", new CheckListboxItem("Dusk Fern"));
         put("sandflea", new CheckListboxItem("Sand Flea"));
+        put("jellyfish", new CheckListboxItem("Jelly Fish"));
     }};
 
     public final static HashMap<String, CheckListboxItem> flowermenus = new HashMap<String, CheckListboxItem>(19) {{
@@ -688,7 +701,12 @@ public class Config {
                 }
             }
         }
-
+        if(Config.vendanMapv4) {
+        	MappingClient.getInstance().SetEndpoint(Utils.getpref("vendan-mapv4-endpoint", ""));
+        	MappingClient.getInstance().EnableGridUploads(Config.vendanMapv4);
+        	MappingClient.getInstance().EnableTracking(Config.vendanMapv4);
+        }
+        
         loadLogins();
 
 		Iconfinder.loadConfig();

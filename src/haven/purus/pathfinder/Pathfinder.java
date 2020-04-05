@@ -110,10 +110,14 @@ public class Pathfinder extends Thread {
 
 		for(int i=1; i<90; i++) {
 			for(int j=1; j<90; j++) {
-				int t = gui.map.glob.map.gettile(origin.div(11).floor().add(i, j));
-				Resource res = gui.map.glob.map.tilesetr(t);
-				if(res != null && inaccessibleTiles.contains(res.name)) {
-					accessMatrix[i][j] = 2;
+				try {
+					int t = gui.map.glob.map.gettile(origin.div(11).floor().add(i, j));
+					Resource res = gui.map.glob.map.tilesetr(t);
+					if(res != null && inaccessibleTiles.contains(res.name)) {
+						accessMatrix[i][j] = 2;
+					}
+				} catch(Loading l) {
+
 				}
 			}
 		}

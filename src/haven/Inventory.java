@@ -116,14 +116,13 @@ public class Inventory extends Widget implements DTarget {
     @Override
     public void wdgmsg(Widget sender, String msg, Object... args) {
         if(msg.equals("drop-identical")) {
-            for (WItem item : getIdenticalItems((GItem) args[0]))
+            for (WItem item : getIdenticalItems((GItem) args[0], false))
                 item.item.wdgmsg("drop", Coord.z);
         } else if(msg.startsWith("transfer-identical")) {
-            Window stockpile = gameui().getwnd("Stockpile");
-            Window smelter = gameui().getwnd("Ore Smelter");
-            Window kiln = gameui().getwnd("Kiln");
-            if (stockpile == null || smelter != null || kiln != null) {
-                List<WItem> items = getIdenticalItems((GItem) args[0]);
+            boolean eq = msg.endsWith("eq");
+            List<WItem> items = getIdenticalItems((GItem) args[0], eq);
+            if (!eq) {
+                int asc = msg.endsWith("asc") ? 1 : -1;
                 Collections.sort(items, (a, b) -> {
                     QBuff aq = a.item.quality();
                     QBuff bq = b.item.quality();
@@ -132,10 +131,15 @@ public class Inventory extends Widget implements DTarget {
                     else if (aq.q == bq.q)
                         return 0;
                     else if (aq.q > bq.q)
-                        return msg.endsWith("asc") ? 1 : -1;
+                        return asc;
                     else
-                        return msg.endsWith("asc") ? -1 : 1;
+                        return -asc;
                 });
+            }
+            Window stockpile = gameui().getwnd("Stockpile");
+            Window smelter = gameui().getwnd("Ore Smelter");
+            Window kiln = gameui().getwnd("Kiln");
+            if (stockpile == null || smelter != null || kiln != null) {
                 for (WItem item : items)
                     item.item.wdgmsg("transfer", Coord.z);
             } else {
@@ -143,7 +147,7 @@ public class Inventory extends Widget implements DTarget {
                     if (w instanceof ISBox) {
                         ISBox isb = (ISBox) w;
                         int freespace = isb.getfreespace();
-                        for (WItem item : getIdenticalItems((GItem) args[0])) {
+                        for (WItem item : items) {
                             if (freespace-- <= 0)
                                 break;
                             item.item.wdgmsg("take", new Coord(item.sz.x / 2, item.sz.y / 2));
@@ -158,19 +162,36 @@ public class Inventory extends Widget implements DTarget {
         }
     }
 
-    public List<WItem> getIdenticalItems(GItem item) {
+    public List<WItem> getIdenticalItems(GItem item, boolean quality) {
         List<WItem> items = new ArrayList<WItem>();
+        double q0 = 0;
+        if (quality) {
+            QBuff aq = item.quality();
+            if (aq != null)
+                q0 = aq.q;
+        }
         GSprite sprite = item.spr();
         if (sprite != null) {
             String name = sprite.getname();
             String resname = item.resource().name;
             for (Widget wdg = child; wdg != null; wdg = wdg.next) {
                 if (wdg instanceof WItem) {
-                    sprite = ((WItem) wdg).item.spr();
+                    GItem it = ((WItem) wdg).item;
+                    sprite = it.spr();
                     if (sprite != null) {
-                        Resource res = ((WItem) wdg).item.resource();
-                        if (res != null && res.name.equals(resname) && (name == null || name.equals(sprite.getname())))
-                            items.add((WItem) wdg);
+                        Resource res = it.resource();
+                        if (res != null && res.name.equals(resname) && (name == null || name.equals(sprite.getname()))) {
+                            if (quality) {
+                                QBuff bq = it.quality();
+                                if (bq != null) {
+                                    double q1 = bq.q - q0;
+                                    if (q1 < 0.1 && q1 > -0.1)
+                                        items.add((WItem) wdg);
+                                }
+                            } else {
+                                items.add((WItem) wdg);
+                            }
+                        }
                     }
                 }
             }

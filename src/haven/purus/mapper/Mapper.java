@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Mapper {
-	public static String apiURL = Utils.getprop("pastaMapperUrl", "http://localhost:4664/");
+	public static String apiURL = Config.pastaMapperUrl + "//";
 
 	private static ScheduledExecutorService executor;
 
@@ -33,7 +33,7 @@ public class Mapper {
 					if(charname.get() == null || playerGridOfs.get() == null)
 						return;
 					try {
-						HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/charloc").openConnection();
+						HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "charloc").openConnection();
 						conn.setRequestMethod("POST");
 						conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 						conn.setDoOutput(true);
@@ -124,7 +124,7 @@ public class Mapper {
 					}
 
 
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/waypoints/client/markers").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "waypoints/client/markers").openConnection();
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
@@ -147,7 +147,7 @@ public class Mapper {
 				if(grids.length <= 1)
 					return;
 				try {
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/grid").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "grid").openConnection();
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);
@@ -180,7 +180,7 @@ public class Mapper {
 			@Override
 			public void run() {
 				try {
-					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "/maptile").openConnection();
+					HttpURLConnection conn = (HttpURLConnection) new URL(new URL(apiURL), "maptile").openConnection();
 					conn.setRequestMethod("POST");
 					conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 					conn.setDoOutput(true);

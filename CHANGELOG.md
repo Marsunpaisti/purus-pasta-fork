@@ -1,5 +1,14 @@
 ## Changelog
 
+### 3.18.12
+    - Added proximity aggro options for players and kritters
+    - Fixed "idle animals" animation disable
+    - Minor bugfixes
+    - Latest merges from Amber & Default client
+### 3.18.11
+    - Minor bugfixes
+### 3.18.10
+    - Fix pastamapper url
 ### 3.18.9
     - Start using lanczos mipmapper for sketches
     - Do not disable quality/mineradius toggles in adventure menu
