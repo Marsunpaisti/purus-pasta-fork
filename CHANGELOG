@@ -1,3 +1,17 @@
+Version 1.78.1
+    Fixed:
+        * Number of issues in mapping service (by andyleap).
+        * Proximity aggro setting (by puruscor).
+
+Version 1.78.0
+    New:
+        * Support for v4 of github.com/andyleap/hnh-map (by andyleap).
+        * Transfer items of same quality on middle mouse button click (by lcy03406).
+
+    Misc:
+        * Update en l18n
+        * Add Jelly Fish to icons list.
+
 Version 1.77.3
     Misc:
         * Update ru i10n (by supremko).

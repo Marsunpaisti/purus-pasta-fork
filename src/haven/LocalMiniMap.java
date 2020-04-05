@@ -326,7 +326,7 @@ public class LocalMiniMap extends Widget {
                         Audio.play(doomedsfx, Config.alarmbramvol);
                     } else if (gob.type == Gob.Type.WOLF && gob.knocked == Boolean.FALSE) {
                         sgobs.add(gob.id);
-                        Audio.play(wolfsfx, 0.8);
+                        Audio.play(wolfsfx, 0.7);
                     }
 						*/
                 } catch (Loading l) {

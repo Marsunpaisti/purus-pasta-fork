@@ -32,6 +32,8 @@ import integrations.map.Navigation;
 import java.util.ArrayList;
 import java.util.List;
 
+import integrations.mapv4.MappingClient;
+
 public class Charlist extends Widget {
     public static final Tex bg = Resource.loadtex("gfx/hud/avakort");
     public static final int margin = 6;
@@ -145,6 +147,8 @@ public class Charlist extends Widget {
                         Navigation.setCharacterName(c.name);
                         Mapper.setCharacterName(c.name);
                         Mapper.setHat(null, true);
+						if(Config.vendanMapv4)
+                        	MappingClient.getInstance().SetPlayerName(c.name);
                     }
                 }
             }

@@ -2,6 +2,8 @@ package haven;
 
 import integrations.map.Navigation;
 import integrations.map.RemoteNavigation;
+import integrations.mapv4.MappingClient;
+import integrations.mapv4.MappingClient.MapRef;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -124,6 +126,8 @@ public class MinimapWnd extends Widget {
             private Coord2d locatedAC = null;
             private Coord2d detectedAC = null;
 
+            private int state = 0;
+
             @Override
             public Object tooltip(Coord c, Widget prev) {
                 if (this.locatedAC != null) {
@@ -133,11 +137,24 @@ public class MinimapWnd extends Widget {
                 } else {
                     tooltip = Text.render("Unable to determine your current location.");
                 }
+                if (Config.vendanMapv4) {
+                    MapRef mr = MappingClient.getInstance().lastMapRef;
+                    if(mr != null) {
+                        tooltip = Text.render("Coordinates: " + mr);
+                    }
+                }
                 return super.tooltip(c, prev);
             }
 
             @Override
             public void click() {
+                if (Config.vendanMapv4) {
+                    MapRef mr = MappingClient.getInstance().GetMapRef(true);
+                    if(mr != null) {
+                        MappingClient.getInstance().OpenMap(mr);
+                        return;
+                    }
+                }
                 Coord gridCoord = null;
                 if (this.locatedAC != null) {
                     gridCoord = this.locatedAC.toGridCoordinate();
@@ -152,15 +169,29 @@ public class MinimapWnd extends Widget {
             @Override
             public void draw(GOut g) {
                 boolean redraw = false;
+
                 Coord2d locatedAC = Navigation.getAbsoluteCoordinates();
-                if (!Objects.equals(this.locatedAC, locatedAC)) {
+                if (state != 2 && locatedAC != null) {
                     this.locatedAC = locatedAC;
+                    state = 2;
                     redraw = true;
                 }
                 Coord2d detectedAC = Navigation.getDetectedAbsoluteCoordinates();
-                if (!Objects.equals(this.detectedAC, detectedAC)) {
+                if (state != 1 && detectedAC != null) {
                     this.detectedAC = detectedAC;
+                    state = 1;
                     redraw = true;
+                }
+                if (Config.vendanMapv4) {
+                    MapRef mr = MappingClient.getInstance().lastMapRef;
+                    if (state != 2 && mr != null) {
+                        state = 2;
+                        redraw = true;
+                    }
+                    if (state != 0 && mr == null) {
+                        state = 0;
+                        redraw = true;
+                    }
                 }
                 if (redraw) this.redraw();
                 super.draw(g);
@@ -169,9 +200,9 @@ public class MinimapWnd extends Widget {
             @Override
             public void draw(BufferedImage buf) {
                 Graphics2D g = (Graphics2D) buf.getGraphics();
-                if (this.locatedAC != null) {
+                if (state == 2) {
                     g.drawImage(green, 0, 0, null);
-                } else if (this.detectedAC != null) {
+                } else if (state == 1) {
                     g.drawImage(red, 0, 0, null);
                 } else {
                     g.drawImage(up, 0, 0, null);

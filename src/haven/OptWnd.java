@@ -26,6 +26,7 @@
 
 package haven;
 
+import integrations.mapv4.MappingClient;
 
 import haven.purus.Iconfinder;
 
@@ -1166,7 +1167,7 @@ public class OptWnd extends Window {
 
             public void set(boolean val) {
                 Utils.setprefb("proximityaggro", val);
-                Config.combshowkeys = val;
+                Config.proximityaggro = val;
                 a = val;
             }
         });
@@ -2021,6 +2022,17 @@ public class OptWnd extends Window {
                     }
                 }
         );
+        appender.add(new CheckBox("Enable mapping service") {
+            {
+                a = Config.mapperEnabled;
+            }
+
+            public void set(boolean val) {
+                Utils.setprefb("mapperEnabled", val);
+                Config.mapperEnabled = val;
+                a = val;
+            }
+        });
         appender.add(new CheckBox("Hide character name") {
             {
                 a = Config.mapperHashName;
@@ -2079,6 +2091,48 @@ public class OptWnd extends Window {
 			public void set(boolean val) {
 				Utils.setprefb("pastaMapper", val);
 				Config.pastaMapper = val;
+				a = val;
+			}
+		});
+
+        appender.add(new Label(""));
+		appender.add(new Label("Vendan Map-v4:", sectionfndr));
+
+		appender.addRow(new Label("Server URL:"),
+				new TextEntry(240, Utils.getpref("vendan-mapv4-endpoint", "")) {
+					@Override
+					public boolean keydown(KeyEvent ev) {
+						if (!parent.visible)
+							return false;
+						Utils.setpref("vendan-mapv4-endpoint", text);
+                        MappingClient.getInstance().SetEndpoint(text);
+						return buf.key(ev);
+					}
+				}
+		);
+
+		appender.add(new CheckBox("Enable mapv4 mapper") {
+			{
+				a = Config.vendanMapv4;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("vendan-mapv4", val);
+                Config.vendanMapv4 = val;
+                MappingClient.getInstance().EnableGridUploads(Config.vendanMapv4);
+                MappingClient.getInstance().EnableTracking(Config.vendanMapv4);
+				a = val;
+			}
+        });
+        
+        appender.add(new CheckBox("Upload custom GREEN markers to map") {
+			{
+				a = Config.vendanGreenMarkers;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("vendan-mapv4-green-markers", val);
+                Config.vendanGreenMarkers = val;
 				a = val;
 			}
 		});
