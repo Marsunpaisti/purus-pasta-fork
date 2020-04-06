@@ -46,6 +46,7 @@ public class herbPicker implements Runnable {
 		}
 
 		if (gotItem && targetHerb.getres() != null && targetHerb.getres().name.contains("cattail")) {
+			BotUtils.sleep(200);
 			dropCattailGarbage();
 		}
 

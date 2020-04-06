@@ -10,3 +10,6 @@ amber-*.zip
 /bin
 /.settings
 /doc/javadoc
+/scripts/mussel*
+/scripts/mussel*
+/scripts/test*

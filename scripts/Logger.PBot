@@ -1,0 +1,189 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const hcHavenPanel = Java.type("haven.HavenPanel");
+const hcGameUI = Java.type("haven.GameUI");
+const hcCharlist = Java.type("haven.Charlist");
+const hcCoord2d = Java.type("haven.Coord2d");
+const hcCoord = Java.type("haven.Coord");
+const hcOCache = Java.type("haven.OCache");
+const hcLabel = Java.type("haven.Label");
+const hcContents = Java.type("haven.ItemInfo.Contents");
+const window = PBotUtils.PBotWindow("Logger", 120, 110, ScriptID);
+const btn = window.addButton("btnClick", "Start", 100, 5, 5);
+const infoLabel = window.addLabel("", 45, 100);
+const ITEMSHOVEL = "Wooden Shovel";
+const ITEMAXE = "Stone Axe";
+const WINDOWNAME = "Logger";
+const hoRW = hcHavenPanel.lui.root;
+const tick = 150;
+
+let stop = false;
+const shouldStop = () => {
+	return stop || window.closed();
+};
+
+const btnClick = () => {
+	btn.destroy();
+	btn.changeText("Select an area with trees!");
+	let aTrees = [];
+	PBotUtils.selectArea();
+	let lAllGobs = PBotUtils.gobsInArea(PBotUtils.getSelectedAreaA(), PBotUtils.getSelectedAreaB());
+	for (let g of lAllGobs) {
+		if (isTree(g)) aTrees.push(g);
+	}
+
+	aTrees = aTrees.sort(
+		(a, b) =>
+			getPlayer()
+				.getRcCoords()
+				.dist(a.getRcCoords()) -
+			getPlayer()
+				.getRcCoords()
+				.dist(b.getRcCoords())
+	);
+
+	let treeIndex = 1;
+	let treesTotal = aTrees.length;
+	while (aTrees.length > 0 && !shouldStop()) {
+		let nextTree = aTrees[0];
+		if (PBotCharacterAPI.getStamina() < 80) {
+			if (!PBotUtils.drink(true)) {
+				stop = true;
+				PBotUtils.sysMsg("Out of water!");
+				return;
+			}
+			PBotUtils.sleep(100);
+		}
+		infoLabel.setText("Tree: " + treeIndex + "/" + treesTotal);
+		chopTree(nextTree);
+		if (PBotGobAPI.findGobById(nextTree.getGobId()) == null) {
+			treeIndex++;
+			aTrees.shift();
+		}
+	}
+	PBotUtils.sysMsg("Logger finished!!");
+};
+
+function isTree(a) {
+	let res = false;
+	try {
+		let gobName = a.getResname();
+		if (gobName.endsWith("stump") || gobName.endsWith("log")) return false;
+		res = gobName.startsWith("gfx/terobjs/trees/"); //|| gobName.startsWith("gfx/terobjs/bushes/");
+	} catch (e) {}
+	return res;
+}
+
+function isStump(a) {
+	let res = false;
+	try {
+		let gobName = a.getResname();
+		res = gobName.startsWith("gfx/terobjs/trees/") && gobName.endsWith("stump");
+	} catch (e) {}
+	return res;
+}
+function chopTree(gob) {
+	//equipItem(ITEMAXE, 6);
+	PBotUtils.pfRightClick(gob, 3);
+	if (shouldStop()) return;
+	pickPetal("Chop");
+	waitForIdle();
+}
+
+function pickPetal(s) {
+	let r = false;
+	PBotUtils.waitForFlowerMenu();
+	if (shouldStop()) return;
+	r = PBotUtils.choosePetal(s);
+	PBotUtils.closeFlowermenu();
+	return r;
+}
+
+function waitForIdle() {
+	const maxWaitTicks = 8;
+	const tickDuration = 25;
+	PBotUtils.waitForHourglass(tickDuration * maxWaitTicks);
+	let idleCounter = maxWaitTicks;
+	while (idleCounter >= 0 && !shouldStop()) {
+		if (PBotUtils.getHourglass() == -1 && !getPlayer().isMoving()) idleCounter--;
+		else idleCounter = maxWaitTicks;
+		PBotUtils.sleep(tickDuration);
+	}
+}
+
+function removeStump(gob) {
+	equipItem(ITEMSHOVEL, 6);
+	if (gob.pfClick(1, 0)) {
+		if (shouldStop()) return;
+		PBotCharacterAPI.doAct("destroy");
+		gob.doClick(1, 0);
+		PBotCharacterAPI.cancelAct();
+		waitForIdle();
+	} else {
+		return false;
+	}
+	return true;
+}
+
+function getGui() {
+	let gui = waitForChild(hcGameUI, hoRW, 10 * 1000);
+	if (gui == null) {
+		stopError("No gui found!");
+		return false;
+	}
+	return gui;
+}
+
+function waitForChild(CClass, PObject, TO) {
+	let timer = 0;
+	let result = null;
+	while (result == null && timer < TO && !shouldStop()) {
+		try {
+			result = PObject.findchild(CClass);
+		} catch (e) {
+			PBotUtils.sleep(tick);
+			timer += tick;
+		}
+	}
+	return result;
+}
+
+function getPlayer() {
+	const player = PBotGobAPI.findGobByNames(12, "borka");
+	return player;
+}
+
+function equipItem(itemName, slot) {
+	let equipory = getGui().getequipory();
+	if (equipory == null) {
+		PBotUtils.sysMsg("No equipory found!");
+		return false;
+	}
+
+	let invItem = PBotUtils.playerInventory().getInventoryItemsByNames(itemName)[0];
+	if (!invItem) {
+		PBotUtils.sysMsg("No " + item + " found");
+		return false;
+	}
+
+	let itemCoords = invItem.c.div(33);
+	PBotUtils.takeItem(invItem);
+	waitForHandEmpty(false, 4);
+	equipory.wdgmsg("drop", slot);
+	waitForHandEmpty(true, tick);
+	if (waitForHandEmpty(false, 4)) PBotUtils.playerInventory().dropItemToInventory(itemCoords);
+	return true;
+}
+
+function waitForHandEmpty(b, t) {
+	let counter = 0;
+	while ((PBotUtils.getGItemAtHand() == null) != b && !shouldStop()) {
+		if (counter >= t) {
+			return false;
+		}
+		PBotUtils.sleep(tick);
+		counter += tick;
+	}
+	return true;
+}

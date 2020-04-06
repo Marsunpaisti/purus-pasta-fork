@@ -1,0 +1,28 @@
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotWindowAPI = Java.type("haven.purus.pbot.PBotWindowAPI");
+const window = PBotUtils.PBotWindow("CoordMaker", 80, 200, ScriptID);
+
+
+window.addButton("waypointBtn", "Add waypoint (first origo)", 180, 10, 10);
+window.addButton("getWaypoints", "Print waypoints in console", 180, 10, 40);
+
+const waypoints = [];
+let origo = null;
+
+const waypointBtn = () => {
+	if(origo === null) {
+		origo = PBotGobAPI.player().getRcCoords();
+		PBotUtils.sysMsg("Set origin.");
+	} else {
+		let coord = PBotGobAPI.player().getRcCoords().sub(origo);
+		waypoints.push({x: coord.x, y: coord.y});
+		PBotUtils.sysMsg("Added a waypoint!");
+	}
+};
+
+const getWaypoints = () => {
+	console.log(JSON.stringify(waypoints));
+	PBotUtils.sysMsg("Waypoints printed in console!");
+};
+

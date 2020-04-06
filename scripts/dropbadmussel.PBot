@@ -1,0 +1,21 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotWindowAPI = Java.type("haven.purus.pbot.PBotWindowAPI");
+const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
+
+const dropGarbageItems = () => {
+	const inventories = PBotUtils.getAllInventories();
+	for (let inv of inventories) {
+		const items = inv.getInventoryContents();
+		for (let item of items) {
+			const name = item.getResname();
+			if (name && name.includes("invobjs/musselsboiled") && item.getQuality() < 31) {
+				item.dropItemFromInventory();
+				PBotUtils.sleep(20);
+			}
+		}
+	}
+};
+
+dropGarbageItems();

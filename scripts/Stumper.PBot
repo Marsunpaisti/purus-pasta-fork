@@ -1,0 +1,102 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const hcHavenPanel = Java.type("haven.HavenPanel");
+const hcGameUI = Java.type("haven.GameUI");
+const hcCharlist = Java.type("haven.Charlist");
+const hcCoord2d = Java.type("haven.Coord2d");
+const hcCoord = Java.type("haven.Coord");
+const hcOCache = Java.type("haven.OCache");
+const hcLabel = Java.type("haven.Label");
+const hcContents = Java.type("haven.ItemInfo.Contents");
+const window = PBotUtils.PBotWindow("Stumper", 120, 110, ScriptID);
+const btn = window.addButton("btnClick", "Start", 100, 5, 5);
+const infoLabel = window.addLabel("", 45, 100);
+const WINDOWNAME = "Stumper";
+const hoRW = hcHavenPanel.lui.root;
+const tick = 150;
+
+let stop = false;
+const shouldStop = () => {
+	return stop || window.closed() || PBotCharacterAPI.getEnergy() <= 35;
+};
+
+const btnClick = () => {
+	btn.destroy();
+	btn.changeText("Select an area with stumps!");
+	let aStumps = [];
+	PBotUtils.selectArea();
+	let lAllGobs = PBotUtils.gobsInArea(PBotUtils.getSelectedAreaA(), PBotUtils.getSelectedAreaB());
+	for (let g of lAllGobs) {
+		if (isStump(g)) aStumps.push(g);
+	}
+
+	aStumps = aStumps.sort(
+		(a, b) =>
+			getPlayer()
+				.getRcCoords()
+				.dist(a.getRcCoords()) -
+			getPlayer()
+				.getRcCoords()
+				.dist(b.getRcCoords())
+	);
+
+	let stumpIndex = 1;
+	let stumpsTotal = aStumps.length;
+	while (aStumps.length > 0 && !shouldStop()) {
+		let nextStump = aStumps[0];
+
+		if (PBotCharacterAPI.getStamina() < 80) {
+			if (!PBotUtils.drink(true)) {
+				stop = true;
+				PBotUtils.sysMsg("Out of water!");
+				return;
+			}
+		}
+		infoLabel.setText("Stump: " + stumpIndex + "/" + stumpsTotal);
+		removeStump(nextStump);
+		if (PBotGobAPI.findGobById(nextStump.getGobId()) == null) {
+			aStumps.shift();
+			stumpIndex++;
+		}
+	}
+	PBotUtils.sysMsg("Stumper finished!!");
+};
+
+function isStump(a) {
+	let res = false;
+	try {
+		let gobName = a.getResname();
+		res = gobName.startsWith("gfx/terobjs/trees/") && gobName.endsWith("stump");
+	} catch (e) {}
+	return res;
+}
+
+function waitForIdle() {
+	const maxWaitTicks = 4;
+	PBotUtils.waitForHourglass(tick * maxWaitTicks);
+	let idleCounter = maxWaitTicks;
+	while (idleCounter >= 0 && !shouldStop()) {
+		if (PBotUtils.getHourglass() == -1 && !getPlayer().isMoving()) idleCounter--;
+		else idleCounter = maxWaitTicks;
+		PBotUtils.sleep(tick);
+	}
+}
+
+function removeStump(gob) {
+	if (gob.pfClick(1, 0)) {
+		if (shouldStop()) return;
+		PBotCharacterAPI.doAct("destroy");
+		gob.doClick(1, 0);
+		PBotCharacterAPI.cancelAct();
+		waitForIdle();
+	} else {
+		return false;
+	}
+	return true;
+}
+
+function getPlayer() {
+	const player = PBotGobAPI.findGobByNames(12, "borka");
+	return player;
+}

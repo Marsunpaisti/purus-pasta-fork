@@ -1,0 +1,404 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotWindowAPI = Java.type("haven.purus.pbot.PBotWindowAPI");
+const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
+const window = PBotUtils.PBotWindow("Forager bot", 125, 110, ScriptID);
+let getPosBtn = null;
+let selectPathBtn = null;
+let startBtn = null;
+
+let anchorCoordinate = null;
+const getPosButton = () => {
+	const currentPos = getCurrentPos();
+	const offsetPos = { x: currentPos.x - anchorCoordinate.x, y: currentPos.y - anchorCoordinate.y };
+	PBotUtils.sysMsg(JSON.stringify(offsetPos));
+};
+
+let stop = false;
+let currentWayPoint = null;
+let currenWayPointIndex = 0;
+const startScriptButton = () => {
+	currentWayPoint = wayPoints[0];
+	currenWayPointIndex = 0;
+	while (!shouldStop()) {
+		mainLoop();
+	}
+};
+
+const selectPathButton = () => {
+	if (wayPoints === route1) {
+		wayPoints = route2;
+		PBotUtils.sysMsg("Selected route 2");
+	} else {
+		wayPoints = route1;
+		PBotUtils.sysMsg("Selected route 1");
+	}
+};
+
+const mainLoop = () => {
+	if (shouldStop()) return;
+	if (hearthIfFullInventory()) return;
+	walkTowardsWaypoint();
+	if (shouldStop()) return;
+	if (hearthIfFullInventory()) return;
+	if (currentWayPoint.pickRadius != null && currentWayPoint.pickRadius <= 0) {
+		PBotUtils.sysMsg("Skipping herb picking because of waypoint specification");
+		return;
+	}
+	let herbArray = findHerbs();
+	if (shouldStop()) return;
+	if (hearthIfFullInventory()) return;
+	collectHerbs(herbArray);
+	if (shouldStop()) return;
+	if (hearthIfFullInventory()) return;
+};
+
+const hearthIfFullInventory = () => {
+	if (isInventoryFull()) {
+		stop = true;
+		PBotUtils.sysMsg("Hearthing due to full inventory");
+		PBotAPI.gui.wdgmsg("act", "travel", "hearth");
+		return true;
+	}
+	return false;
+};
+
+const maybeSetNextWayPoint = () => {
+	const currentPos = getCurrentPos();
+	const target = { x: currentWayPoint.x + anchorCoordinate.x, y: currentWayPoint.y + anchorCoordinate.y };
+	const vectorToTarget = { x: target.x - currentPos.x, y: target.y - currentPos.y };
+	const dist = vectorLength(vectorToTarget);
+	if (dist < 15 * 11) {
+		currenWayPointIndex = currenWayPointIndex + 1;
+		if (currenWayPointIndex > wayPoints.length - 1) {
+			PBotUtils.sysMsg("Reached final waypoint!");
+			stop = true;
+			return false;
+		}
+		currentWayPoint = wayPoints[currenWayPointIndex];
+		PBotUtils.sysMsg("Set waypoint: " + currenWayPointIndex + " pickradius: " + currentWayPoint.pickRadius);
+	}
+	return true;
+};
+
+const getHostilesInRadius = (pos, radius) => {
+	const returnArray = [];
+	const gobs = javaListToArray(PBotGobAPI.getAllGobs());
+
+	gobs.forEach(gob => {
+		if (shouldStop()) return;
+		//Check gob type
+
+		if (gobNameMatchesList(gob, avoidHostilesList)) {
+			const target = gob.getRcCoords();
+			const vectorToTarget = { x: target.x - pos.x, y: target.y - pos.y };
+			const dist = vectorLength(vectorToTarget);
+			if (dist <= radius) {
+				returnArray.push(gob);
+			}
+		}
+	});
+
+	return returnArray;
+};
+
+const isInventoryFull = () => {
+	return PBotUtils.playerInventory().freeSlotsInv() < 1;
+};
+
+const checkPathForHostiles = target => {
+	const currentPos = getCurrentPos();
+	const vectorToTarget = { x: target.x - currentPos.x, y: target.y - currentPos.y };
+	const dist = vectorLength(vectorToTarget);
+	const unitVecToTarget = vectorScale(vectorToTarget, 1 / dist);
+	const stepsAmount = Math.floor(dist / (12 * 11)); //Do a check every 12 tiles
+	const returnArray = [];
+	for (step = 0; step <= stepsAmount; step++) {
+		const offset = vectorScale(unitVecToTarget, step * 12 * 11); // 12 tile step
+		const checkPos = { x: currentPos.x + offset.x, y: currentPos.y + offset.y };
+		const result = getHostilesInRadius(checkPos, 18 * 11); // 18 tile radius
+		for (let gob of result) {
+			returnArray.push(gob);
+		}
+	}
+
+	const result = getHostilesInRadius(target, 18 * 11); // 22 tile radius
+	for (let gob of result) {
+		returnArray.push(gob);
+	}
+	return returnArray;
+};
+
+const findHerbs = () => {
+	const returnArray = [];
+	const gobs = javaListToArray(PBotGobAPI.getAllGobs());
+	let index = 0;
+
+	gobs.forEach(gob => {
+		if (shouldStop()) return;
+		//Check gob type
+
+		if (gobNameMatchesList(gob, gatherHerbsList) && !gobNameMatchesList(gob, ignoreHerbsList)) {
+			//Check distance if specified on waypoint
+			if (currentWayPoint.pickRadius != null) {
+				const target = gob.getRcCoords();
+				const currentPos = getCurrentPos();
+				const vectorToTarget = { x: target.x - currentPos.x, y: target.y - currentPos.y };
+				const dist = vectorLength(vectorToTarget);
+				if (dist > currentWayPoint.pickRadius) {
+					PBotUtils.sysMsg(
+						`Skipping ${gob.getResname()} because distance is too high (${dist} > ${currentWayPoint.pickRadius})`
+					);
+					return;
+				}
+			}
+
+			returnArray.push(gob);
+			PBotUtils.sysMsg("Added " + gob.getResname() + " to index " + index);
+			index++;
+			return;
+		}
+	});
+
+	if (returnArray.length > 0) PBotUtils.sysMsg("Detected " + returnArray.length + " herbs in total");
+	return returnArray;
+};
+
+const collectHerbs = herbArray => {
+	if (hearthIfFullInventory()) return;
+	let herbs = [...herbArray];
+	const returnLocation = getCurrentPos();
+	let index = -1;
+	for (let herb of herbs) {
+		if (hearthIfFullInventory()) return;
+		index++;
+
+		const hostiles = checkPathForHostiles({ x: herb.getRcCoords().x, y: herb.getRcCoords().y });
+		if (hostiles.length > 0) {
+			PBotUtils.sysMsg(`Found hostile ${hostiles[0].getResname()} on path to herb ${index}`);
+			continue;
+		}
+
+		if (herb.pfClick(3, 0)) {
+			PBotUtils.waitForFlowerMenu();
+			if (PBotUtils.choosePetal("Pick")) {
+				PBotUtils.sysMsg("Waiting for herb to disappear");
+				let success = false;
+				for (let i = 0; i < 100; i++) {
+					PBotUtils.sleep(100);
+					if (PBotGobAPI.findGobById(herb.getGobId()) == null) {
+						success = true;
+						break;
+					}
+				}
+				if (success) {
+					PBotUtils.sysMsg("Successfully got herb!");
+				} else {
+					PBotUtils.sysMsg("Waiting for herb disappear timed out");
+				}
+			} else {
+				PBotUtils.sysMsg('Failed to select "pick" petal for herb ' + index);
+			}
+
+			if (hearthIfFullInventory()) return;
+			PBotUtils.sysMsg("Returning to waypoint from herb");
+			if (PBotUtils.pfLeftClick(returnLocation.x, returnLocation.y)) {
+				continue;
+			} else {
+				PBotUtils.sysMsg("Failed to find path back from herb " + index);
+				continue;
+			}
+		} else {
+			PBotUtils.sysMsg("Failed to find path to herb " + index);
+			continue;
+		}
+	}
+};
+
+const walkTowardsWaypoint = () => {
+	if (!maybeSetNextWayPoint()) return;
+	const currentPos = getCurrentPos();
+	const target = { x: currentWayPoint.x + anchorCoordinate.x, y: currentWayPoint.y + anchorCoordinate.y };
+	const vectorToTarget = { x: target.x - currentPos.x, y: target.y - currentPos.y };
+	const dist = vectorLength(vectorToTarget);
+	const unitVecToTarget = vectorScale(vectorToTarget, 1 / dist);
+
+	const hostiles = checkPathForHostiles(target);
+	if (hostiles.length > 0) {
+		PBotUtils.sysMsg(`Found hostile ${hostiles[0].getResname()} on path to next waypoint! Hearthing!`);
+		stop = true;
+		PBotAPI.gui.wdgmsg("act", "travel", "hearth");
+		return;
+	}
+
+	let foundPath = false;
+	for (let clickDist = 12 * 11; clickDist <= 42 * 11; clickDist = clickDist + 12 * 11) {
+		const clickOffsetVec = vectorScale(unitVecToTarget, clickDist);
+		const clickPointX = currentPos.x + clickOffsetVec.x;
+		const clickPointY = currentPos.y + clickOffsetVec.y;
+		PBotUtils.sysMsg(`Walking ${clickDist / 11} tiles towards waypoint ${currenWayPointIndex}`);
+		if (PBotUtils.pfLeftClick(clickPointX, clickPointY)) {
+			foundPath = true;
+			break;
+		}
+	}
+
+	if (!foundPath) {
+		PBotUtils.sysMsg("Failed to find path towards waypoint! Stopping!");
+		stop = true;
+		PBotAPI.gui.wdgmsg("act", "travel", "hearth");
+		return;
+	}
+};
+
+const vectorLength = vec => {
+	return Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+};
+
+const vectorScale = (vec, scaling) => {
+	return { x: vec.x * scaling, y: vec.y * scaling };
+};
+
+const shouldStop = () => {
+	return stop || window.closed();
+};
+
+const gobNameMatchesList = (gob, nameList) => {
+	const gobName = gob.getResname();
+	for (let d of nameList) {
+		if (gobName != null && d.enabled && gobName.includes(d.resname)) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+const setup = () => {
+	PBotUtils.sysMsg("Alt+click on anchor object");
+	const selectedGob = PBotGobAPI.selectGob();
+	if (shouldStop()) return;
+	PBotUtils.sysMsg("Anchor selected");
+	const coord = selectedGob.getRcCoords();
+	anchorCoordinate = { x: coord.x, y: coord.y };
+	getPosBtn = window.addButton("getPosButton", "Get position", 100, 5, 5);
+	selectPathBtn = window.addButton("selectPathButton", "Change path", 100, 5, 45);
+	startBtn = window.addButton("startScriptButton", "Start script", 100, 5, 85);
+	getPosBtn.changeColor(0, 200, 0);
+	selectPathBtn.changeColor(0, 200, 0);
+	startBtn.changeColor(255, 0, 0);
+};
+
+const getCurrentPos = () => {
+	const coords = PBotGobAPI.findGobByNames(12, "borka").getRcCoords();
+	return { x: coords.x, y: coords.y };
+};
+
+const javaListToArray = javalist => {
+	const ret = [];
+	for (let i = 0; i < javalist.size(); i++) ret.push(javalist.get(i));
+	return ret;
+};
+
+const route1 = [
+	{ x: 320.955078125, y: 517.193359375 },
+	{ x: 149.1875, y: 871.3955078125 },
+	{ x: 9.431640625, y: 1370.080078125 },
+	{ x: 22.107421875, y: 1712.17578125 },
+	{ x: 11.837890625, y: 2050.3291015625 },
+	{ x: 253, y: 2354 },
+	{ x: 473, y: 2739 },
+	{ x: 671, y: 3058 },
+	{ x: 1012, y: 3113 },
+	{ x: 1343.3427734375, y: 3120.5517578125, pickRadius: 11 * 25 },
+	{ x: 1683, y: 3135, pickRadius: 0 },
+	{ x: 1951.8876953125, y: 3168.322265625, pickRadius: 0 },
+	{ x: 2203.244140625, y: 3232.2060546875, pickRadius: 0 },
+	{ x: 2434.8134765625, y: 3118.84375, pickRadius: 0 },
+	{ x: 2649.7216796875, y: 3181.8681640625, pickRadius: 0 },
+	{ x: 2941.3291015625, y: 3227.4580078125, pickRadius: 11 * 14 },
+	{ x: 3217.1884765625, y: 3247.7822265625 },
+	{ x: 3487, y: 3267 },
+	{ x: 3784, y: 3487 },
+	{ x: 4047.3125, y: 3589.4267578125 },
+	{ x: 4064.54296875, y: 3856.05859375 },
+	{ x: 3870.5927734375, y: 4208.48828125, pickRadius: 0 },
+	{ x: 3652, y: 4180, pickRadius: 11 * 10 },
+	{ x: 3441.5498046875, y: 4302.095703125, pickRadius: 11 * 12 },
+	{ x: 3144.3671875, y: 4508.1953125, pickRadius: 11 * 20 },
+	{ x: 2921.05859375, y: 4737.4765625, pickRadius: 11 * 20 },
+	{ x: 2677.0283203125, y: 4873.021484375, pickRadius: 11 * 30 },
+	{ x: 2476.052734375, y: 5025.5927734375 },
+	{ x: 2441.2158203125, y: 5492.0615234375 },
+	{ x: 2560.4755859375, y: 5832.2236328125 },
+	{ x: 2883.998046875, y: 6130.6845703125, pickRadius: 11 * 30 },
+	{ x: 3168, y: 6292, pickRadius: 11 * 35 },
+	{ x: 3350.31640625, y: 6479.666015625, pickRadius: 11 * 40 },
+	{ x: 3322, y: 6897 },
+	{ x: 3300, y: 7293 },
+	{ x: 3366, y: 7667 },
+	{ x: 3344, y: 8107 },
+	{ x: 3432, y: 8492, pickradius: 11 * 10 },
+	{ x: 3500.642578125, y: 8757.009765625, pickradius: 11 * 10 },
+	{ x: 3478.771484375, y: 9029.66796875, pickradius: 11 * 12 },
+	{ x: 3685, y: 9460, pickRadius: 11 * 20 },
+	{ x: 3955.703125, y: 9553.1025390625 },
+	{ x: 4370.8779296875, y: 9711.7646484375 },
+	{ x: 4536.3291015625, y: 9761.4150390625 },
+	{ x: 4514.5869140625, y: 10085.5498046875 },
+	{ x: 4231.1328125, y: 10371.4638671875, pickradius: 11 * 20 },
+	{ x: 3938, y: 10604, pickradius: 11 * 20 },
+	{ x: 3921.1025390625, y: 10962.1875, pickradius: 11 * 30 },
+	{ x: 3872, y: 11451, pickradius: 11 * 40 },
+	{ x: 4301, y: 11682 },
+	{ x: 4719, y: 11583 }
+];
+
+const route2 = [
+	{ x: 310.169921875, y: -412.28515625, pickradius: 11 * 35 },
+	{ x: 35.599609375, y: -871.8359375, pickradius: 11 * 35 },
+	{ x: -297.7626953125, y: -842.8857421875 },
+	{ x: -578.4130859375, y: -702.904296875, pickradius: 11 * 40 },
+	{ x: -900.861328125, y: -619.6953125, pickradius: 11 * 35 },
+	{ x: -1252.173828125, y: -523.1552734375, pickradius: 11 * 10 },
+	{ x: -1551, y: -242, pickradius: 11 * 10 },
+	{ x: -1650.2470703125, y: -57.5244140625, pickradius: 11 * 15 },
+	{ x: -1653.99609375, y: 216.51953125, pickradius: 11 * 25 },
+	{ x: -1757.916015625, y: 523.91796875 },
+	{ x: -2050.16796875, y: 481.7763671875 },
+	{ x: -2475.9775390625, y: 450.0224609375 },
+	{ x: -2821.11328125, y: 480.1328125 },
+	{ x: -3152.9716796875, y: 468.57421875 },
+	{ x: -3534.13671875, y: 289.8994140625 },
+	{ x: -3910.02734375, y: 257.3720703125 },
+	{ x: -4266.044921875, y: 269.4462890625 },
+	{ x: -4535.4375, y: 412.4033203125 },
+	{ x: -4530.302734375, y: 765.037109375 },
+	{ x: -4368.9228515625, y: 1099.7958984375 },
+	{ x: -3994.6220703125, y: 1179.427734375 },
+	{ x: -3720.4814453125, y: 1370.48828125 },
+	{ x: -3386.087890625, y: 1416.5615234375 },
+	{ x: -3365.978515625, y: 1764.6298828125 },
+	{ x: -3365.634765625, y: 2174.5625 },
+	{ x: -3345.0634765625, y: 2557.671875 },
+	{ x: -3387.892578125, y: 2981.021484375 },
+	{ x: -3353.0771484375, y: 3304.2431640625 },
+	{ x: -3344, y: 3740 }
+];
+
+let wayPoints = route1;
+
+const gatherHerbsList = [{ resname: "/herbs/", enabled: true }];
+const ignoreHerbsList = [{ resname: "/herbs/lingon", enabled: true }];
+const avoidHostilesList = [
+	{ resname: "kritter/boar", enabled: true },
+	{ resname: "kritter/bear", enabled: true },
+	{ resname: "kritter/wolverine", enabled: true },
+	{ resname: "kritter/badge", enabled: true },
+	{ resname: "kritter/bat", enabled: true },
+	{ resname: "kritter/lynx", enabled: true },
+	{ resname: "kritter/badger", enabled: true }
+];
+
+setup();

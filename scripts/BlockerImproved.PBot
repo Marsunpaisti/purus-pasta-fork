@@ -1,0 +1,79 @@
+// Chop logs to blocks!
+// Assumes that player has an axe, some water to autodrink via default hotbar, access to logs etc.
+// Made by Purus Cor to demonstrate usage of PBot API
+// For more information about API, join Purus Pasta discord
+// To suggest features into API, suggest them in discord
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const window = PBotUtils.PBotWindow("Block maker", 70, 200, ScriptID);
+window.addLabel("Chops logs to blocks", 10, 10);
+const btn = window.addButton("btnClick", "Start", 180, 10, 30);
+let stop = false;
+
+const logRegex = RegExp("gfx/terobjs/trees/.*log$");
+
+const javaListToArray = javalist => {
+	const ret = [];
+	for (let i = 0; i < javalist.size(); i++) ret.push(javalist.get(i));
+	return ret;
+};
+
+const shouldStop = () => {
+	return stop || window.closed();
+};
+
+function getPlayer() {
+	const player = PBotGobAPI.findGobByNames(12, "borka");
+	return player;
+}
+
+function waitForIdle() {
+	const maxWaitTicks = 8;
+	const tickDuration = 50;
+	PBotUtils.waitForHourglass(tickDuration * maxWaitTicks);
+	let idleCounter = maxWaitTicks;
+	while (idleCounter >= 0 && !shouldStop()) {
+		if (PBotUtils.getHourglass() == -1 && !getPlayer().isMoving()) idleCounter--;
+		else idleCounter = maxWaitTicks;
+		PBotUtils.sleep(tickDuration);
+	}
+}
+
+const btnClick = () => {
+	btn.destroy();
+	btn.changeText("Select an area with logs!");
+	PBotUtils.selectArea();
+	let gobs = javaListToArray(PBotUtils.gobsInArea(PBotUtils.getSelectedAreaA(), PBotUtils.getSelectedAreaB()));
+	gobs = gobs.sort(
+		(a, b) =>
+			getPlayer()
+				.getRcCoords()
+				.dist(a.getRcCoords()) -
+			getPlayer()
+				.getRcCoords()
+				.dist(b.getRcCoords())
+	);
+
+	let nextGob = null;
+	while (gobs.length > 0) {
+		nextGob = gobs.shift();
+		if (!nextGob.getResname() || !logRegex.test(nextGob.getResname())) continue;
+
+		while (PBotGobAPI.findGobById(nextGob.getGobId()) != null) {
+			if (PBotUtils.getItemAtHand() !== null) {
+				PBotUtils.dropItemFromHand(0);
+				PBotUtils.sleep(100);
+			}
+			if (PBotCharacterAPI.getStamina() < 75) PBotUtils.drink(true);
+			PBotUtils.sleep(100);
+			nextGob.pfClick(3, 0);
+			PBotUtils.waitForFlowerMenu();
+			PBotUtils.choosePetal("Chop into blocks");
+			if (shouldStop()) return;
+			waitForIdle();
+		}
+	}
+	PBotUtils.sysMsg("Blocker finished!");
+	window.closeWindow();
+};

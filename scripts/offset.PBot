@@ -1,0 +1,59 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotWindowAPI = Java.type("haven.purus.pbot.PBotWindowAPI");
+const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
+const window = PBotUtils.PBotWindow("Offset checker", 125, 110, ScriptID);
+let startPosButton = null;
+let endPosButton = null;
+let stop = false;
+let startCoord = null;
+let endCoord = null;
+
+const startPosButtonCb = () => {
+	const currentPos = getCurrentPos();
+	startCoord = { x: currentPos.x, y: currentPos.y };
+	PBotUtils.sysMsg("Coord 1 set at: " + JSON.stringify(startCoord));
+};
+
+const endPosButtonCb = () => {
+	if (!startCoord) {
+		PBotUtils.sysMsg("Set starting coordinate first!");
+		return;
+	}
+	const currentPos = getCurrentPos();
+	const difference = { x: currentPos.x - startCoord.x, y: currentPos.y - startCoord.y };
+	const tileDifference = { x: Math.floor(difference.x / 11), y: Math.floor(difference.y / 11) };
+	PBotUtils.sysMsg("Offset in coords: " + JSON.stringify(difference));
+	PBotUtils.sysMsg("Offset in tiles: " + JSON.stringify(tileDifference));
+};
+
+const vectorLength = vec => {
+	return Math.sqrt(vec.x * vec.x + vec.y * vec.y);
+};
+
+const vectorScale = (vec, scaling) => {
+	return { x: vec.x * scaling, y: vec.y * scaling };
+};
+
+const shouldStop = () => {
+	return stop || window.closed();
+};
+
+const setup = () => {
+	startPosButton = window.addButton("startPosButtonCb", "Start pos", 100, 5, 5);
+	endPosButton = window.addButton("endPosButtonCb", "End pos", 100, 5, 45);
+};
+
+const getCurrentPos = () => {
+	const coords = PBotGobAPI.findGobByNames(12, "borka").getRcCoords();
+	return { x: coords.x, y: coords.y };
+};
+
+const javaListToArray = javalist => {
+	const ret = [];
+	for (let i = 0; i < javalist.size(); i++) ret.push(javalist.get(i));
+	return ret;
+};
+
+setup();

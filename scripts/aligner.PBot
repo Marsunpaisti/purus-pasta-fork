@@ -1,0 +1,120 @@
+const PBotUtils = Java.type("haven.purus.pbot.PBotUtils");
+const PBotCharacterAPI = Java.type("haven.purus.pbot.PBotCharacterAPI");
+const PBotGobAPI = Java.type("haven.purus.pbot.PBotGobAPI");
+const PBotWindowAPI = Java.type("haven.purus.pbot.PBotWindowAPI");
+const PBotAPI = Java.type("haven.purus.pbot.PBotAPI");
+let window = null;
+let northBtn = null;
+let southBtn = null;
+let westBtn = null;
+let eastBtn = null;
+let stop = false;
+
+const northBtnCb = () => {
+	PBotUtils.sysMsg("Alt+click on object");
+	const selectedGob = PBotGobAPI.selectGob();
+	for (let offset = 0; offset >= -7 * 11; offset -= 1) {
+		if (shouldStop()) return;
+		let clickPos = selectedGob
+			.getRcCoords()
+			.round()
+			.add(0, offset);
+		PBotUtils.mapClick(clickPos.x, clickPos.y, 3, 0);
+		if (waitForStartMoving()) break;
+	}
+};
+
+const southBtnCb = () => {
+	PBotUtils.sysMsg("Alt+click on object");
+	const selectedGob = PBotGobAPI.selectGob();
+	for (let offset = 0; offset <= 7 * 11; offset += 1) {
+		if (shouldStop()) return;
+		let clickPos = selectedGob
+			.getRcCoords()
+			.round()
+			.add(0, offset);
+		PBotUtils.mapClick(clickPos.x, clickPos.y, 3, 0);
+		if (waitForStartMoving()) break;
+	}
+};
+
+const eastBtnCb = () => {
+	PBotUtils.sysMsg("Alt+click on object");
+	const selectedGob = PBotGobAPI.selectGob();
+	for (let offset = 0; offset <= 7 * 11; offset += 1) {
+		if (shouldStop()) return;
+		let clickPos = selectedGob
+			.getRcCoords()
+			.round()
+			.add(offset, 0);
+		PBotUtils.mapClick(clickPos.x, clickPos.y, 3, 0);
+		if (waitForStartMoving()) break;
+	}
+};
+
+const westBtnCb = () => {
+	PBotUtils.sysMsg("Alt+click on object");
+	const selectedGob = PBotGobAPI.selectGob();
+	for (let offset = 0; offset >= -7 * 11; offset -= 1) {
+		if (shouldStop()) return;
+		let clickPos = selectedGob
+			.getRcCoords()
+			.round()
+			.add(offset, 0);
+		PBotUtils.mapClick(clickPos.x, clickPos.y, 3, 0);
+		if (waitForStartMoving()) break;
+	}
+};
+
+function getPlayer() {
+	const player = PBotGobAPI.findGobByNames(12, "borka");
+	return player;
+}
+
+const waitForStartMoving = () => {
+	const maxWaitTicks = 10;
+	const tickDuration = 15;
+	let waitedTicks = 0;
+	while (true) {
+		if (waitedTicks >= maxWaitTicks) return false;
+		if (getPlayer().isMoving()) return true;
+		waitedTicks++;
+		PBotUtils.sleep(tickDuration);
+	}
+};
+
+const shouldStop = () => {
+	if (stop || window.closed()) {
+		return true;
+	}
+	return false;
+};
+
+const setup = () => {
+	window = PBotUtils.PBotWindow("Offset tool", 120, 200, ScriptID);
+	if (shouldStop()) return;
+	northBtn = window.addButton("northBtnCb", "North", 50, 75, 20);
+	southBtn = window.addButton("southBtnCb", "South", 50, 75, 75);
+	westBtn = window.addButton("westBtnCb", "West", 50, 25, 50);
+	eastBtn = window.addButton("eastBtnCb", "East", 50, 125, 50);
+};
+
+const javaListToArray = javalist => {
+	const ret = [];
+	for (let i = 0; i < javalist.size(); i++) ret.push(javalist.get(i));
+	return ret;
+};
+
+function waitForIdle() {
+	const maxWaitTicks = 8;
+	const tickDuration = 25;
+	PBotUtils.waitForHourglass(tickDuration * maxWaitTicks);
+	let idleCounter = maxWaitTicks;
+	while (idleCounter >= 0 && !shouldStop()) {
+		if (PBotUtils.getHourglass() == -1 && !getPlayer().isMoving()) idleCounter--;
+		else idleCounter = maxWaitTicks;
+		PBotUtils.sleep(tickDuration);
+	}
+}
+
+setup();

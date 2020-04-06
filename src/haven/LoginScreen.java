@@ -68,6 +68,22 @@ public class LoginScreen extends Widget {
         GameUI.trackon = false;
         GameUI.crimeon = false;
         GameUI.siegepointerson = false;
+        /*
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+
+                } catch (Exception e){
+                    System.out.println(e);
+                }
+                System.out.println("Autologin");
+                wdgmsg("forget");
+                wdgmsg("login", new Object[]{new AuthClient.NativeCred("user", "pwd"), false});
+            }
+        }).start();
+        */
     }
 
     private static abstract class Login extends Widget {
