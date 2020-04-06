@@ -11,5 +11,8 @@ amber-*.zip
 /.settings
 /doc/javadoc
 /scripts/mussel*
-/scripts/mussel*
 /scripts/test*
+/scripts/wayp*
+/scripts2/mussel*
+/scripts2/test*
+/scripts2/wayp*
