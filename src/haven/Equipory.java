@@ -269,6 +269,7 @@ public class Equipory extends Widget implements DTarget {
 	}
 
 	private HashMap<String, AttrMod.Mod> gildBuffs = new HashMap<>();
+    private LinkedList<BufferedImage> gildBufimgs;
     public void draw(GOut g) {
         drawslots(g);
         super.draw(g);
@@ -280,6 +281,8 @@ public class Equipory extends Widget implements DTarget {
                 for (int i = 0; i < quickslots.length; i++) {
                     WItem itm = quickslots[i];
                     if (itm != null) {
+                    	if(i != 0 && quickslots[0] != null && quickslots[0].item.getres().name.equals(itm.item.getres().name))
+                    		continue; // May be cape or druids cloak, probably
                         for (ItemInfo info : itm.item.info()) {
                             if (info instanceof Armor) {
                                 h += ((Armor)info).hard;
@@ -307,23 +310,28 @@ public class Equipory extends Widget implements DTarget {
                     }
                 }
                 armorclass = Text.render(Resource.getLocString(Resource.BUNDLE_LABEL, "Armor Class: ") + h + "/" + s, Color.BLACK, acf).tex();
+
             } catch (Exception e) { // fail silently
             }
+			gildBufimgs = new LinkedList<>();
+			for(Map.Entry<String, AttrMod.Mod> e : gildBuffs.entrySet()) {
+				if(e.getValue().mod == 0)
+					continue;
+				BufferedImage bufferedImage1 = (RichText.render(String.format("%s $col[%s]{%s%d}", new Object[] { ((Resource.Tooltip)e.getValue().attr.layer(Resource.tooltip)).t, (e.getValue().mod < 0) ? AttrMod.debuff : AttrMod.buff,
+						(char)((e.getValue().mod < 0) ? 45 : 43), Integer.valueOf(Math.abs(e.getValue().mod)) }), 0, new Object[0])).img;
+				BufferedImage bufferedImage2 = PUtils.convolvedown(((Resource.Image)e.getValue().attr.layer(Resource.imgc)).img, new Coord(bufferedImage1
+						.getHeight(), bufferedImage1.getHeight()), CharWnd.iconfilter);
+				BufferedImage combined = AttrMod.catimgsh(0, new BufferedImage[] { bufferedImage2, bufferedImage1 });
+				gildBufimgs.add(combined);
+			}
         }
         if (armorclass != null)
             g.image(armorclass, new Coord(acx - armorclass.sz().x / 2, bg.sz().y - armorclass.sz().y));
-		int ofsY = 15;
-		for(Map.Entry<String, AttrMod.Mod> e : gildBuffs.entrySet()) {
-			if(e.getValue().mod == 0)
-				continue;
-			BufferedImage bufferedImage1 = (RichText.render(String.format("%s $col[%s]{%s%d}", new Object[] { ((Resource.Tooltip)e.getValue().attr.layer(Resource.tooltip)).t, (e.getValue().mod < 0) ? AttrMod.debuff : AttrMod.buff,
-					(char)((e.getValue().mod < 0) ? 45 : 43), Integer.valueOf(Math.abs(e.getValue().mod)) }), 0, new Object[0])).img;
-			BufferedImage bufferedImage2 = PUtils.convolvedown(((Resource.Image)e.getValue().attr.layer(Resource.imgc)).img, new Coord(bufferedImage1
-					.getHeight(), bufferedImage1.getHeight()), CharWnd.iconfilter);
-			BufferedImage combined = AttrMod.catimgsh(0, new BufferedImage[] { bufferedImage2, bufferedImage1 });
-			g.image(combined, new Coord(300, ofsY += 15));
-		}
 		g.image(Text.labelFnd.render("Total attributes: ").tex(), new Coord(300, 0));
+		int ofsY = 15;
+		for(BufferedImage bi:gildBufimgs) {
+			g.image(bi, new Coord(300, ofsY += 15));
+		}
 	}
 
     public boolean iteminteract(Coord cc, Coord ul) {
