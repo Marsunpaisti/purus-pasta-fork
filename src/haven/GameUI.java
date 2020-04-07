@@ -1008,11 +1008,14 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
     	if(Config.debugWdgmsg) {
-			System.out.println("############");
-			System.out.println(sender);
-			System.out.println(msg);
-    	for(Object o :args)
-			System.out.println(o);
+			System.out.println("### WDGMSG ###");
+			System.out.println("Sent by:\n" + sender);
+			System.out.println("MSG: " + msg);
+			int ix = 0;
+            for(Object o : args) {
+                System.out.println("args[" + ix + "]: " + o);
+                ix++;
+            }
 		}
         if ((sender == chrwdg) && (msg == "close")) {
             chrwdg.hide();
