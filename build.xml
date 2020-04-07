@@ -31,6 +31,7 @@
 		<pathelement path="lib/sentry.jar" />
 		<pathelement path="lib/graal-sdk.jar" />
 		<pathelement path="lib/graaljs.jar" />
+		<pathelement path="lib/icu4j.jar" />
 		<pathelement path="lib/tregex.jar" />
 		<pathelement path="lib/truffle-api.jar" />
 	  </classpath>
@@ -63,7 +64,7 @@
       <fileset dir="build/classes" />
       <fileset dir="build/classes-lib" /><manifest>
 	<attribute name="Main-Class" value="haven.MainFrame" />
-	<attribute name="Class-Path" value="lib/slf4j-api.jar lib/slf4j-simple.jar lib/jackson-core.jar lib/sentry.jar lib/postgresql-jdbc.jar lib/pasta-res.jar lib/jogl.jar lib/gluegen-rt.jar lib/amber-res.jar lib/builtin-res.jar lib/hafen-res.jar lib/l10n.jar lib/graal-sdk.jar lib/graaljs.jar lib/tregex.jar lib/truffle-api.jar" />
+	<attribute name="Class-Path" value="lib/slf4j-api.jar lib/slf4j-simple.jar lib/jackson-core.jar lib/sentry.jar lib/postgresql-jdbc.jar lib/pasta-res.jar lib/jogl.jar lib/gluegen-rt.jar lib/amber-res.jar lib/builtin-res.jar lib/hafen-res.jar lib/l10n.jar lib/graal-sdk.jar lib/graaljs.jar lib/icu4j.jar lib/tregex.jar lib/truffle-api.jar" />
       </manifest>
     </jar>
     <chmod file="build/hafen.jar" perm="a+x" />
@@ -124,6 +125,7 @@
 	<include name="slf4j-simple.jar" />
 	<include name="graal-sdk.jar" />
 	<include name="graaljs.jar" />
+	<include name="icu4j.jar" />
 	<include name="tregex.jar" />
 	<include name="truffle-api.jar" />
 	<include name="jackson-core.jar" />
