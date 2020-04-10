@@ -767,22 +767,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         } else if (place == "qq") {
             if (qqview != null)
                 qqview.reqdestroy();
-            final Widget cref = qqview = child;
-            questpanel = new AlignPanel() {
-                {
-                    add(cref);
-                }
-
-                protected Coord getc() {
-                    return (new Coord(10, GameUI.this.sz.y - chat.sz.y - beltwdg.sz.y - this.sz.y - 10));
-                }
-
-                public void cdestroy(Widget ch) {
-                    qqview = null;
-                    destroy();
-                }
-            };
-            add(questpanel);
+            qqview = child;
+            add(child);
         } else if (place == "misc") {
             Coord c;
             int a = 1;
