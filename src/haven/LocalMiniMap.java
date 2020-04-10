@@ -290,7 +290,7 @@ public class LocalMiniMap extends Widget {
                     if (sgobs.contains(gob.id))
                         continue;
 
-                    if(AlarmManager.play(res.name))
+                    if((gob.knocked == null || gob.knocked == Boolean.FALSE) && AlarmManager.play(res.name))
                         sgobs.add(gob.id);
 
                     /*
