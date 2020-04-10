@@ -1050,6 +1050,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+		appender.add(new CheckBox("Colorful cavein dust") {
+			{
+				a = Config.colorfulCavein;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("colorfulCavein", val);
+				Config.colorfulCavein = val;
+				a = val;
+			}
+		});
        /* Always send
         appender.add(new CheckBox("Send food details to the food service (https://food.havenandhearth.link)") {
             {
