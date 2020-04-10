@@ -97,6 +97,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public boolean PBotAPISelect = false;
     public haven.purus.pathfinder.Pathfinder pastaPathfinder;
 
+    public Thread mapWalker = null;
+    boolean stopWalker = false;
+
     public interface Delayed {
         public void run(GOut g);
     }
@@ -1783,6 +1786,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             super(c);
             clickb = b;
 
+			stopWalker = true;
             synchronized (Pathfinder.class) {
                 if (pf != null) {
                     pf.terminate = true;
@@ -1921,7 +1925,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (player == null)
             return;
         synchronized (Pathfinder.class) {
-            if (pf != null) {
+			stopWalker = true;
+			if (pf != null) {
                 pf.terminate = true;
                 pfthread.interrupt();
                 // cancel movement
@@ -1957,6 +1962,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (player == null)
             return;
         synchronized (Pathfinder.class) {
+			stopWalker = true;
             if (pf != null) {
                 pf.terminate = true;
                 pfthread.interrupt();
@@ -2511,6 +2517,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void canceltasks() {
         if (pf != null)
             pf.terminate = true;
+        stopWalker = true;
         if (steelrefueler != null)
             steelrefueler.terminate();
         if (musselPicker != null)

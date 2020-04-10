@@ -28,6 +28,7 @@ package haven;
 
 import static haven.MCache.cmaps;
 import static haven.MCache.tilesz;
+import static haven.OCache.posres;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -109,7 +110,8 @@ public class MapWnd extends Window {
         list = listf.add(new MarkerList(listf.inner().x, 0));
 
         resize(sz);
-    }
+		add(new Label("ctrl + left click to move, shift + click to queue moves"), new Coord(50, sz.y-2));
+	}
 
     private class ZoomBar extends Widget {
         private final static int btnsz = 21;
@@ -172,8 +174,57 @@ public class MapWnd extends Window {
             return (false);
         }
 
+        private class CoordPair {
+        	Coord first, second;
+        	public CoordPair(Coord c1, Coord c2) {
+        		this.first = c1;
+        		this.second = c2;
+			}
+		}
+
+        LinkedList<CoordPair> clicks = new LinkedList<>();
+
+        Runnable walker = () -> {
+        	while(!ui.gui.map.stopWalker && clicks.size() > 0) {
+        		Coord dest = clicks.getFirst().second;
+				Gob pl = mv.player();
+				if(pl != null && pl.rc != null) {
+					mv.wdgmsg("click", rootpos(), dest, 1, 0);
+					while(!ui.gui.map.stopWalker && ( ui.gui.map.player().isMoving() || ui.gui.map.player().rc.dist(new Coord2d(dest).mul(posres)) > 5)) {
+						try {
+							Thread.sleep(50);
+						} catch(InterruptedException e) {}
+					}
+				}
+				clicks.pollFirst();
+			}
+        	clicks.clear();
+			ui.gui.map.mapWalker = null;
+		};
+
         public boolean clickloc(Location loc, int button) {
-            if (domark && (button == 1)) {
+        	try {
+        		if(button == 1 && (ui.modshift || ui.modctrl)) {
+        			Coord dif = loc.tc.sub(resolve(player).tc.mul(MapFileWidget.scalef())).mul(11);
+        			Gob pl = mv.player();
+        			if(pl != null && pl.rc != null) {
+        				if(ui.modctrl) {
+							ui.gui.map.stopWalker = true;
+							mv.wdgmsg("click", rootpos(), pl.rc.add(dif).floor(posres), button, 0);
+						} else if(ui.modshift) {
+							clicks.add(new CoordPair(loc.tc, pl.rc.add(dif).floor(posres)));
+							if(ui.gui.map.mapWalker == null) {
+								ui.gui.map.mapWalker = new Thread(walker);
+								ui.gui.map.stopWalker = false;
+								ui.gui.map.mapWalker.start();
+							}
+						}
+					}
+				}
+			} catch(Loading l) {
+			}
+
+			if (domark && (button == 1)) {
                 Marker nm = new PMarker(loc.seg.id, loc.tc, "New marker", BuddyWnd.gc[new Random().nextInt(BuddyWnd.gc.length)]);
                 file.add(nm);
                 list.change2(nm);
@@ -198,12 +249,24 @@ public class MapWnd extends Window {
             g.chcolor();
             super.draw(g);
             try {
-                Coord ploc = xlate(resolve(player));
+            	Coord ploc = xlate(resolve(player));
                 if (ploc != null) {
                     g.chcolor(255, 0, 0, 255);
                     g.image(plx, ploc.sub(plx.sz().div(2)));
                     g.chcolor();
-                }
+				}
+
+                Coord prevC = ploc;
+				for(CoordPair p:clicks) {
+					g.chcolor(0, 255, 0, 255);
+					Coord c = p.first.div(scalef()).add(sz.div(2)).sub(curloc.tc);
+					g.image(plx, c.sub(plx.sz().div(2)));
+					g.chcolor(0, 255, 255, 255);
+					if(prevC != null)
+						g.line(prevC, c, 2.0f); // Ugly
+					prevC = c;
+					g.chcolor();
+				}
             } catch (Loading l) {
             }
         }
@@ -461,7 +524,7 @@ public class MapWnd extends Window {
     }
 
     public void mousemove(Coord c) {
-        if (drag != null) {
+        if (drag != null && !ui.modshift && !ui.modctrl) {
             Coord nsz = c.add(dragc);
             nsz.x = Math.max(nsz.x, 300);
             nsz.y = Math.max(nsz.y, 150);

@@ -583,6 +583,7 @@ public class LocalMiniMap extends Widget {
             if (button == 1)
                 MapView.pllastcc = mc;
             Gob gob = findicongob(csd);
+            ui.gui.map.stopWalker = true;
             if (gob == null) {
                 mv.wdgmsg("click", rootpos().add(csd), mc.floor(posres), button, ui.modflags());
             } else {
