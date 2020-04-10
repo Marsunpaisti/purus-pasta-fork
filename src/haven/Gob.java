@@ -28,6 +28,7 @@ package haven;
 
 import haven.purus.mapper.Mapper;
 import haven.resutil.BPRadSprite;
+import haven.resutil.WaterTile;
 import integrations.mapv4.MappingClient;
 import integrations.map.Navigation;
 
@@ -853,6 +854,13 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 c.y = -c.y;
                 if (Config.disableelev)
                     c.z = 0;
+				if(knocked != null && knocked) {
+					try {
+						if(glob.map.tiler(glob.map.gettile(rc.floor(MCache.tilesz))) instanceof WaterTile) {
+							c.z += 5;
+						}
+					} catch(Loading l) {}
+				}
                 if ((this.c == null) || !c.equals(this.c))
                     xl.update(Transform.makexlate(new Matrix4f(), this.c = c));
                 if (this.a != Gob.this.a)
