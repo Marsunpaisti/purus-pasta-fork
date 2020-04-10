@@ -36,6 +36,7 @@ public class Glob {
     public Astronomy ast;
     public OCache oc = new OCache(this);
     public MCache map;
+    public UI ui;
     public Session sess;
     public Party party;
     public Map<String, CAttr> cattr = new HashMap<String, CAttr>();
