@@ -2067,14 +2067,15 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 									for(Gob.Overlay o:inf.gob.ols) {
                                         try {
                                             if(o.res != null && o.res.get() != null)
-                                                tooltip += String.format("\noverlay: " + o.res.get().name);
+                                                tooltip += String.format("\noverlay: " + o.res.get().name + " id: " + o.id);
                                         } catch(Loading l) {
-
                                         }
                                     }
                                     Drawable d = inf.gob.getattr(Drawable.class);
-
-                                    if(d instanceof Composite) {
+									if(d != null) {
+										d.getres().layers(FastMesh.MeshRes.class).stream().map(mr->"\n meshid: " + mr.id).distinct().forEach(s -> tooltip += s);
+									}
+									if(d instanceof Composite) {
                                         Composite comp = (Composite)d;
                                         for(ResData rd:comp.prevposes) {
                                             try {

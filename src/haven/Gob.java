@@ -29,8 +29,8 @@ package haven;
 import haven.purus.mapper.Mapper;
 import haven.resutil.BPRadSprite;
 import haven.resutil.WaterTile;
-import integrations.mapv4.MappingClient;
 import integrations.map.Navigation;
+import integrations.mapv4.MappingClient;
 
 import java.awt.*;
 import java.util.*;

@@ -60,6 +60,17 @@ public class PBotGob {
 	 * Click the gob
 	 * @param button 1 = Left click, 3 = Right click
 	 * @param mod 0 = no modifier, 1 = shift, 2 = ctrl, 4 = alt
+	 * @param meshId can be a door, roasting spit etc.
+	 */
+	public void doClick(int button, int mod, int meshId) {
+		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
+				meshId);
+	}
+
+	/**
+	 * Click the gob
+	 * @param button 1 = Left click, 3 = Right click
+	 * @param mod 0 = no modifier, 1 = shift, 2 = ctrl, 4 = alt
 	 */
 	public void doClick(int button, int mod) {
 		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
@@ -189,8 +200,8 @@ public class PBotGob {
 	}
 
 	/**
-	 * Get overlays of the gob
-	 * @return List containing resnames of the overlays that the gob has
+	 * Get overlays of the gob, get meshId with getOverlyId
+	 * @return List containing resnames of the overlays
 	 */
 	public List<String> getOverlayNames() {
 		List<String> ret = new ArrayList<>();
@@ -202,6 +213,24 @@ public class PBotGob {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * Return meshId of the overlay with given resname
+	 * @param overlayName Exact match
+	 * @return Meshid of the overlay -1 if not found
+	 */
+	public int getOverlayId(String overlayName) {
+		for (Gob.Overlay ol : gob.ols) {
+			try {
+				Indir<Resource> olires = ol.res;
+				if(olires.get().name.equals(overlayName)) {
+					return ol.id;
+				}
+			} catch (Loading l) {
+			}
+		}
+		return -1;
 	}
 
 	/**
