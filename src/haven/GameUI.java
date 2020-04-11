@@ -35,6 +35,7 @@ import haven.purus.alarms.AlarmWindow;
 import haven.purus.mapper.Mapper;
 import haven.purus.pbot.PBotAPI;
 import haven.purus.pbot.PBotScriptlist;
+import haven.purus.pbot.PBotScriptlistItem;
 import haven.resutil.FoodInfo;
 import integrations.map.RemoteNavigation;
 import integrations.mapv4.MappingClient;
@@ -117,12 +118,20 @@ public class GameUI extends ConsoleHost implements Console.Directory {
         public final int idx;
         public final Indir<Resource> res;
         public final Message sdt;
+        PBotScriptlistItem itm;
 
         public BeltSlot(int idx, Indir<Resource> res, Message sdt) {
             this.idx = idx;
             this.res = res;
             this.sdt = sdt;
         }
+
+        public BeltSlot(int idx, PBotScriptlistItem itm) {
+        	this.idx = idx;
+        	this.itm = itm;
+        	res = null;
+        	sdt = Message.nil;
+		}
 
         private GSprite spr = null;
         public GSprite spr() {

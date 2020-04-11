@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import haven.Resource;
 import haven.Tex;
 import haven.TexI;
 import haven.Text;
@@ -14,20 +15,26 @@ public class PBotScriptlistItem {
 	private String name;
 	private File scriptFile;
 	private Tex iconTex, nameTex;
-	
+	public String filename;
+
 	public PBotScriptlistItem(String name, File scriptFile) {
+		if(name.length() == 0)
+			name = scriptFile.getName();
 		this.name = name;
 		this.scriptFile = scriptFile;
-		
-		File icon = new File("scripts/"+scriptFile.getName().substring(0, scriptFile.getName().lastIndexOf("."))+".png");
+		this.filename = scriptFile.getName();
+
+		File icon = new File("scripts/" + scriptFile.getName().substring(0, scriptFile.getName().lastIndexOf("."))+".png");
 		if(icon.exists()) {
 			try {
 				this.iconTex = new TexI(ImageIO.read(icon));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			this.iconTex = Resource.local().load("paginae/purus/PBotMenu").get().layer(Resource.Image.class).tex();
 		}
-		
+
 		this.nameTex = Text.render(name.substring(0, name.length()-5)).tex();
 	}
 	

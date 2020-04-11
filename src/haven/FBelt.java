@@ -1,9 +1,12 @@
 package haven;
 
+import haven.purus.pbot.PBotScriptlistItem;
+
 import static haven.Inventory.invsq;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 public class FBelt extends Widget implements DTarget, DropTarget {
     private final int beltkeys[] = {KeyEvent.VK_F1, KeyEvent.VK_F2, KeyEvent.VK_F3, KeyEvent.VK_F4,
@@ -32,7 +35,9 @@ public class FBelt extends Widget implements DTarget, DropTarget {
             if (resnames != null) {
                 for (int i = 0; i < 12; i++) {
                     String resname = resnames[i];
-                    if (!resname.equals("null")) {
+                    if(resname.startsWith("scripts/")) {
+						belt[i] = ((GameUI)parent).new BeltSlot(i,  new PBotScriptlistItem("", new File(resname)));
+					} else if (!resname.equals("null")) {
                         try {
                             belt[i] = ((GameUI)parent).new BeltSlot(i, Resource.local().load(resname), Message.nil);
                         } catch (Exception e) {   // possibly a resource from another client
@@ -48,10 +53,16 @@ public class FBelt extends Widget implements DTarget, DropTarget {
         if (chrid != "") {
             String[] resnames = new String[12];
             for (int i = 0; i < 12; i++) {
-                try {
+				try {
                     GameUI.BeltSlot res = belt[i];
-                    if (res != null && res.getres().name.startsWith("paginae/amber") || res.getres().name.startsWith("paginae/purus"))
-                        resnames[i] = res.getres().name;
+                    if (res != null) {
+                    	if(res.itm != null) {
+                    		resnames[i] = "scripts/" + res.itm.filename;
+						} else {
+							if(res.getres().name.startsWith("paginae/amber") || res.getres().name.startsWith("paginae/purus"))
+								resnames[i] = res.getres().name;
+						}
+					}
 
                 } catch (Exception e) {
                 }
@@ -79,15 +90,21 @@ public class FBelt extends Widget implements DTarget, DropTarget {
         for (int slot = 0; slot < 12; slot++) {
             Coord c = beltc(slot);
             g.image(invsq, c);
-            try {
-                GameUI.BeltSlot ires = belt[slot];
-                if (ires != null)
-                    g.image(ires.getres().layer(Resource.imgc).tex(), c.add(1, 1));
-            } catch (Loading e) {
-            } catch (Exception re) {
-                // possibly a resource from another client
-                belt[slot] = null;
-            }
+            if(belt[slot] != null) {
+				try {
+					if(belt[slot].itm != null) {
+						g.image(belt[slot].itm.getIconTex(), c.add(1, 1), new Coord(32,32));
+					} else {
+						GameUI.BeltSlot ires = belt[slot];
+						if(ires != null)
+							g.image(ires.getres().layer(Resource.imgc).tex(), c.add(1, 1));
+					}
+				} catch(Loading e) {
+				} catch(Exception re) {
+					// possibly a resource from another client
+					belt[slot] = null;
+				}
+			}
             g.chcolor(keysClr);
             FastText.aprint(g, new Coord(c.x + invsq.sz().x - 2, c.y + invsq.sz().y), 1, 1, "F" + (slot + 1));
             g.chcolor();
@@ -201,23 +218,31 @@ public class FBelt extends Widget implements DTarget, DropTarget {
                         gameui().wdgmsg("setbelt", getServerSlot(slot), res.name);
                     return true;
                 }
-            }
+            } else if(thing instanceof PBotScriptlistItem) {
+            	belt[slot] = this.gameui().new BeltSlot(slot, (PBotScriptlistItem) thing);
+            	saveLocally();
+            	return true;
+			}
         }
         return false;
     }
 
     private void use(int slot) {
         try {
-            Resource res = belt[slot].getres();
-            Resource.AButton act = res.layer(Resource.action);
-            if (act == null) {
-                gameui().wdgmsg("belt", getServerSlot(slot), 1, ui.modflags());
-            } else {
-                if (res.name.startsWith("paginae/amber") || res.name.startsWith("paginae/purus"))
-                    gameui().menu.use(act.ad);
-                else
-                    gameui().act(act.ad);
-            }
+        	if(belt[slot].itm != null) {
+        		belt[slot].itm.runScript();
+			} else {
+				Resource res = belt[slot].getres();
+				Resource.AButton act = res.layer(Resource.action);
+				if(act == null) {
+					gameui().wdgmsg("belt", getServerSlot(slot), 1, ui.modflags());
+				} else {
+					if(res.name.startsWith("paginae/amber") || res.name.startsWith("paginae/purus"))
+						gameui().menu.use(act.ad);
+					else
+						gameui().act(act.ad);
+				}
+			}
         } catch (Exception e) {
         }
     }
@@ -233,8 +258,10 @@ public class FBelt extends Widget implements DTarget, DropTarget {
         int slot = serverSlot - SERVER_FSLOT_INDEX;
 
         GameUI.BeltSlot ires = belt[slot];
+        if(ires == null || ires.itm != null)
+        	return;
         try {
-            if (ires == null || ires.getres().name.startsWith("paginae/amber") || ires.getres().name.startsWith("paginae/purus"))
+            if (ires.getres().name.startsWith("paginae/amber") || ires.getres().name.startsWith("paginae/purus"))
                 return;
         } catch (Exception e) {
         }
