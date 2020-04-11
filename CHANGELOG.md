@@ -1,5 +1,7 @@
 ## Changelog
 
+### 3.19.1
+    - Added more info about meshids to PBot api
 ### 3.19.0
     - Added option for colorful cavein dust
     - Added queued moevements for loftars map
