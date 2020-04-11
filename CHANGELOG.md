@@ -4,7 +4,7 @@
     - Added more info about meshids to PBot api
 ### 3.19.0
     - Added option for colorful cavein dust
-    - Added queued moevements for loftars map
+    - Added queued movements for loftars map
     - Allow binding of PBot scripts to FBelts
     - Cavein dust now persists for ~30 minutes
     - Knocked out animals should now be higher on water
