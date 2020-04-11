@@ -1,4 +1,6 @@
 ## This script automates deploying of update.zip to puruscor.github.io, unzips it, commits and pushes
+ant doc
+rm -r ../purus-pasta-2-dist/public/javadoc
 mv doc/javadoc ../purus-pasta-2-dist/public/
 unzip -o build/update.zip -d ../purus-pasta-2-dist/public/HnH/
 cd ../purus-pasta-2-dist/
