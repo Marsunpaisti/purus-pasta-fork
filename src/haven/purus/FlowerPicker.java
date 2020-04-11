@@ -58,17 +58,10 @@ public class FlowerPicker implements Runnable, ItemClickCallback, WItemDestroyCa
 					FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
 					if(menu != null) {
 						menu.choose(menu.opts[0]);
+						menu.destroy();
 					} else {
 						continue;
 					}
-				}
-				while(gui.ui.root.findchild(FlowerMenu.class) != null && !itemDestroyed) {
-					BotUtils.sleep(5);
-				}
-				synchronized(gui.ui) {
-					FlowerMenu menu = gui.ui.root.findchild(FlowerMenu.class);
-					if(menu != null)
-						menu.destroy();
 				}
 			}
 		}
