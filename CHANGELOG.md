@@ -8,7 +8,6 @@
     - Knocked out animals should now be higher on water
     - Made dowsing slices persist
     - Made flowerpicker-extension faster
-    - Made flowerpicker-extension faster
     - Made questgiver widget draggable
     - Minor fixes
     - PBot updated to use graal v20
