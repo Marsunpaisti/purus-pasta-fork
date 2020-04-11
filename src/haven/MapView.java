@@ -88,7 +88,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public SteelRefueler steelrefueler;
     private Thread musselPicker;
     private final PartyHighlight partyHighlight;
-    public static final Set<Long> markedGobs = new HashSet<>();
+    public static final Set<Long> markedGobs = new TreeSet<>();
     public static final Material.Colors markedFx = new Material.Colors(new Color(21, 127, 208, 255));
     public Object[] lastItemactClickArgs;
     private static TexCube sky = new TexCube(Resource.loadimg("skycube"));
@@ -2061,9 +2061,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                             MapView.gobclickargs(inf);
                             if (inf.gob != null) {
                                 Resource res = inf.gob.getres();
-                                if (res != null) {
-                                    tooltip = res.name;
-                                    for(Gob.Overlay o:inf.gob.ols) {
+								tooltip = String.format("GobId: " + inf.gob.id + "\n");
+								if (res != null) {
+                                    tooltip += res.name;
+									for(Gob.Overlay o:inf.gob.ols) {
                                         try {
                                             if(o.res != null && o.res.get() != null)
                                                 tooltip += String.format("\noverlay: " + o.res.get().name);

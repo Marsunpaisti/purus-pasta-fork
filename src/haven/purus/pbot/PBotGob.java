@@ -4,6 +4,7 @@ import haven.*;
 import haven.purus.gobText;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static haven.OCache.posres;
 
@@ -26,7 +27,6 @@ public class PBotGob {
 			return false;
 	}
 
-
 	/**
 	 * Itemact with gob, to fill trough with item in hand for example
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
@@ -39,9 +39,21 @@ public class PBotGob {
 	 * Add cool hovering text above gob
 	 * @param text text to add
 	 * @param height height that the hext hovers at
+	 * @return Returns id of the text, which can be used to remove the text with removeGobText
 	 */
-	public void addGobText(String text, int height) {
-		gob.addol(new gobText(text, height));
+	public int addGobText(String text, int height) {
+		Gob.Overlay ol = new Gob.Overlay(new gobText(text, height));
+		gob.addol(ol);
+		return ol.id;
+	}
+
+	/**
+	 * Remove an added hovering text from gob that was added with addGobText
+	 * @param id Id of the gobtext
+	 */
+	public void removeGobText(int id) {
+		gob.ols.remove(gob.findol(id));
+		PBotAPI.gui.map.glob.oc.changed(gob);
 	}
 
 	/**
@@ -104,10 +116,14 @@ public class PBotGob {
 	}
 
 	/**
-	 * Highlights the gob by Alt+Clicking it
+	 * Toggle whether the gob should be marked or not
 	 */
-	public void highlightGob() {
-		doClick(0, 4);
+	public void toggleMarked() {
+		if(MapView.markedGobs.contains(gob.id))
+			MapView.markedGobs.remove(gob.id);
+		else
+			MapView.markedGobs.add(gob.id);
+		PBotAPI.gui.map.glob.oc.changed(gob);
 	}
 
 	/**
@@ -140,6 +156,18 @@ public class PBotGob {
 	}
 
 	/**
+	 * Get speed of this gob if it is moving
+	 * @return Speed of the gob, -1 if not moving object
+	 */
+	public double getSpeed() {
+		LinMove lm = gob.getLinMove();
+		if(lm == null)
+			return -1;
+		else
+			return lm.getv();
+	}
+
+	/**
 	 * Returns resnames of poses of this gob if it has any poses
 	 * @return Resnames of poses
 	 */
@@ -158,6 +186,38 @@ public class PBotGob {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * Get overlays of the gob
+	 * @return List containing resnames of the overlays that the gob has
+	 */
+	public List<String> getOverlayNames() {
+		List<String> ret = new ArrayList<>();
+		for (Gob.Overlay ol : gob.ols) {
+			try {
+				Indir<Resource> olires = ol.res;
+				ret.add(olires.get().name);
+			} catch (Loading l) {
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Sdt may tell information about things such as tanning tub state, crop stage etc.
+	 * @return sdt of the gob, -1 if not found
+	 */
+	public int getSdt() {
+		try {
+			Resource res = gob.getres();
+			if (res != null) {
+				GAttrib rd = gob.getattr(ResDrawable.class);
+				return ((ResDrawable) rd).sdt.peekrbuf(0);
+			}
+		} catch(Loading l) {
+		}
+		return -1;
 	}
 
 	/**

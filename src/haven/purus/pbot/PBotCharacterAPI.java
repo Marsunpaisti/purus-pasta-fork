@@ -2,7 +2,7 @@ package haven.purus.pbot;
 
 import haven.ChatUI;
 import haven.Coord2d;
-import haven.GameUI;
+import haven.Speedget;
 import haven.Widget;
 
 import static haven.OCache.posres;
@@ -29,7 +29,7 @@ public class PBotCharacterAPI {
 	 * Get the player hp
 	 * @return Returns 0-100
 	 */
-	public static int getShp() {
+	public static int getHp() {
 		return PBotAPI.gui.getmeter("hp", 0).a;
 	}
 
@@ -45,11 +45,10 @@ public class PBotCharacterAPI {
 	}
 
 	/**
-	 * Cancels the current act
+	 * Cancels the current act by clicking
 	 */
 	public static void cancelAct() {
 		PBotAPI.gui.map.wdgmsg("click", PBotUtils.getCenterScreenCoord(), new Coord2d(0, 0).floor(posres), 3, 0);
-
 	}
 
 	/**
@@ -57,6 +56,39 @@ public class PBotCharacterAPI {
 	 */
 	public static void logoutChar() {
 		PBotAPI.gui.act("lo", "cs");
+	}
+
+
+	/**
+	 * Log in with a character from character login menu
+	 * @param charname Name of the character
+	 */
+	public static void loginChar(String charname) {
+		PBotAPI.charlist.wdgmsg("play", charname);
+	}
+
+	/**
+	 * Set player speed setting
+	 * @param speed 1 = crawl, 2 = walk, 3 = run, 4 = sprint
+	 */
+	public static void setSpeed(int speed) {
+		Speedget.SpeedToSet = speed;
+	}
+
+	/**
+	 * Get current speed setting of player
+	 * @return 1 = crawl, 2 = walk, 3 = run, 4 = sprint
+	 */
+	public static int getSpeed() {
+		return Speedget.cur;
+	}
+
+	/**
+	 * Get maximum speed setting that player can be set to
+	 * @return 1 = crawl, 2 = walk, 3 = run, 4 = sprint
+	 */
+	public static int getMaxSpeed() {
+		return Speedget.max;
 	}
 
 	/**

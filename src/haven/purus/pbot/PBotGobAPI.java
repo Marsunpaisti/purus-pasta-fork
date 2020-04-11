@@ -5,8 +5,11 @@ import haven.automation.GobSelectCallback;
 import haven.purus.BotUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static haven.OCache.posres;
 
@@ -71,21 +74,22 @@ public class PBotGobAPI {
 	/**
 	 * Finds the closest object that matches one of the given names
 	 * @param radius Radius to look for objects in tiles
-	 * @param names Name(s) of gobs to look for
+	 * @param pattern Regex pattern(s) to match resnames of the gobs
 	 * @return Gob of the object, or null if not found
 	 */
-	public static PBotGob findGobByNames(double radius, String... names) {
+	public static PBotGob findGobByNames(double radius, String... pattern) {
 		Coord2d plc = player().getRcCoords();
 		double min = radius;
 		Gob nearest = null;
+		List<Pattern> patterns = Arrays.stream(pattern).map(Pattern::compile).collect(Collectors.toList());
 		synchronized (PBotAPI.gui.ui.sess.glob.oc) {
 			for (Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
 				double dist = gob.rc.dist(plc);
 				if (dist < min) {
 					boolean matches = false;
 					try {
-						for (String name : names) {
-							if (gob.getres() != null && gob.getres().name.contains(name)) {
+						for(Pattern p:patterns) {
+							if(gob.getres() != null && p.matcher(gob.getres().name).matches()) {
 								matches = true;
 								break;
 							}
@@ -128,7 +132,6 @@ public class PBotGobAPI {
 		return new PBotGob(PBotAPI.gui.map.player());
 	}
 
-
 	/**
 	 * Find object by ID
 	 * @param id ID of the object to look for
@@ -141,7 +144,6 @@ public class PBotGobAPI {
 		else
 			return new PBotGob(PBotAPI.gui.ui.sess.glob.oc.getgob(id));
 	}
-
 
 	/**
 	 * Next alt+click to gob returns the gob, the function will wait until this happens

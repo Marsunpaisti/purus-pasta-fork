@@ -2,7 +2,6 @@ package haven.purus.pbot;
 
 import haven.*;
 import haven.Window;
-import haven.automation.GobSelectCallback;
 import haven.purus.BotUtils;
 import haven.purus.DrinkWater;
 import haven.purus.ItemClickCallback;
@@ -50,7 +49,6 @@ public class PBotUtils {
 		}
 	}
 
-
 	/**
 	 * Chooses a petal with given label from a flower menu that is currently open
 	 * @param name Name of petal to open
@@ -96,7 +94,6 @@ public class PBotUtils {
 		PBotAPI.gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), PBotGobAPI.player().getRcCoords().floor(posres), 3, PBotAPI.gui.ui.modflags());
 	}
 
-
 	/**
 	 * Coordinates of the center of the screen
 	 * @return Coordinates of the center of the screen
@@ -108,7 +105,6 @@ public class PBotUtils {
 				(int) Math.round(Math.random() * 200 + sz.y / 2 - 100));
 		return sc;
 	}
-
 
 	/**
 	 * Left click to somewhere with pathfinder, wait until pathfinder is finished
@@ -249,9 +245,9 @@ public class PBotUtils {
 		Window wnd = PBotWindowAPI.getWindow("Crafting");
 		if(wnd != null)
 			PBotWindowAPI.closeWindow(wnd);
-		PBotWindowAPI.waitForWindowClose("Crafting");
+		PBotWindowAPI.waitForWindowClose("Crafting", 1000*1000);
 		PBotAPI.gui.wdgmsg("act", "craft", name);
-		PBotWindowAPI.waitForWindow("Crafting");
+		PBotWindowAPI.waitForWindow("Crafting", 1000*1000);
 	}
 
 	/**

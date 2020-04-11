@@ -4,7 +4,6 @@ import haven.*;
 import haven.res.ui.tt.q.qbuff.QBuff;
 
 import java.util.regex.Pattern;
-import static haven.OCache.posres;
 
 public class PBotItem {
 
@@ -37,17 +36,18 @@ public class PBotItem {
 		return null;
 	}
 
-
 	/**
-	 * Take the item to hand and wait for it to appear in hand
+	 * Take the item to hand
+	 * @param wait Wait for item to appear on hand
 	 */
-	public void takeItem() {
+	public void takeItem(boolean wait) {
 		gitem.wdgmsg("take", Coord.z);
-		while(PBotUtils.getItemAtHand() != null) {
-			PBotUtils.sleep(25);
+		if(wait) {
+			while(PBotUtils.getItemAtHand() != null) {
+				PBotUtils.sleep(25);
+			}
 		}
 	}
-
 
 	/**
 	 * Transfer an item to the active inventory, does not wait for item to transfer
@@ -55,7 +55,6 @@ public class PBotItem {
 	public void transferItem() {
 		gitem.wdgmsg("transfer", Coord.z);
 	}
-
 
 	/**
 	 * Right clicks the item in the inventory

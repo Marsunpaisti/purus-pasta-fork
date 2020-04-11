@@ -3,8 +3,10 @@ package haven.purus.pbot;
 import haven.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class PBotInventory {
 
@@ -32,15 +34,17 @@ public class PBotInventory {
 	}
 
 	/**
-	 * Returns a list of items with specific name(s) from the inventory
-	 * @return List of items found
+	 * Returns a list of items with specific regex pattern(s) from the inventory
+	 * @param pattern Regex pattern(s) matching item names
+	 * @return List of items with name matching at least one of the given patterns
 	 */
-	public List<PBotItem> getInventoryItemsByNames(List<String> names) {
+	public List<PBotItem> getInventoryItemsByNames(String... pattern) {
 		List<PBotItem> items = new ArrayList<>();
+		List<Pattern> patterns = Arrays.stream(pattern).map(Pattern::compile).collect(Collectors.toList());
 		for(PBotItem item : getInventoryContents()) {
 			String name = item.getName();
-			for(String s : names) {
-				if(s.equals(name))
+			for(Pattern p : patterns) {
+				if(p.matcher(name).matches())
 					items.add(item);
 			}
 		}
@@ -48,18 +52,15 @@ public class PBotInventory {
 	}
 
 	/**
-	 * @param resnames List of regular expressions
-	 * @return List of items with resname matching to one of the expressions given in the list
+	 * @param pattern Regex pattern(s) matching item resnames
+	 * @return List of items with resname matching at least one of the given patterns
 	 */
-	public List<PBotItem> getInventoryItemsByResnames(List<String> resnames) {
+	public List<PBotItem> getInventoryItemsByResnames(String... pattern) {
 		List<PBotItem> items = new ArrayList<>();
-		List<Pattern> nameExs = new ArrayList<>();
-		for(String s : resnames) {
-			nameExs.add(Pattern.compile(s));
-		}
+		List<Pattern> patterns = Arrays.stream(pattern).map(Pattern::compile).collect(Collectors.toList());
 		for(PBotItem item : getInventoryContents()) {
 			String name = item.getResname();
-			for(Pattern p : nameExs) {
+			for(Pattern p : patterns) {
 				if(p.matcher(name).matches())
 					items.add(item);
 			}
