@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.20.0
+    - Added status colors to tanning tubs
+    - Added butcher script
+    - Fixed graalvm regex library
 ### 3.19.1
     - Added more info about meshids to PBot api
 ### 3.19.0
