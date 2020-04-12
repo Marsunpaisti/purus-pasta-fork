@@ -138,7 +138,7 @@
 	 <target name="dist" depends="rebuild, doc">
 	    <zip destfile="build/update.zip" update="true">
 	        <fileset dir="build" includes="*hafen.jar, grid_ids.txt, icons, defaultAlarms, alarms/*, scripts/*"/>
-	    	<zipfileset dir="build/lib" includes="slf4j-api.jar, slf4j-simple.jar, jackson-core.jar, sentry.jar, postgresql-jdbc.jar, amber-res.jar, l10n.jar, pasta-res.jar, graal-sdk.jar, graaljs.jar, tregex.jar, truffle-api.jar" prefix="lib/"/>
+	    	<zipfileset dir="build/lib" includes="slf4j-api.jar, slf4j-simple.jar, jackson-core.jar, sentry.jar, postgresql-jdbc.jar, amber-res.jar, l10n.jar, pasta-res.jar, graal-sdk.jar, graaljs.jar, tregex.jar, truffle-api.jar, icu4j.jar" prefix="lib/"/>
 	    </zip>
 		 <exec executable="sh" >
 			 <arg line="./deploy.sh" />
