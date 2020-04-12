@@ -2072,6 +2072,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                                         }
                                     }
                                     Drawable d = inf.gob.getattr(Drawable.class);
+									if(d != null)
+										tooltip += "\n sdt: "+ ((ResDrawable) d).sdt.peekrbuf(0);
 									if(d != null) {
 										d.getres().layers(FastMesh.MeshRes.class).stream().map(mr->"\n meshid: " + mr.id).distinct().forEach(s -> tooltip += s);
 									}
