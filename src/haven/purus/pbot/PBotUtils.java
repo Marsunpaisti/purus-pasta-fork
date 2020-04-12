@@ -1,7 +1,7 @@
 package haven.purus.pbot;
 
-import haven.*;
 import haven.Window;
+import haven.*;
 import haven.purus.BotUtils;
 import haven.purus.DrinkWater;
 import haven.purus.ItemClickCallback;
@@ -69,7 +69,7 @@ public class PBotUtils {
 	}
 
 	/**
-	 * Closes flowermenu, if it is open
+	 * Wait for the flowermenu to close
 	 */
 	public static void waitFlowermenuClose() {
 		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null)

@@ -141,10 +141,11 @@ public class PBotGob {
 	 * Click a gob with pathfinder, with given button, wait until pathfinder is finished
 	 * @param btn 1 = left click, 3 = right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @param meshId meshid to click
 	 * @return True if path was found, or false if not
 	 */
-	public boolean pfClick(int btn, int mod) {
-		PBotAPI.gui.map.purusPfRightClick(gob, -1, btn, mod, null);
+	public boolean pfClick(int btn, int mod, int meshId) {
+		PBotAPI.gui.map.purusPfRightClick(gob, meshId, btn, mod, null);
 		try {
 			PBotAPI.gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
@@ -153,6 +154,16 @@ public class PBotGob {
 		synchronized(PBotAPI.gui.map) {
 			return PBotAPI.gui.map.foundPath;
 		}
+	}
+
+	/**
+	 * Click a gob with pathfinder, with given button, wait until pathfinder is finished
+	 * @param btn 1 = left click, 3 = right click
+	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @return True if path was found, or false if not
+	 */
+	public boolean pfClick(int btn, int mod) {
+		return pfClick(btn, mod, -1);
 	}
 
 	/**
@@ -247,6 +258,17 @@ public class PBotGob {
 		} catch(Loading l) {
 		}
 		return -1;
+	}
+
+	/**
+	 * Is the gob knocked out/dead
+	 * @return True if animal is knocked out, false if not
+	 */
+	public boolean isKnocked() {
+		if(gob.knocked == null)
+			return false;
+		else
+			return gob.knocked;
 	}
 
 	/**
