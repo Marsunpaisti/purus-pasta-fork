@@ -35,7 +35,7 @@ public class PickForageable implements Runnable {
                     else if (itm.selected)
                         hidden = Boolean.TRUE;
 
-                    if (hidden == null && res.name.startsWith("gfx/terobjs/herbs") || res.name.startsWith("gfx/kritter/jellyfish/jellyfish")||
+                    if (hidden == null && res.name.startsWith("gfx/terobjs/herbs") || res.name.startsWith("gfx/terobjs/items/precioussnowflake") || res.name.startsWith("gfx/kritter/jellyfish/jellyfish")||
                             hidden == Boolean.FALSE && !res.name.startsWith("gfx/terobjs/vehicle")) {
                         double distFromPlayer = gob.rc.dist(gui.map.player().rc);
                         if (distFromPlayer <= 20 * 11 && (herb == null || distFromPlayer < herb.rc.dist(gui.map.player().rc)))

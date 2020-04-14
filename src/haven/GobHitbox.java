@@ -74,6 +74,8 @@ public class GobHitbox extends Sprite {
     private static final BBox bboxSmelter = new BBox(new Coord(-12, -12), new Coord(12, 20));
     private static final BBox bboxWallseg = new BBox(new Coord(-5, -6), new Coord(6, 5));
     private static final BBox bboxHwall = new BBox(new Coord(-1, 0), new Coord(0, 11));
+    private static final BBox bboxBigGate = new BBox(new Coord(-6, -15), new Coord(5, 16));
+    private static final BBox bboxSmallGate = new BBox(new Coord(-6, -11), new Coord(5, 11));
 
     public static BBox getBBox(Gob gob) {
         Resource res = null;
@@ -108,6 +110,9 @@ public class GobHitbox extends Sprite {
             int state = ((ResDrawable) rd).sdt.peekrbuf(0);
             if (state == 1)     // open gate
                 return null;
+
+            if (name.endsWith("biggate")) return bboxBigGate;
+            if (name.endsWith("gate")) return bboxSmallGate;
         } else if (name.endsWith("/pow")) {
             GAttrib rd = gob.getattr(ResDrawable.class);
             if (rd == null)     // shouldn't happen
