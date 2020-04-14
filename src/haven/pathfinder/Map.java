@@ -22,7 +22,7 @@ public class Map {
     public final static int origin = origintile * 11;
     public final static int sz = origin * 2;
     public static int plbbox = 3;
-    private final static int way = plbbox + 2;
+    private static int way = plbbox + 2;
     private final static int clr = way + 1;
     private final static int concaveclr = 2;
     private final static int tomaxside = 33;
@@ -41,15 +41,19 @@ public class Map {
     private final MCache mcache;
     private Vertex vxstart;
     private Vertex vxend;
+    private GameUI gui;
+    private boolean ridingHorse = false;
+    private boolean carryingObject = false;
 
     private Dbg dbg;
     private final static boolean DEBUG = false;
     public final static boolean DEBUG_TIMINGS = false;
 
-    public Map(Coord plc, Coord endc, MCache mcache) {
+    public Map(Coord plc, Coord endc, MCache mcache, GameUI gui) {
         this.plc = plc;
         this.endc = endc;
         this.mcache = mcache;
+        this.gui = gui;
         dbg = new Dbg(DEBUG);
         dbg.init();
     }
@@ -227,15 +231,16 @@ public class Map {
 
     public void addGobAndShrink(Gob gob, Coord shrinkBy) {
         GobHitbox.BBox bbox = GobHitbox.getBBox(gob);
+        GobHitbox.BBox bboxOriginal = GobHitbox.getBBox(gob);
         if (bbox == null)
             return;
 
         bbox.a.add(shrinkBy.x, shrinkBy.y);
         bbox.b.sub(shrinkBy.x, shrinkBy.y);
-
-
         Coord bboxa = bbox.a;
         Coord bboxb = bbox.b;
+        Coord bboxaOriginal = bboxOriginal.a;
+        Coord bboxbOriginal = bboxOriginal.b;
 
         // gob coordinate relative to the origin (player's location)
         int gcx = origin - (plc.x - gob.rc.floor().x);
@@ -259,10 +264,10 @@ public class Map {
             cd = new Coord(gcx + bboxa.x - plbbox, gcy + bboxb.y + plbbox);
 
             // calculate waypoints located on the angular bisector of the corner
-            wa = new Coord(gcx + bboxa.x - way, gcy + bboxa.y - way);
-            wb = new Coord(gcx + bboxb.x + way, gcy + bboxa.y - way);
-            wc = new Coord(gcx + bboxb.x + way, gcy + bboxb.y + way);
-            wd = new Coord(gcx + bboxa.x - way, gcy + bboxb.y + way);
+            wa = new Coord(gcx + bboxaOriginal.x - way, gcy + bboxaOriginal.y - way);
+            wb = new Coord(gcx + bboxbOriginal.x + way, gcy + bboxaOriginal.y - way);
+            wc = new Coord(gcx + bboxbOriginal.x + way, gcy + bboxbOriginal.y + way);
+            wd = new Coord(gcx + bboxaOriginal.x - way, gcy + bboxbOriginal.y + way);
 
             // calculate TO clearance vertices
             clra = new Coord(gcx + bboxa.x - clr, gcy + bboxa.y - clr);

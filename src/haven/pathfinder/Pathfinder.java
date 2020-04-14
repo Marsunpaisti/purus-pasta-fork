@@ -3,6 +3,7 @@ package haven.pathfinder;
 
 import haven.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -72,10 +73,39 @@ public class Pathfinder implements Runnable {
 
     public void pathfind(Coord src) {
         long starttotal = System.nanoTime();
-        haven.pathfinder.Map m = new haven.pathfinder.Map(src, dest, map);
+        haven.pathfinder.Map m = new haven.pathfinder.Map(src, dest, map, mv.gameui());
         Gob player = mv.player();
 
         long start = System.nanoTime();
+
+        boolean ridingHorse = false;
+        boolean carryingObject = false;
+        if (mv.player() != null) {
+            ArrayList<String> poses = new ArrayList<>();
+            Drawable d = mv.player().getattr(Drawable.class);
+
+            if(d instanceof Composite) {
+                Composite comp = (Composite)d;
+                for(ResData rd:comp.prevposes) {
+                    try {
+                        poses.add(rd.res.get().name);
+                    } catch(Loading l) {
+
+                    }
+                }
+            }
+
+            for ( String pose : poses
+            ) {
+                if (pose.toLowerCase().contains("riding")) {
+                    ridingHorse = true;
+                }
+                if (pose.toLowerCase().contains("banzai")) {
+                    carryingObject = true;
+                }
+            }
+        }
+
         synchronized (oc) {
             for (Gob gob : oc) {
                 if (gob.isplayer())
@@ -83,6 +113,19 @@ public class Pathfinder implements Runnable {
                 // need to exclude destination gob so it won't get into TO candidates list
                 if (this.gob != null && this.gob.id == gob.id)
                     continue;
+
+                if (ridingHorse) {
+                    if (gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 3) {
+                        continue;
+                    }
+                }
+
+                if (carryingObject) {
+                    if (gob.rc.dist(mv.player().rc) < 3) {
+                        continue;
+                    }
+                }
+
 
                 GobHitbox.BBox box = GobHitbox.getBBox(gob);
                 int shrink = 0;

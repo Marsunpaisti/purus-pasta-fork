@@ -98,7 +98,6 @@
     <mkdir dir="build/scripts"/>
   	<copy todir="build/scripts">
 		<fileset dir="scripts/" includes="*"></fileset>
-		<fileset dir="scripts2/" includes="*"></fileset>
   	</copy>
   </target>
   <target name="alarms" depends="build-env">
