@@ -99,9 +99,11 @@ public class Pathfinder implements Runnable {
             ) {
                 if (pose.toLowerCase().contains("riding")) {
                     ridingHorse = true;
+                    System.out.println("Riding horse!");
                 }
                 if (pose.toLowerCase().contains("banzai")) {
                     carryingObject = true;
+                    System.out.println("Carrying object!");
                 }
             }
         }
@@ -115,13 +117,13 @@ public class Pathfinder implements Runnable {
                     continue;
 
                 if (ridingHorse) {
-                    if (gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 3) {
+                    if (gob.getres() != null && gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 11) {
                         continue;
                     }
                 }
 
                 if (carryingObject) {
-                    if (gob.rc.dist(mv.player().rc) < 3) {
+                    if (gob.rc.dist(mv.player().rc) < 11) {
                         continue;
                     }
                 }
@@ -136,7 +138,7 @@ public class Pathfinder implements Runnable {
                         box = GobHitbox.getBBox(gob);
                         box.a = box.a.add(shrink, shrink);
                         box.b = box.b.sub(shrink, shrink);
-
+                        if (shrink >= 10) break; //Max shrink
                     } while (isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor()));
                     m.addGobAndShrink(gob, new Coord(shrink, shrink));
                     continue;
@@ -218,7 +220,7 @@ public class Pathfinder implements Runnable {
             while (!moveinterupted && !terminate) {
                 if (!player.isMoving()) {
                     try {
-                        Thread.sleep(150);
+                        Thread.sleep(50);
                     } catch (InterruptedException e1) {
                         return;
                     }
@@ -227,7 +229,7 @@ public class Pathfinder implements Runnable {
                 }
 
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(25);
                 } catch (InterruptedException e1) {
                     return;
                 }
