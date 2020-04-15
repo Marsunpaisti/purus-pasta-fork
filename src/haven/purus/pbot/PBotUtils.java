@@ -52,7 +52,8 @@ public class PBotUtils {
 		}
 	}
 
-	public PaistiPathfinder getPaistiPfGobClick(Gob gob, int clickb, int modflags) {
+	public static PaistiPathfinder getPaistiPfGobClick(PBotGob pbgob, int clickb, int modflags) {
+		Gob gob = pbgob.gob;
 		Gob player = PBotAPI.gui.map.player();
 		if (player == null)
 			return null;
@@ -71,7 +72,7 @@ public class PBotUtils {
 		return pf;
 	}
 
-	public PaistiPathfinder getPaistiPfLeftClick(Coord mc, String action) {
+	public static PaistiPathfinder getPaistiPfLeftClick(Coord mc, String action) {
 		Gob player = PBotAPI.gui.map.player();
 		if (player == null)
 			return null;
@@ -89,7 +90,7 @@ public class PBotUtils {
 	}
 
 	//Launches the pathfinder with path given by paistiPfLeftClickPath/paistiPfRightClickPath
-	public void executePaistiPfWalk(PaistiPathfinder pf){
+	public static void executePaistiPfWalk(PaistiPathfinder pf){
 		Gob player = PBotAPI.gui.map.player();
 		if (player == null)
 			return;

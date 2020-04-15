@@ -64,7 +64,6 @@ public class PaistiPathfinder implements Runnable{
     }
 
     public Iterable<Edge> getPath(Coord src, int retries) {
-        System.out.println("Getpath retries: " + retries);
         if (retries < 0) return null;
         long starttotal = System.nanoTime();
         m = new haven.pathfinder.Map(src, dest, map, mv.gameui());
@@ -178,7 +177,6 @@ public class PaistiPathfinder implements Runnable{
     }
 
     private void walkPath(Coord src) {
-        System.out.println("Walkpath!");
         Iterator<Edge> it = path.iterator();
         while (it.hasNext() && !terminate) {
             Edge e = it.next();
@@ -191,6 +189,7 @@ public class PaistiPathfinder implements Runnable{
             if (gob != null && !it.hasNext()) {
                 mv.wdgmsg("click", gob.sc, mc, clickb, modflags, 0, (int) gob.id, gob.rc.floor(posres), 0, meshid);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
+
             } else {
                 mv.wdgmsg("click", Coord.z, mc, 1, 0);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
@@ -200,12 +199,12 @@ public class PaistiPathfinder implements Runnable{
             long moveWaitStart = System.currentTimeMillis();
             while (!mv.player().isMoving() && !terminate) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(25);
                 } catch (InterruptedException e1) {
                     return;
                 }
                 if (System.currentTimeMillis() - moveWaitStart > RESPONSE_TIMEOUT)
-                    return;
+                    break;
             }
 
             // wait for it to finish
@@ -228,6 +227,7 @@ public class PaistiPathfinder implements Runnable{
 
                 long now = System.currentTimeMillis();
 
+                /*
                 // FIXME
                 // when right clicking gobs, char will try to navigate towards gob's rc
                 // however he will be blocked by gob's bounding box.
@@ -235,6 +235,8 @@ public class PaistiPathfinder implements Runnable{
                 LinMove lm = mv.player().getLinMove();
                 if (gob != null && !it.hasNext() && lm != null && now - lm.lastupd > 500)
                     break;
+
+                 */
             }
         }
 
