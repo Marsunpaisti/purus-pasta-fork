@@ -23,7 +23,7 @@ public class Map {
     public final static int sz = origin * 2;
     public static int plbbox = 3;
     private static int way = plbbox + 2;
-    private final static int clr = way + 1;
+    private static int clr = way + 1;
     private final static int concaveclr = 2;
     private final static int tomaxside = 33;
     private final static int mapborder = 4;
@@ -42,8 +42,6 @@ public class Map {
     private Vertex vxstart;
     private Vertex vxend;
     private GameUI gui;
-    private boolean ridingHorse = false;
-    private boolean carryingObject = false;
 
     private Dbg dbg;
     private final static boolean DEBUG = false;
@@ -56,6 +54,32 @@ public class Map {
         this.gui = gui;
         dbg = new Dbg(DEBUG);
         dbg.init();
+
+        way = plbbox + 2;
+        clr = way + 1;
+        if (gui.map.player() != null) {
+            ArrayList<String> poses = new ArrayList<>();
+            Drawable d = gui.map.player().getattr(Drawable.class);
+
+            if(d instanceof Composite) {
+                Composite comp = (Composite)d;
+                for(ResData rd:comp.prevposes) {
+                    try {
+                        poses.add(rd.res.get().name);
+                    } catch(Loading l) {
+
+                    }
+                }
+            }
+
+            for ( String pose : poses
+            ) {
+                if (pose.toLowerCase().contains("riding")) {
+                    way = plbbox + 4;
+                    clr = way + 1;
+                }
+            }
+        }
     }
 
     private void initGeography() {
