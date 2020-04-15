@@ -63,7 +63,7 @@ public class PBotGob {
 	 * @param meshId can be a door, roasting spit etc.
 	 */
 	public void doClick(int button, int mod, int meshId) {
-		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
+		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, mod, 0, (int) gob.id, gob.rc.floor(posres), 0,
 				meshId);
 	}
 
@@ -73,7 +73,7 @@ public class PBotGob {
 	 * @param mod 0 = no modifier, 1 = shift, 2 = ctrl, 4 = alt
 	 */
 	public void doClick(int button, int mod) {
-		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
+		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, mod, 0, (int) gob.id, gob.rc.floor(posres), 0,
 				-1);
 	}
 

@@ -20,7 +20,7 @@ public class BotUtils {
 	// Button 1 = Left click and 3 = right click
 	// Modifier 1 - shift; 2 - ctrl; 4 - alt;
 	public static void doClick(Gob gob, int button, int mod) {
-		gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
+		gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, mod, 0, (int) gob.id, gob.rc.floor(posres), 0,
 				-1);
 	}
 	
