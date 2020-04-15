@@ -32,7 +32,7 @@ public class Speedget extends Widget {
     public static final Tex imgs[][];
     public static final String tips[];
     public static final Coord tsz;
-    public int cur, max;
+    public static int cur, max;
     public boolean runonloginset;
     public static int SpeedToSet = -1;
 

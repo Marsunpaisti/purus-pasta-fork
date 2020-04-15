@@ -28,8 +28,9 @@ package haven;
 
 import haven.purus.mapper.Mapper;
 import haven.resutil.BPRadSprite;
-import integrations.mapv4.MappingClient;
+import haven.resutil.WaterTile;
 import integrations.map.Navigation;
+import integrations.mapv4.MappingClient;
 
 import java.awt.*;
 import java.util.*;
@@ -63,7 +64,9 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     private Overlay bowvector = null;
     private static final Material.Colors dframeEmpty = new Material.Colors(new Color(87, 204, 73, 255));
     private static final Material.Colors dframeDone = new Material.Colors(new Color(209, 42, 42, 255));
-    private static final Material.Colors potDOne = new Material.Colors(new Color(0, 0, 0, 255));
+	private static final Material.Colors ttEmpty = new Material.Colors(new Color(209, 42, 42, 255));
+	private static final Material.Colors ttDone = new Material.Colors(new Color(87, 204, 73, 255));
+    private static final Material.Colors potDone = new Material.Colors(new Color(0, 0, 0, 255));
     private static final Gob.Overlay animalradius = new Gob.Overlay(new BPRadSprite(100.0F, -10.0F, BPRadSprite.smatDanger));
     private static final Map<Gob, Gob.Overlay> playerhighlight = new HashMap<Gob, Gob.Overlay>();
     public Boolean knocked = null;  // knocked will be null if pose update request hasn't been received yet
@@ -73,7 +76,7 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
         OTHER(0), DFRAME(1), TREE(2), BUSH(3), BOULDER(4), PLAYER(5), SIEGE_MACHINE(6), MAMMOTH(7), OLDTRUNK(9), GARDENPOT(10), MUSSEL(11), LOC_RESOURCE(12), FU_YE_CURIO(13), SEAL(14), EAGLE(15),
         PLANT(16), MULTISTAGE_PLANT(17), PLANT_FALLOW(18),
         MOB(32), WOLF(33), BEAR(34), LYNX(35), WILDGOAT(36), TROLL(38), WALRUS(39), BAT(40), CAVERAT(41),
-        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), WAGON(600), WALL(602), DREAMCATCHER(603), HOUSE(604);
+        WOODEN_SUPPORT(64), STONE_SUPPORT(65), METAL_SUPPORT(66), TROUGH(67), BEEHIVE(68), WAGON(600), WALL(602), DREAMCATCHER(603), HOUSE(604), TT(1024);
 
         public final int value;
 
@@ -532,6 +535,8 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
             type = Type.FU_YE_CURIO;
         else if (Config.locres.contains(name))
             type = Type.LOC_RESOURCE;
+        else if(name.endsWith("/ttub"))
+        	type = Type.TT;
         else
             type = Type.OTHER;
     }
@@ -576,8 +581,19 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 rl.prepc(dframeEmpty);
         }
 
+        if(Config.showdframestatus && type == Type.TT) {
+			GAttrib rd = getattr(ResDrawable.class);
+			if(rd != null) {
+				int r = ((ResDrawable) rd).sdt.peekrbuf(0);
+				if((r&(0x8)) == 0x8)
+					rl.prepc(ttDone);
+				else if((r&(0x4)) == 0)
+					rl.prepc(ttEmpty);
+			}
+		}
+
         if (Config.highlightpots && type == Type.GARDENPOT && ols.size() == 2)
-            rl.prepc(potDOne);
+            rl.prepc(potDone);
 
         GobHighlight highlight = getattr(GobHighlight.class);
         if (highlight != null) {
@@ -853,6 +869,13 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
                 c.y = -c.y;
                 if (Config.disableelev)
                     c.z = 0;
+				if(knocked != null && knocked) {
+					try {
+						if(glob.map.tiler(glob.map.gettile(rc.floor(MCache.tilesz))) instanceof WaterTile) {
+							c.z += 5;
+						}
+					} catch(Loading l) {}
+				}
                 if ((this.c == null) || !c.equals(this.c))
                     xl.update(Transform.makexlate(new Matrix4f(), this.c = c));
                 if (this.a != Gob.this.a)
@@ -912,12 +935,16 @@ public class Gob implements Sprite.Owner, Skeleton.ModOwner, Rendered {
     }
 
     public int getStage() {
-        Resource res = getres();
-        if (res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
-	    	GAttrib rd = getattr(ResDrawable.class);
-	    	final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
-	        return stage;
-        } else
-        	return -1;
+    	try {
+			Resource res = getres();
+			if(res != null && res.name.startsWith("gfx/terobjs/plants") && !res.name.endsWith("trellis")) {
+				GAttrib rd = getattr(ResDrawable.class);
+				final int stage = ((ResDrawable) rd).sdt.peekrbuf(0);
+				return stage;
+			} else
+				return -1;
+		} catch(Loading l) {
+    		return -1;
+		}
     }
 }

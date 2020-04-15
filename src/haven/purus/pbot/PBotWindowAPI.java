@@ -2,26 +2,45 @@ package haven.purus.pbot;
 
 import haven.*;
 
+import java.util.ArrayList;
+
 public class PBotWindowAPI {
 
 	/**
 	 * Wait for a window with a specific name to appear
 	 * @param windowName Name of the window
+	 * @param timeout Timeout in milliseconds to wait for the window to appear
+	 * @return Returns the window or null if not found
 	 */
-	public static void waitForWindow(String windowName) {
-		while (PBotAPI.gui.getwnd(windowName) == null) {
-			PBotUtils.sleep(50);
+	public static Window waitForWindow(String windowName, long timeout) {
+		Window window;
+		int retries = 0;
+		while((window = PBotAPI.gui.getwnd(windowName)) == null) {
+			if(retries*25 >= timeout) {
+				return null;
+			}
+			retries++;
+			PBotUtils.sleep(25);
 		}
+		return window;
 	}
 
 	/**
 	 * Wait for a window with a specific name to disappear
+	 * @param timeout in milliseconds
 	 * @param windowName Name of the window
+	 * @return false if the window did not close before the timeout (it may or may not still close in the future)
 	 */
-	public static void waitForWindowClose(String windowName) {
+	public static boolean waitForWindowClose(String windowName, long timeout) {
+		int retries = 0;
 		while (PBotAPI.gui.getwnd(windowName) != null) {
+			if(retries*25 >= timeout) {
+				return false;
+			}
+			retries++;
 			PBotUtils.sleep(50);
 		}
+		return true;
 	}
 
 	/**
@@ -41,19 +60,19 @@ public class PBotWindowAPI {
 		window.reqdestroy();
 	}
 
-
 	/**
-	 * Tries to find an inventory attached to the given window, such as cupboard
-	 * @param window Window to look inventory from
-	 * @return Inventory of the window or null if not found
+	 * Tries to find an inventories attached to the given window, such as cupboard
+	 * @param window Window to check for inventories
+	 * @return List of inventories of the window, empty if not found
 	 */
-	public static PBotInventory getInventory(Window window) {
+	public static ArrayList<PBotInventory> getInventories(Window window) {
+		ArrayList<PBotInventory> inventories = new ArrayList<>();
 		for(Widget wdg = window.lchild; wdg!=null; wdg = wdg.prev) {
 			if(wdg instanceof Inventory) {
-				return new PBotInventory((Inventory) wdg);
+				inventories.add(new PBotInventory((Inventory) wdg));
 			}
 		}
-		return null;
+		return inventories;
 	}
 
 	/**
@@ -95,7 +114,7 @@ public class PBotWindowAPI {
 	}
 
 	/**
-	 * Attemps to get items from the stockpile that is currently open
+	 * Attempts to get items from the stockpile that is currently open
 	 * @param count How many items to take
 	 */
 	public static void takeItemsFromStockpile(int count) {
@@ -113,7 +132,7 @@ public class PBotWindowAPI {
 	}
 
 	/**
-	 * Put a item from hand to a stockpile window that is currently open
+	 * Put an item from the hand to a stockpile window that is currently open
 	 */
 	public static void putItemFromHandToStockpile() {
 		Window wnd = getWindow("Stockpile");
@@ -129,15 +148,15 @@ public class PBotWindowAPI {
 	}
 
 	/**
-	 * Get amount at a meter of the window, from 0 to 100, for example, a trough
-	 * @return Meter amount, -1 if not meter found
+	 * Get amounts of meters of the window, from 0 to 100, some windows may have more than 1 meter, like chicken coops
+	 * @return List containing amounts of the meters that were found
 	 */
-	public static int getAmount(Window window) {
-		VMeter vm = window.getchild(VMeter.class);
-		if(vm == null)
-			return -1;
-		else
-			return vm.amount;
+	public static ArrayList<Integer> getAmounts(Window window) {
+		ArrayList<Integer> amounts = new ArrayList<>();
+		for(VMeter vm:window.getchilds(VMeter.class)) {
+			amounts.add(vm.amount);
+		}
+		return amounts;
 	}
 
 	/**

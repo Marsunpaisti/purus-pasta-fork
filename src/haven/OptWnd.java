@@ -26,22 +26,16 @@
 
 package haven;
 
-import integrations.mapv4.MappingClient;
-
 import haven.purus.Iconfinder;
+import integrations.mapv4.MappingClient;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.prefs.BackingStoreException;
@@ -766,7 +760,7 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
-        appender.add(new CheckBox("Highlight empty/finished drying frames") {
+        appender.add(new CheckBox("Highlight empty/finished drying frames and tanning tubs") {
             {
                 a = Config.showdframestatus;
             }
@@ -1050,6 +1044,17 @@ public class OptWnd extends Window {
                 a = val;
             }
         });
+		appender.add(new CheckBox("Colorful cavein dust") {
+			{
+				a = Config.colorfulCavein;
+			}
+
+			public void set(boolean val) {
+				Utils.setprefb("colorfulCavein", val);
+				Config.colorfulCavein = val;
+				a = val;
+			}
+		});
        /* Always send
         appender.add(new CheckBox("Send food details to the food service (https://food.havenandhearth.link)") {
             {

@@ -1,5 +1,24 @@
 ## Changelog
 
+### 3.20.0
+    - Added status colors to tanning tubs
+    - Added butcher script
+    - Fixed graalvm regex library
+### 3.19.1
+    - Added more info about meshids to PBot api
+### 3.19.0
+    - Added option for colorful cavein dust
+    - Added queued movements for loftars map
+    - Allow binding of PBot scripts to FBelts
+    - Cavein dust now persists for ~30 minutes
+    - Knocked out animals should now be higher on water
+    - Made dowsing slices persist
+    - Made flowerpicker-extension faster
+    - Made questgiver widget draggable
+    - Minor fixes
+    - PBot updated to use graal v20
+    - Resize PBot scriptlist icons
+    - Some refactoring of PBot API functions (major changes for some functions)
 ### 3.18.12
     - Added proximity aggro options for players and kritters
     - Fixed "idle animals" animation disable

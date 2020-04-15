@@ -4,6 +4,7 @@ import haven.*;
 import haven.purus.gobText;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static haven.OCache.posres;
 
@@ -26,7 +27,6 @@ public class PBotGob {
 			return false;
 	}
 
-
 	/**
 	 * Itemact with gob, to fill trough with item in hand for example
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
@@ -39,9 +39,32 @@ public class PBotGob {
 	 * Add cool hovering text above gob
 	 * @param text text to add
 	 * @param height height that the hext hovers at
+	 * @return Returns id of the text, which can be used to remove the text with removeGobText
 	 */
-	public void addGobText(String text, int height) {
-		gob.addol(new gobText(text, height));
+	public int addGobText(String text, int height) {
+		Gob.Overlay ol = new Gob.Overlay(new gobText(text, height));
+		gob.addol(ol);
+		return ol.id;
+	}
+
+	/**
+	 * Remove an added hovering text from gob that was added with addGobText
+	 * @param id Id of the gobtext
+	 */
+	public void removeGobText(int id) {
+		gob.ols.remove(gob.findol(id));
+		PBotAPI.gui.map.glob.oc.changed(gob);
+	}
+
+	/**
+	 * Click the gob
+	 * @param button 1 = Left click, 3 = Right click
+	 * @param mod 0 = no modifier, 1 = shift, 2 = ctrl, 4 = alt
+	 * @param meshId can be a door, roasting spit etc.
+	 */
+	public void doClick(int button, int mod, int meshId) {
+		PBotAPI.gui.map.wdgmsg("click", Coord.z, gob.rc.floor(posres), button, 0, mod, (int) gob.id, gob.rc.floor(posres), 0,
+				meshId);
 	}
 
 	/**
@@ -104,20 +127,25 @@ public class PBotGob {
 	}
 
 	/**
-	 * Highlights the gob by Alt+Clicking it
+	 * Toggle whether the gob should be marked or not
 	 */
-	public void highlightGob() {
-		doClick(0, 4);
+	public void toggleMarked() {
+		if(MapView.markedGobs.contains(gob.id))
+			MapView.markedGobs.remove(gob.id);
+		else
+			MapView.markedGobs.add(gob.id);
+		PBotAPI.gui.map.glob.oc.changed(gob);
 	}
 
 	/**
 	 * Click a gob with pathfinder, with given button, wait until pathfinder is finished
 	 * @param btn 1 = left click, 3 = right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @param meshId meshid to click
 	 * @return True if path was found, or false if not
 	 */
-	public boolean pfClick(int btn, int mod) {
-		PBotAPI.gui.map.purusPfRightClick(gob, -1, btn, mod, null);
+	public boolean pfClick(int btn, int mod, int meshId) {
+		PBotAPI.gui.map.purusPfRightClick(gob, meshId, btn, mod, null);
 		try {
 			PBotAPI.gui.map.pastaPathfinder.join();
 		} catch(InterruptedException e) {
@@ -129,6 +157,16 @@ public class PBotGob {
 	}
 
 	/**
+	 * Click a gob with pathfinder, with given button, wait until pathfinder is finished
+	 * @param btn 1 = left click, 3 = right click
+	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
+	 * @return True if path was found, or false if not
+	 */
+	public boolean pfClick(int btn, int mod) {
+		return pfClick(btn, mod, -1);
+	}
+
+	/**
 	 * Check if the object is moving
 	 * @return Returns true if gob is moving, false otherwise
 	 */
@@ -137,6 +175,18 @@ public class PBotGob {
 			return false;
 		else
 			return true;
+	}
+
+	/**
+	 * Get speed of this gob if it is moving
+	 * @return Speed of the gob, -1 if not moving object
+	 */
+	public double getSpeed() {
+		LinMove lm = gob.getLinMove();
+		if(lm == null)
+			return -1;
+		else
+			return lm.getv();
 	}
 
 	/**
@@ -158,6 +208,67 @@ public class PBotGob {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * Get overlays of the gob, get meshId with getOverlyId
+	 * @return List containing resnames of the overlays
+	 */
+	public List<String> getOverlayNames() {
+		List<String> ret = new ArrayList<>();
+		for (Gob.Overlay ol : gob.ols) {
+			try {
+				Indir<Resource> olires = ol.res;
+				ret.add(olires.get().name);
+			} catch (Loading l) {
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Return meshId of the overlay with given resname
+	 * @param overlayName Exact match
+	 * @return Meshid of the overlay -1 if not found
+	 */
+	public int getOverlayId(String overlayName) {
+		for (Gob.Overlay ol : gob.ols) {
+			try {
+				Indir<Resource> olires = ol.res;
+				if(olires.get().name.equals(overlayName)) {
+					return ol.id;
+				}
+			} catch (Loading l) {
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Sdt may tell information about things such as tanning tub state, crop stage etc.
+	 * @return sdt of the gob, -1 if not found
+	 */
+	public int getSdt() {
+		try {
+			Resource res = gob.getres();
+			if (res != null) {
+				GAttrib rd = gob.getattr(ResDrawable.class);
+				return ((ResDrawable) rd).sdt.peekrbuf(0);
+			}
+		} catch(Loading l) {
+		}
+		return -1;
+	}
+
+	/**
+	 * Is the gob knocked out/dead
+	 * @return True if animal is knocked out, false if not
+	 */
+	public boolean isKnocked() {
+		if(gob.knocked == null)
+			return false;
+		else
+			return gob.knocked;
 	}
 
 	/**

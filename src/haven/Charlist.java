@@ -27,6 +27,7 @@
 package haven;
 
 import haven.purus.mapper.Mapper;
+import haven.purus.pbot.PBotAPI;
 import integrations.map.Navigation;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class Charlist extends Widget {
     public Charlist(int height) {
         super(Coord.z);
         this.height = height;
+        PBotAPI.charlist = this;
         y = 0;
         setcanfocus(true);
         sau = adda(new IButton("gfx/hud/buttons/csau", "u", "d", "o") {

@@ -1,10 +1,10 @@
 package haven.purus.pbot;
 
-import haven.*;
 import haven.Window;
 import haven.automation.GobSelectCallback;
 import haven.paisti.PaistiPathfinder;
 import haven.pathfinder.Edge;
+import haven.*;
 import haven.purus.BotUtils;
 import haven.purus.DrinkWater;
 import haven.purus.ItemClickCallback;
@@ -24,6 +24,7 @@ public class PBotUtils {
 
 	/**
 	 * Sleep for t milliseconds
+	 * 
 	 * @param t Time to wait in milliseconds
 	 */
 	public static void sleep(int t) {
@@ -36,6 +37,7 @@ public class PBotUtils {
 
 	/**
 	 * Right click a gob with pathfinder, wait until pathfinder is finished
+	 * 
 	 * @param gob Gob to right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
 	 * @return False if path was not found, true if it was found
@@ -44,10 +46,10 @@ public class PBotUtils {
 		PBotAPI.gui.map.purusPfRightClick(gob.gob, -1, 3, mod, null);
 		try {
 			PBotAPI.gui.map.pastaPathfinder.join();
-		} catch(InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		synchronized(PBotAPI.gui.map) {
+		synchronized (PBotAPI.gui.map) {
 			return PBotAPI.gui.map.foundPath;
 		}
 	}
@@ -64,10 +66,12 @@ public class PBotUtils {
 		if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
 			return null;
 
-		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), gob, -1, clickb, modflags,null);
+		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), gob, -1, clickb, modflags,
+				null);
 		Iterable<Edge> path = pf.getPath(player.rc.floor(), 2);
 
-		if (path == null) return null;
+		if (path == null)
+			return null;
 
 		return pf;
 	}
@@ -85,17 +89,19 @@ public class PBotUtils {
 
 		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), action);
 		Iterable<Edge> path = pf.getPath(player.rc.floor(), 2);
-		if (path == null) return null;
+		if (path == null)
+			return null;
 		return pf;
 	}
 
-	//Launches the pathfinder with path given by paistiPfLeftClickPath/paistiPfRightClickPath
-	public static void executePaistiPfWalk(PaistiPathfinder pf){
+	// Launches the pathfinder with path given by
+	// paistiPfLeftClickPath/paistiPfRightClickPath
+	public static void executePaistiPfWalk(PaistiPathfinder pf) {
 		Gob player = PBotAPI.gui.map.player();
 		if (player == null)
 			return;
 
-		if (PBotAPI.gui.map.paistiPf != null){
+		if (PBotAPI.gui.map.paistiPf != null) {
 			synchronized (PBotAPI.gui.map.paistiPf) {
 				PBotAPI.gui.map.paistiPf.terminate = true;
 				PBotAPI.gui.map.paistiPfThread.interrupt();
@@ -111,14 +117,15 @@ public class PBotUtils {
 
 	/**
 	 * Chooses a petal with given label from a flower menu that is currently open
+	 * 
 	 * @param name Name of petal to open
 	 * @return False if petal or flower menu with name could not be found
 	 */
 	public static boolean choosePetal(String name) {
 		FlowerMenu menu = PBotAPI.gui.ui.root.findchild(FlowerMenu.class);
-		if(menu != null) {
-			for(FlowerMenu.Petal opt : menu.opts) {
-				if(opt.name.equals(name)) {
+		if (menu != null) {
+			for (FlowerMenu.Petal opt : menu.opts) {
+				if (opt.name.equals(name)) {
 					menu.choose(opt);
 					menu.destroy();
 					return true;
@@ -129,17 +136,18 @@ public class PBotUtils {
 	}
 
 	/**
-	 * Closes flowermenu, if it is open
+	 * Wait for the flowermenu to close
 	 */
 	public static void waitFlowermenuClose() {
-		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null)
+		while (PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null)
 			sleep(25);
 	}
 
 	/**
 	 * Click some place on map
-	 * @param x x-coordinate
-	 * @param y y-coordinate
+	 * 
+	 * @param x   x-coordinate
+	 * @param y   y-coordinate
 	 * @param btn 1 = left click, 3 = right click
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
 	 */
@@ -151,12 +159,13 @@ public class PBotUtils {
 	 * Use item in hand to ground below player, for example, to plant carrot
 	 */
 	public static void mapInteractClick() {
-		PBotAPI.gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(), PBotGobAPI.player().getRcCoords().floor(posres), 3, PBotAPI.gui.ui.modflags());
+		PBotAPI.gui.map.wdgmsg("itemact", PBotUtils.getCenterScreenCoord(),
+				PBotGobAPI.player().getRcCoords().floor(posres), 3, PBotAPI.gui.ui.modflags());
 	}
-
 
 	/**
 	 * Coordinates of the center of the screen
+	 * 
 	 * @return Coordinates of the center of the screen
 	 */
 	public static Coord getCenterScreenCoord() {
@@ -167,9 +176,9 @@ public class PBotUtils {
 		return sc;
 	}
 
-
 	/**
 	 * Left click to somewhere with pathfinder, wait until pathfinder is finished
+	 * 
 	 * @param x X-Coordinate
 	 * @param y Y-Coordinate
 	 * @return False if path was not found, true if it was found
@@ -178,24 +187,24 @@ public class PBotUtils {
 		PBotAPI.gui.map.purusPfLeftClick(new Coord2d(x, y), null);
 		try {
 			PBotAPI.gui.map.pastaPathfinder.join();
-		} catch(InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		synchronized(PBotAPI.gui.map) {
+		synchronized (PBotAPI.gui.map) {
 			return PBotAPI.gui.map.foundPath;
 		}
 	}
 
 	/**
 	 * Starts crafting item with the given name
-	 * @param name Name of the item ie. "clogs"
+	 * 
+	 * @param name    Name of the item ie. "clogs"
 	 * @param makeAll 0 To craft once, 1 to craft all
 	 */
 	public static void craftItem(String name, int makeAll) {
 		openCraftingWnd(name);
-		loop:
-		while(true) {
-			for(Widget w : PBotAPI.gui.ui.widgets.values()) {
+		loop: while (true) {
+			for (Widget w : PBotAPI.gui.ui.widgets.values()) {
 				if (w instanceof Makewindow) {
 					PBotAPI.gui.wdgmsg(w, "make", makeAll);
 					break loop;
@@ -209,7 +218,7 @@ public class PBotUtils {
 	 * Waits for flower menu to appear
 	 */
 	public static void waitForFlowerMenu() {
-		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) == null) {
+		while (PBotAPI.gui.ui.root.findchild(FlowerMenu.class) == null) {
 			BotUtils.sleep(15);
 		}
 	}
@@ -219,18 +228,18 @@ public class PBotUtils {
 	 */
 	public static void closeFlowermenu() {
 		FlowerMenu menu = PBotAPI.gui.ui.root.findchild(FlowerMenu.class);
-		if(menu != null) {
+		if (menu != null) {
 			menu.choose(null);
 			menu.destroy();
 		}
-		while(PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null) {
+		while (PBotAPI.gui.ui.root.findchild(FlowerMenu.class) != null) {
 			BotUtils.sleep(15);
 		}
 	}
 
 	/**
-	 * Waits for the hourglass timer when crafting or drinking for example
-	 * Also waits until the hourglass has been seen to change at least once
+	 * Waits for the hourglass timer when crafting or drinking for example Also
+	 * waits until the hourglass has been seen to change at least once
 	 */
 	public static void waitForHourglass() {
 		double prog = PBotAPI.gui.prog;
@@ -244,16 +253,17 @@ public class PBotUtils {
 	}
 
 	/**
-	 * Waits for the hourglass timer when crafting or drinking for example
-	 * Also waits until the hourglass has been seen to change at least once
-	 * If hourglass does not appear within timeout, returns false, else true
+	 * Waits for the hourglass timer when crafting or drinking for example Also
+	 * waits until the hourglass has been seen to change at least once If hourglass
+	 * does not appear within timeout, returns false, else true
+	 * 
 	 * @param timeout Timeout in milliseconds
 	 */
 	public static boolean waitForHourglass(int timeout) {
 		double prog = PBotAPI.gui.prog;
 		int retries = 0;
-		while(prog == PBotAPI.gui.prog) {
-			if(retries > timeout/5)
+		while (prog == PBotAPI.gui.prog) {
+			if (retries > timeout / 5)
 				return false;
 			retries++;
 			prog = PBotAPI.gui.prog;
@@ -266,30 +276,35 @@ public class PBotUtils {
 	}
 
 	/**
-	 * Returns value of hourglass, -1 = no hourglass, else the value between 0.0 and 1.0
+	 * Returns value of hourglass, -1 = no hourglass, else the value between 0.0 and
+	 * 1.0
+	 * 
 	 * @return value of hourglass
 	 */
 	public static double getHourglass() {
 		return PBotAPI.gui.prog;
 	}
 
-	// TODO: Return false if drinking was not successful (no water found for example)
+	// TODO: Return false if drinking was not successful (no water found for
+	// example)
 	/**
-	 * Attempts to drink water by using the same water drinking script as in extensions
+	 * Attempts to drink water by using the same water drinking script as in
+	 * extensions
+	 * 
 	 * @param wait Wait for the drinking to finish
 	 */
 	public static boolean drink(boolean wait) {
-		if(!PBotAPI.gui.drinkingWater) {
+		if (!PBotAPI.gui.drinkingWater) {
 			Thread t = new Thread(new DrinkWater(PBotAPI.gui));
 			t.start();
-			if(wait) {
+			if (wait) {
 				try {
 					t.join();
-					if(!PBotAPI.gui.lastDrinkingSucessful) {
+					if (!PBotAPI.gui.lastDrinkingSucessful) {
 						sysMsg("PBotUtils Warning: Couldn't drink, didn't find anything to drink!", Color.ORANGE);
 						return false;
 					}
-				} catch(InterruptedException e) {
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				waitForHourglass();
@@ -300,20 +315,22 @@ public class PBotUtils {
 
 	/**
 	 * Opens the crafting window for given item
+	 * 
 	 * @param name Name of craft for wdgmsg
 	 */
 	public static void openCraftingWnd(String name) {
 		// Close current window and wait for it to close
 		Window wnd = PBotWindowAPI.getWindow("Crafting");
-		if(wnd != null)
+		if (wnd != null)
 			PBotWindowAPI.closeWindow(wnd);
-		PBotWindowAPI.waitForWindowClose("Crafting");
+		PBotWindowAPI.waitForWindowClose("Crafting", 1000 * 1000);
 		PBotAPI.gui.wdgmsg("act", "craft", name);
-		PBotWindowAPI.waitForWindow("Crafting");
+		PBotWindowAPI.waitForWindow("Crafting", 1000 * 1000);
 	}
 
 	/**
 	 * Send a system message to the user
+	 * 
 	 * @param str Message to send
 	 */
 	public static void sysMsg(String str) {
@@ -322,6 +339,7 @@ public class PBotUtils {
 
 	/**
 	 * Send a system message to the user
+	 * 
 	 * @param str Message to send
 	 * @param col Color of the text
 	 */
@@ -331,10 +349,11 @@ public class PBotUtils {
 
 	/**
 	 * Send a system message to the user
+	 * 
 	 * @param str Message to send
-	 * @param r Amount of red colour in the text
-	 * @param g Amount of green colour in the text
-	 * @param b Amount of blue colour in the text
+	 * @param r   Amount of red colour in the text
+	 * @param g   Amount of green colour in the text
+	 * @param b   Amount of blue colour in the text
 	 */
 	public static void sysMsg(String str, int r, int g, int b) {
 		PBotAPI.gui.msg(str, new Color(r, g, b));
@@ -342,6 +361,7 @@ public class PBotUtils {
 
 	/**
 	 * Returns the players inventory
+	 * 
 	 * @return Inventory of the player
 	 */
 	public static PBotInventory playerInventory() {
@@ -350,14 +370,15 @@ public class PBotUtils {
 
 	/**
 	 * Returns all open inventories
+	 * 
 	 * @return List of inventories
 	 */
 	public static ArrayList<PBotInventory> getAllInventories() {
 		ArrayList<PBotInventory> ret = new ArrayList<>();
-		for(Widget window = PBotAPI.gui.lchild; window != null; window = window.prev) {
-			if(window instanceof Window) {
-				for(Widget wdg = window.lchild; wdg != null; wdg = wdg.prev) {
-					if(wdg instanceof Inventory) {
+		for (Widget window = PBotAPI.gui.lchild; window != null; window = window.prev) {
+			if (window instanceof Window) {
+				for (Widget wdg = window.lchild; wdg != null; wdg = wdg.prev) {
+					if (wdg instanceof Inventory) {
 						ret.add(new PBotInventory((Inventory) wdg));
 					}
 				}
@@ -368,10 +389,11 @@ public class PBotUtils {
 
 	/**
 	 * Create a PBotWindow object, See PBotWindow for usage
-	 * @param title Title of the window
+	 * 
+	 * @param title  Title of the window
 	 * @param height Height of the window
-	 * @param width Width of the window
-	 * @param id scriptID variable of the script
+	 * @param width  Width of the window
+	 * @param id     scriptID variable of the script
 	 * @return PBotWindow object
 	 */
 	public static PBotWindow PBotWindow(String title, int height, int width, String id) {
@@ -382,40 +404,41 @@ public class PBotUtils {
 
 	/**
 	 * Returns the item currently in the hand
+	 * 
 	 * @return Item at hand
 	 */
 	public static PBotItem getItemAtHand() {
-		if(PBotAPI.gui.vhand == null)
+		if (PBotAPI.gui.vhand == null)
 			return null;
 		else
 			return new PBotItem(PBotAPI.gui.vhand);
 	}
 
-
 	/**
 	 * Drops an item from the hand and waits until it has been dropped
+	 * 
 	 * @param mod 1 = shift, 2 = ctrl, 4 = alt
 	 */
 	public static void dropItemFromHand(int mod) {
 		PBotAPI.gui.map.wdgmsg("drop", Coord.z, PBotAPI.gui.map.player().rc.floor(posres), mod);
-		while(getItemAtHand() != null)
+		while (getItemAtHand() != null)
 			sleep(25);
 	}
 
 	/**
-	 * Activate area selection by dragging.
-	 * To get coordinates of the area selected, use getSelectedAreaA and getSelectedAreaB
-	 * User can select an area by dragging
+	 * Activate area selection by dragging. To get coordinates of the area selected,
+	 * use getSelectedAreaA and getSelectedAreaB User can select an area by dragging
 	 */
 	public static void selectArea() {
 		sysMsg("Please select an area by dragging!", Color.ORANGE);
 		PBotAPI.gui.map.PBotAPISelect = true;
-		while(PBotAPI.gui.map.PBotAPISelect)
+		while (PBotAPI.gui.map.PBotAPISelect)
 			sleep(25);
 	}
 
 	/**
 	 * Get A point of the rectangle selected with selectArea()
+	 * 
 	 * @return A-Point of the rectangle
 	 */
 	public static Coord getSelectedAreaA() {
@@ -424,6 +447,7 @@ public class PBotUtils {
 
 	/**
 	 * Get B point of the rectangle selected with selectArea()
+	 * 
 	 * @return B-Point of the rectangle
 	 */
 	public static Coord getSelectedAreaB() {
@@ -441,6 +465,7 @@ public class PBotUtils {
 
 	/**
 	 * Returns a list of gobs in the rectangle between A and B points
+	 * 
 	 * @param a A-point of the rectangle
 	 * @param b B-point of the rectangle
 	 * @return List of gobs in the area, sorted to zig-zag pattern
@@ -452,9 +477,9 @@ public class PBotUtils {
 		double smallX = a.x < b.x ? a.x : b.x;
 		double bigY = a.y > b.y ? a.y : b.y;
 		double smallY = a.y < b.y ? a.y : b.y;
-		synchronized(PBotAPI.gui.ui.sess.glob.oc) {
-			for(Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
-				if(gob.rc.x <= bigX && gob.rc.x >= smallX && gob.getres() != null && gob.rc.y <= bigY
+		synchronized (PBotAPI.gui.ui.sess.glob.oc) {
+			for (Gob gob : PBotAPI.gui.ui.sess.glob.oc) {
+				if (gob.rc.x <= bigX && gob.rc.x >= smallX && gob.getres() != null && gob.rc.y <= bigY
 						&& gob.rc.y >= smallY) {
 					gobs.add(new PBotGob(gob));
 				}
@@ -466,6 +491,7 @@ public class PBotUtils {
 
 	/**
 	 * Resource name of the tile in the given location
+	 * 
 	 * @param x X-Coord of the location (rc coord)
 	 * @param y Y-Coord of the location (rc coord)
 	 * @return
@@ -475,11 +501,11 @@ public class PBotUtils {
 			Coord loc = new Coord(x, y);
 			int t = PBotAPI.gui.map.glob.map.gettile(loc.div(11));
 			Resource res = PBotAPI.gui.map.glob.map.tilesetr(t);
-			if(res != null)
+			if (res != null)
 				return res.name;
 			else
 				return null;
-		} catch(Loading l) {
+		} catch (Loading l) {
 
 		}
 		return null;
@@ -490,25 +516,29 @@ public class PBotUtils {
 		public int compare(PBotGob a, PBotGob b) {
 			if (a.gob.rc.floor().x == b.gob.rc.floor().x) {
 				if (a.gob.rc.floor().x % 2 == 0)
-					return (a.gob.rc.floor().y <b.gob.rc.floor().y) ? 1 : (a.gob.rc.floor().y >b.gob.rc.floor().y) ? -1 : 0;
+					return (a.gob.rc.floor().y < b.gob.rc.floor().y) ? 1
+							: (a.gob.rc.floor().y > b.gob.rc.floor().y) ? -1 : 0;
 				else
-					return (a.gob.rc.floor().y <b.gob.rc.floor().y) ? -1 : (a.gob.rc.floor().y >b.gob.rc.floor().y) ? 1 : 0;
+					return (a.gob.rc.floor().y < b.gob.rc.floor().y) ? -1
+							: (a.gob.rc.floor().y > b.gob.rc.floor().y) ? 1 : 0;
 			} else
-				return (a.gob.rc.floor().x <b.gob.rc.floor().x) ? -1 : (a.gob.rc.floor().x > b.gob.rc.floor().x) ? 1 : 0;
+				return (a.gob.rc.floor().x < b.gob.rc.floor().x) ? -1
+						: (a.gob.rc.floor().x > b.gob.rc.floor().x) ? 1 : 0;
 		}
 	}
 
 	/**
-	 * Next click to item in inventory returns the item, the function will wait until this happens
+	 * Next click to item in inventory returns the item, the function will wait
+	 * until this happens
 	 */
 	public static PBotItem selectItem() {
 		synchronized (ItemClickCallback.class) {
 			BotUtils.gui.registerItemCallback(new ItemCb());
 		}
-		while(itemSelectWait) {
+		while (itemSelectWait) {
 			PBotUtils.sleep(25);
 		}
-		synchronized(ItemClickCallback.class) {
+		synchronized (ItemClickCallback.class) {
 			BotUtils.gui.unregisterItemCallback();
 		}
 		return selectedItem;
