@@ -3,6 +3,8 @@ package haven.purus.pbot;
 import haven.*;
 import haven.Window;
 import haven.automation.GobSelectCallback;
+import haven.paisti.PaistiPathfinder;
+import haven.pathfinder.Edge;
 import haven.purus.BotUtils;
 import haven.purus.DrinkWater;
 import haven.purus.ItemClickCallback;
@@ -50,6 +52,61 @@ public class PBotUtils {
 		}
 	}
 
+	public PaistiPathfinder getPaistiPfGobClick(Gob gob, int clickb, int modflags) {
+		Gob player = PBotAPI.gui.map.player();
+		if (player == null)
+			return null;
+
+		Coord src = player.rc.floor();
+		int gcx = haven.pathfinder.Map.origin - (src.x - gob.rc.floor().x);
+		int gcy = haven.pathfinder.Map.origin - (src.y - gob.rc.floor().y);
+		if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
+			return null;
+
+		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), gob, -1, clickb, modflags,null);
+		Iterable<Edge> path = pf.getPath(player.rc.floor(), 2);
+
+		if (path == null) return null;
+
+		return pf;
+	}
+
+	public PaistiPathfinder getPaistiPfLeftClick(Coord mc, String action) {
+		Gob player = PBotAPI.gui.map.player();
+		if (player == null)
+			return null;
+
+		Coord src = player.rc.floor();
+		int gcx = haven.pathfinder.Map.origin - (src.x - mc.x);
+		int gcy = haven.pathfinder.Map.origin - (src.y - mc.y);
+		if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
+			return null;
+
+		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), action);
+		Iterable<Edge> path = pf.getPath(player.rc.floor(), 2);
+		if (path == null) return null;
+		return pf;
+	}
+
+	//Launches the pathfinder with path given by paistiPfLeftClickPath/paistiPfRightClickPath
+	public void executePaistiPfWalk(PaistiPathfinder pf){
+		Gob player = PBotAPI.gui.map.player();
+		if (player == null)
+			return;
+
+		if (PBotAPI.gui.map.paistiPf != null){
+			synchronized (PBotAPI.gui.map.paistiPf) {
+				PBotAPI.gui.map.paistiPf.terminate = true;
+				PBotAPI.gui.map.paistiPfThread.interrupt();
+				if (player.getattr(Moving.class) != null)
+					PBotAPI.gui.map.wdgmsg("gk", 27);
+			}
+		}
+
+		PBotAPI.gui.map.paistiPf = pf;
+		PBotAPI.gui.map.paistiPfThread = new Thread(PBotAPI.gui.map.paistiPf, "PaistiPathfinder");
+		PBotAPI.gui.map.paistiPfThread.start();
+	}
 
 	/**
 	 * Chooses a petal with given label from a flower menu that is currently open

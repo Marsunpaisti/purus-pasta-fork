@@ -36,6 +36,8 @@ import haven.pathfinder.Pathfinder;
 import haven.purus.pbot.PBotUtils;
 import haven.resutil.BPRadSprite;
 import integrations.map.Navigation;
+import haven.paisti.PaistiPathfinder;
+import haven.pathfinder.Edge;
 
 import javax.media.opengl.GL;
 import java.awt.*;
@@ -84,6 +86,8 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     private GobSelectCallback gobselcb;
     private AreaSelectCallback areaselcb;
     private Pathfinder pf;
+    public PaistiPathfinder paistiPf;
+    public Thread paistiPfThread;
     public Thread pfthread;
     public SteelRefueler steelrefueler;
     private Thread musselPicker;
@@ -1788,6 +1792,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     pf.terminate = true;
                     pfthread.interrupt();
                 }
+                if (paistiPf != null){
+                    synchronized (paistiPf){
+                        paistiPf.terminate = true;
+                        paistiPfThread.interrupt();
+                    }
+                }
             }
         }
 
@@ -1840,7 +1850,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
 
             if (inf == null) {
                 if (Config.pf && clickb == 1 && curs != null && !curs.name.equals("gfx/hud/curs/study")) {
-                    pfLeftClick(mc.floor(), null);
+                    paistiPfLeftClick(mc.floor(), null);
                 } else {
                     wdgmsg("click", args);
                 }
@@ -1871,7 +1881,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                 }
 
                 if (Config.pf && curs != null && !curs.name.equals("gfx/hud/curs/study") && gob != null) {
-                    pfRightClick(gob, (int)args[8], clickb, 0, null);
+                    paistiPfRightClick(gob, (int)args[8], clickb, 0, null);
                 } else {
                     wdgmsg("click", args);
                     if (Config.autopickmussels && gob.type == Gob.Type.MUSSEL)
@@ -1916,10 +1926,45 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
+    public void paistiPfLeftClick(Coord mc, String action){
+        Gob player = player();
+        if (player == null)
+            return;
+
+        if (paistiPf != null){
+            synchronized (paistiPf) {
+                paistiPf.terminate = true;
+                paistiPfThread.interrupt();
+                if (player.getattr(Moving.class) != null)
+                    wdgmsg("gk", 27);
+            }
+        }
+
+        Coord src = player.rc.floor();
+        int gcx = haven.pathfinder.Map.origin - (src.x - mc.x);
+        int gcy = haven.pathfinder.Map.origin - (src.y - mc.y);
+        if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
+            return;
+
+        paistiPf = new PaistiPathfinder(this, new Coord(gcx, gcy), action);
+        paistiPfThread = new Thread(paistiPf, "PaistiPathfinder");
+        paistiPfThread.start();
+    }
+
     public void pfLeftClick(Coord mc, String action) {
         Gob player = player();
         if (player == null)
             return;
+
+        if (paistiPf != null){
+            synchronized (paistiPf) {
+                paistiPf.terminate = true;
+                paistiPfThread.interrupt();
+                if (player.getattr(Moving.class) != null)
+                    wdgmsg("gk", 27);
+            }
+        }
+
         synchronized (Pathfinder.class) {
             if (pf != null) {
                 pf.terminate = true;
@@ -1952,6 +1997,31 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
+    public void paistiPfRightClick(Gob gob, int meshid, int clickb, int modflags, String action) {
+        Gob player = player();
+        if (player == null)
+            return;
+
+        if (paistiPf != null) {
+            synchronized (paistiPf){
+                paistiPf.terminate = true;
+                paistiPfThread.interrupt();
+                if (player.getattr(Moving.class) != null)
+                    wdgmsg("gk", 27);
+            }
+        }
+
+        Coord src = player.rc.floor();
+        int gcx = haven.pathfinder.Map.origin - (src.x - gob.rc.floor().x);
+        int gcy = haven.pathfinder.Map.origin - (src.y - gob.rc.floor().y);
+        if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
+            return;
+
+        paistiPf = new PaistiPathfinder(this, new Coord(gcx, gcy), gob, meshid, clickb, modflags, action);
+        paistiPfThread = new Thread(paistiPf, "PaistiPathfinder");
+        paistiPfThread.start();
+    }
+
     public void pfRightClick(Gob gob, int meshid, int clickb, int modflags, String action) {
         Gob player = player();
         if (player == null)
@@ -1965,6 +2035,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     wdgmsg("gk", 27);
             }
 
+            if (paistiPf != null) {
+                synchronized (paistiPf){
+                    paistiPf.terminate = true;
+                    paistiPfThread.interrupt();
+                }
+            }
             Coord src = player.rc.floor();
             int gcx = haven.pathfinder.Map.origin - (src.x - gob.rc.floor().x);
             int gcy = haven.pathfinder.Map.origin - (src.y - gob.rc.floor().y);
@@ -2162,7 +2238,7 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
                     if (nodropping) {
                         // we really don't want dropping, so click is moving
                         if (Config.pf) {
-                            pfLeftClick(mc.floor(), null);
+                            paistiPfLeftClick(mc.floor(), null);
                         } else {
                             wdgmsg("click", pc, mc.floor(posres), 1, 0);
                         }
@@ -2511,6 +2587,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void canceltasks() {
         if (pf != null)
             pf.terminate = true;
+        if (paistiPf != null) {
+            paistiPf.terminate = true;
+            paistiPfThread.interrupt();
+        }
         if (steelrefueler != null)
             steelrefueler.terminate();
         if (musselPicker != null)

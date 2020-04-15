@@ -1,8 +1,8 @@
-package haven.pathfinder;
+package haven.paisti;
 
 
 import haven.*;
-
+import haven.pathfinder.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -10,13 +10,13 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import static haven.OCache.posres;
 
-public class Pathfinder implements Runnable {
+//I'm taking no credit for this pf, just small modifications to amber's api
+public class PaistiPathfinder implements Runnable{
     private OCache oc;
     private MCache map;
     private MapView mv;
     private Coord dest;
     public boolean terminate = false;
-    public boolean moveinterupted = false;
     private int meshid;
     private int clickb;
     private Gob gob;
@@ -25,16 +25,19 @@ public class Pathfinder implements Runnable {
     private int modflags;
     private int interruptedRetries = 5;
     private static final int RESPONSE_TIMEOUT = 800;
+    private haven.pathfinder.Map m = null;
+    private Iterable<Edge> path = null;
 
-    public Pathfinder(MapView mv, Coord dest, String action) {
+    public PaistiPathfinder(MapView mv, Coord dest, String action) {
         this.dest = dest;
         this.action = action;
         this.oc = mv.glob.oc;
         this.map = mv.glob.map;
         this.mv = mv;
+        System.out.println("PaistiPF Created!");
     }
 
-    public Pathfinder(MapView mv, Coord dest, Gob gob, int meshid, int clickb, int modflags, String action) {
+    public PaistiPathfinder(MapView mv, Coord dest, Gob gob, int meshid, int clickb, int modflags, String action) {
         this.dest = dest;
         this.meshid = meshid;
         this.clickb = clickb;
@@ -44,36 +47,27 @@ public class Pathfinder implements Runnable {
         this.oc = mv.glob.oc;
         this.map = mv.glob.map;
         this.mv = mv;
-    }
-
-    private final Set<PFListener> listeners = new CopyOnWriteArraySet<PFListener>();
-    public final void addListener(final PFListener listener) {
-        listeners.add(listener);
-    }
-
-    public final void removeListener(final PFListener listener) {
-        listeners.remove(listener);
-    }
-
-    private final void notifyListeners() {
-        for (PFListener listener : listeners) {
-            listener.pfDone(this);
-        }
+        System.out.println("PaistiPF Created!");
     }
 
     @Override
     public void run() {
-        do {
-            moveinterupted = false;
-            pathfind(mv.player().rc.floor());
-        } while (moveinterupted && !terminate);
-
-        notifyListeners();
+        if (this.path == null) getPath(mv.player().rc.floor(), 3);
+        if (this.path != null) {
+            do {
+                walkPath(mv.player().rc.floor());
+            } while (!terminate);
+        } else {
+            this.m.dbgdump();
+            System.out.println("PaistiPathFinder Unable to find a path!");
+        }
     }
 
-    public void pathfind(Coord src) {
+    public Iterable<Edge> getPath(Coord src, int retries) {
+        System.out.println("Getpath retries: " + retries);
+        if (retries < 0) return null;
         long starttotal = System.nanoTime();
-        haven.pathfinder.Map m = new haven.pathfinder.Map(src, dest, map, mv.gameui());
+        m = new haven.pathfinder.Map(src, dest, map, mv.gameui());
         Gob player = mv.player();
 
         long start = System.nanoTime();
@@ -152,43 +146,41 @@ public class Pathfinder implements Runnable {
         if (m.isOriginBlocked()) {
             Pair<Integer, Integer> freeloc = m.getFreeLocation();
 
-            if (freeloc == null) {
-                terminate = true;
-                m.dbgdump();
-                return;
-            }
+            if (freeloc == null) return null;
 
             mc = new Coord2d(src.x + freeloc.a - Map.origin, src.y + freeloc.b - Map.origin).floor(posres);
             mv.wdgmsg("click", Coord.z, mc, 1, 0);
 
             // FIXME
             try {
-                Thread.sleep(30);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             // need to recalculate map
-            moveinterupted = true;
-            m.dbgdump();
-            return;
+            return getPath(mv.player().rc.floor(), retries-1);
         }
 
         // exclude any bounding boxes overlapping the destination gob
-        if (this.gob != null)
-            m.excludeGob(this.gob);
-
-        if (Map.DEBUG_TIMINGS)
-            System.out.println("      Gobs Processing: " + (double) (System.nanoTime() - start) / 1000000.0 + " ms.");
-
+        if (this.gob != null) m.excludeGob(this.gob);
         Iterable<Edge> path = m.main();
-        if (Map.DEBUG_TIMINGS)
-            System.out.println("--------------- Total: " + (double) (System.nanoTime() - starttotal) / 1000000.0 + " ms.");
-
-        m.dbgdump();
-
         Iterator<Edge> it = path.iterator();
-        while (it.hasNext() && !moveinterupted && !terminate) {
+        int len = 0;
+        while (it.hasNext()) {
+            len++;
+            it.next();
+        }
+        if (len == 0) return null;
+        this.path = path;
+        m.dbgdump();
+        return path;
+    }
+
+    private void walkPath(Coord src) {
+        System.out.println("Walkpath!");
+        Iterator<Edge> it = path.iterator();
+        while (it.hasNext() && !terminate) {
             Edge e = it.next();
 
             mc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin).floor(posres);
@@ -206,7 +198,7 @@ public class Pathfinder implements Runnable {
 
             // wait for gob to start moving
             long moveWaitStart = System.currentTimeMillis();
-            while (!player.isMoving() && !terminate) {
+            while (!mv.player().isMoving() && !terminate) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException e1) {
@@ -217,19 +209,19 @@ public class Pathfinder implements Runnable {
             }
 
             // wait for it to finish
-            while (!moveinterupted && !terminate) {
-                if (!player.isMoving()) {
+            while (!terminate) {
+                if (!mv.player().isMoving()) {
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(25);
                     } catch (InterruptedException e1) {
                         return;
                     }
-                    if (!player.isMoving())
+                    if (!mv.player().isMoving())
                         break;
                 }
 
                 try {
-                    Thread.sleep(25);
+                    Thread.sleep(15);
                 } catch (InterruptedException e1) {
                     return;
                 }
@@ -240,17 +232,9 @@ public class Pathfinder implements Runnable {
                 // when right clicking gobs, char will try to navigate towards gob's rc
                 // however he will be blocked by gob's bounding box.
                 // therefore we just wait for a bit
-                LinMove lm = player.getLinMove();
+                LinMove lm = mv.player().getLinMove();
                 if (gob != null && !it.hasNext() && lm != null && now - lm.lastupd > 500)
                     break;
-            }
-
-            if (moveinterupted) {
-                interruptedRetries--;
-                if (interruptedRetries == 0)
-                    terminate = true;
-                m.dbgdump();
-                return;
             }
         }
 
@@ -260,7 +244,6 @@ public class Pathfinder implements Runnable {
     static public boolean isInsideBoundBox(Coord gobRc, double gobA, GobHitbox.BBox gobBBox, Coord point) {
         final Coordf relative = new Coordf(point.sub(gobRc)).rotate(-gobA);
         return relative.x >= gobBBox.a.x && relative.x <= gobBBox.b.x &&
-               relative.y >= gobBBox.a.y && relative.y <= gobBBox.b.y;
+                relative.y >= gobBBox.a.y && relative.y <= gobBBox.b.y;
     }
 }
-

@@ -66,6 +66,7 @@ public class Map {
 
         for (int x = -origintile; x < origintile; x++) {
             for (int y = -origintile; y < origintile; y++) {
+                //Map borders
                 int t = mcache.gettile(pltc.sub(x, y));
                 Resource res = mcache.tilesetr(t);
                 if (res == null)
