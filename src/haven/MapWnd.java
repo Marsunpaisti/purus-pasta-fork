@@ -185,8 +185,64 @@ public class MapWnd extends Window {
         LinkedList<CoordPair> clicks = new LinkedList<>();
 
         Runnable walker = () -> {
+            Coord2d dest = null;
+            Coord2d currentClickPos = null;
+            while (!ui.gui.map.stopWalker && clicks.size() > 0) {
+                if (dest == null) {
+                    dest = new Coord2d(clicks.getFirst().second).mul(posres);
+                }
+
+                Coord2d vecToDest = dest.sub(ui.gui.map.player().rc);
+                double distanceToDest = vecToDest.abs();
+
+                if (distanceToDest <= 15 && clicks.size() >= 2) {
+                    clicks.pollFirst();
+                    dest = clicks.getFirst().second.mul(posres);
+                }
+
+                Coord2d unitVecTowardsDest = vecToDest.div(distanceToDest);
+                if (currentClickPos == null || currentClickPos.sub(ui.gui.map.player().rc).abs() <= 15) {
+                    //Try to move towards next destination with pf
+                    boolean foundPath = false;
+                    for (int clickTiles = 39; clickTiles >= 4; clickTiles = clickTiles - 5) {
+                        currentClickPos = ui.gui.map.player().rc.add(unitVecTowardsDest.mul(Math.min(distanceToDest, clickTiles*11)));
+                        if (ui.gui.map.paistiPfLeftClick(new Coord((int)Math.floor(currentClickPos.x), (int)Math.floor(currentClickPos.y)), null)) {
+                            foundPath = true;
+                            break;
+                        }
+                    }
+
+                    //Fallback if pf doesnt work
+                    if (!foundPath) {
+                        currentClickPos = dest;
+                        Coord clickCoord = new Coord((int)Math.floor(dest.div(posres).x), (int)Math.floor(dest.div(posres).y));
+                        mv.wdgmsg("click", rootpos(), dest, 1, 0);
+                    }
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch(InterruptedException e) {}
+
+            }
+            clicks.clear();
+            ui.gui.map.mapWalker = null;
+
+/*
+
         	while(!ui.gui.map.stopWalker && clicks.size() > 0) {
-        		Coord dest = clicks.getFirst().second;
+
+        		while (currentTargetPos == null || dist > 15) {
+        		    if (!ui.gui.map.player().isMoving()){
+                        try {
+                            Thread.sleep(50);
+                        } catch(InterruptedException e) {}
+                        if (!ui.gui.map.player().isMoving()){
+
+                        }
+                    }
+                }
+
 				Gob pl = mv.player();
 				if(pl != null && pl.rc != null) {
 					mv.wdgmsg("click", rootpos(), dest, 1, 0);
@@ -200,6 +256,7 @@ public class MapWnd extends Window {
 			}
         	clicks.clear();
 			ui.gui.map.mapWalker = null;
+			*/
 		};
 
         public boolean clickloc(Location loc, int button) {

@@ -698,11 +698,17 @@ public class Widget {
     }
 
     public void wdgmsg(Widget sender, String msg, Object... args) {
-    	if(msg.equals("click") && args.length>=5 && ui.sess.glob.oc.getgob
-    	(Long.valueOf((int)args[5])).getres().name.contains("steelcrucible")
-    	&& (int)args[3]==1) {
-    		return;
-    	}
+        if (msg.equals("click") && args.length >= 5 && ((int)args[3] == 1 || (int)args[3] == 5)) {
+            if (ui != null && ui.sess != null && ui.sess.glob != null && ui.sess.glob.oc != null) {
+                synchronized (ui.sess.glob.oc) {
+                    Gob target = ui.sess.glob.oc.getgob(Long.valueOf((int)args[5]));
+                    if (target != null && target.getres() != null && target.getres().name.contains("steelcrucible")) {
+                        return;
+                    }
+                }
+            }
+        }
+
         if (parent == null)
             ui.wdgmsg(sender, msg, args);
         else

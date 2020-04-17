@@ -1977,10 +1977,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         }
     }
 
-    public void paistiPfLeftClick(Coord mc, String action) {
+    public boolean paistiPfLeftClick(Coord mc, String action) {
         Gob player = player();
         if (player == null)
-            return;
+            return false;
 
         if (paistiPf != null) {
             synchronized (paistiPf) {
@@ -1995,11 +1995,13 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         int gcx = haven.pathfinder.Map.origin - (src.x - mc.x);
         int gcy = haven.pathfinder.Map.origin - (src.y - mc.y);
         if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
-            return;
+            return false;
 
         paistiPf = new PaistiPathfinder(this, new Coord(gcx, gcy), action);
+        if (paistiPf.getPath(src, 3) == null) return false;
         paistiPfThread = new Thread(paistiPf, "PaistiPathfinder");
         paistiPfThread.start();
+        return true;
     }
 
     public void pfLeftClick(Coord mc, String action) {

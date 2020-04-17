@@ -34,7 +34,6 @@ public class PaistiPathfinder implements Runnable{
         this.oc = mv.glob.oc;
         this.map = mv.glob.map;
         this.mv = mv;
-        System.out.println("PaistiPF Created!");
     }
 
     public PaistiPathfinder(MapView mv, Coord dest, Gob gob, int meshid, int clickb, int modflags, String action) {
@@ -47,7 +46,6 @@ public class PaistiPathfinder implements Runnable{
         this.oc = mv.glob.oc;
         this.map = mv.glob.map;
         this.mv = mv;
-        System.out.println("PaistiPF Created!");
     }
 
     @Override
@@ -92,11 +90,9 @@ public class PaistiPathfinder implements Runnable{
             ) {
                 if (pose.toLowerCase().contains("riding")) {
                     ridingHorse = true;
-                    System.out.println("Riding horse!");
                 }
                 if (pose.toLowerCase().contains("banzai")) {
                     carryingObject = true;
-                    System.out.println("Carrying object!");
                 }
             }
         }
@@ -152,7 +148,7 @@ public class PaistiPathfinder implements Runnable{
 
             // FIXME
             try {
-                Thread.sleep(100);
+                Thread.sleep(250);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
