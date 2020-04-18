@@ -216,7 +216,7 @@ public class MapWnd extends Window {
                     if (!foundPath) {
                         currentClickPos = dest;
                         Coord clickCoord = new Coord((int)Math.floor(dest.div(posres).x), (int)Math.floor(dest.div(posres).y));
-                        mv.wdgmsg("click", rootpos(), dest, 1, 0);
+                        mv.wdgmsg("click", rootpos(), clickCoord, 1, 0);
                     }
                 }
 
