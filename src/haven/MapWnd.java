@@ -195,18 +195,26 @@ public class MapWnd extends Window {
                 Coord2d vecToDest = dest.sub(ui.gui.map.player().rc);
                 double distanceToDest = vecToDest.abs();
 
-                if (distanceToDest <= 15 && clicks.size() >= 2) {
-                    clicks.pollFirst();
-                    dest = clicks.getFirst().second.mul(posres);
+                if (distanceToDest <= 15) {
+                    if (clicks.size() > 0) {
+                        clicks.pollFirst();
+                    }
+                    if (clicks.size() > 0) {
+                        dest = clicks.getFirst().second.mul(posres);
+                    }
                 }
 
                 Coord2d unitVecTowardsDest = vecToDest.div(distanceToDest);
                 if (currentClickPos == null || currentClickPos.sub(ui.gui.map.player().rc).abs() <= 15) {
                     //Try to move towards next destination with pf
                     boolean foundPath = false;
-                    for (int clickTiles = 39; clickTiles >= 4; clickTiles = clickTiles - 5) {
-                        currentClickPos = ui.gui.map.player().rc.add(unitVecTowardsDest.mul(Math.min(distanceToDest, clickTiles*11)));
+                    for (int clickDistance = (int)Math.round(Math.min(distanceToDest, 39*11)); clickDistance >= 4*11; clickDistance = clickDistance - 22) {
+                        System.out.println("Checking clickdistance " + clickDistance);
+                        currentClickPos = ui.gui.map.player().rc.add(unitVecTowardsDest.mul(Math.min(distanceToDest, clickDistance)));
+                        Coord2d tileCenter = currentClickPos.div(11, 11).floord().mul(11).add(5, 5);
+                        currentClickPos = tileCenter;
                         if (ui.gui.map.paistiPfLeftClick(new Coord((int)Math.floor(currentClickPos.x), (int)Math.floor(currentClickPos.y)), null)) {
+                            System.out.println("Found path");
                             foundPath = true;
                             break;
                         }
@@ -214,6 +222,7 @@ public class MapWnd extends Window {
 
                     //Fallback if pf doesnt work
                     if (!foundPath) {
+                        System.out.println("Didnt find a path via pathfinder, trying to go directly toward wp");
                         currentClickPos = dest;
                         Coord clickCoord = new Coord((int)Math.floor(dest.div(posres).x), (int)Math.floor(dest.div(posres).y));
                         mv.wdgmsg("click", rootpos(), clickCoord, 1, 0);
