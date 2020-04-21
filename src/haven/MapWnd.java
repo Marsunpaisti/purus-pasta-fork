@@ -202,12 +202,20 @@ public class MapWnd extends Window {
                     if (clicks.size() > 0) {
                         dest = clicks.getFirst().second.mul(posres);
                     }
+
+                    //Calculate again if dest potentially has changed
+                    vecToDest = dest.sub(ui.gui.map.player().rc);
+                    distanceToDest = vecToDest.abs();
                 }
+
 
                 Coord2d unitVecTowardsDest = vecToDest.div(distanceToDest);
                 if (currentClickPos == null || currentClickPos.sub(ui.gui.map.player().rc).abs() <= 15) {
                     //Try to move towards next destination with pf
                     boolean foundPath = false;
+
+                    int loopstart = (int)Math.round(Math.min(distanceToDest, 39*11));
+                    System.out.println("Loopstart value: " + loopstart);
                     for (int clickDistance = (int)Math.round(Math.min(distanceToDest, 39*11)); clickDistance >= 4*11; clickDistance = clickDistance - 22) {
                         System.out.println("Checking clickdistance " + clickDistance);
                         currentClickPos = ui.gui.map.player().rc.add(unitVecTowardsDest.mul(Math.min(distanceToDest, clickDistance)));

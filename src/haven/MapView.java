@@ -1985,7 +1985,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (paistiPf != null) {
             synchronized (paistiPf) {
                 paistiPf.terminate = true;
-                paistiPfThread.interrupt();
+                if (paistiPfThread != null) {
+                    paistiPfThread.interrupt();
+                }
                 if (player.getattr(Moving.class) != null)
                     wdgmsg("gk", 27);
             }
@@ -1998,7 +2000,10 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             return false;
 
         paistiPf = new PaistiPathfinder(this, new Coord(gcx, gcy), action);
-        if (paistiPf.getPath(src, 3) == null) return false;
+        if (paistiPf.getPath(src, 1) == null) {
+            paistiPf = null;
+            return false;
+        }
         paistiPfThread = new Thread(paistiPf, "PaistiPathfinder");
         paistiPfThread.start();
         return true;
@@ -2012,7 +2017,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (paistiPf != null) {
             synchronized (paistiPf) {
                 paistiPf.terminate = true;
-                paistiPfThread.interrupt();
+                if (paistiPfThread != null) {
+                    paistiPfThread.interrupt();
+                }
                 if (player.getattr(Moving.class) != null)
                     wdgmsg("gk", 27);
             }
@@ -2059,7 +2066,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
         if (paistiPf != null) {
             synchronized (paistiPf) {
                 paistiPf.terminate = true;
-                paistiPfThread.interrupt();
+                if (paistiPfThread != null) {
+                    paistiPfThread.interrupt();
+                }
                 if (player.getattr(Moving.class) != null)
                     wdgmsg("gk", 27);
             }
@@ -2093,7 +2102,9 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
             if (paistiPf != null) {
                 synchronized (paistiPf) {
                     paistiPf.terminate = true;
-                    paistiPfThread.interrupt();
+                    if (paistiPfThread != null) {
+                        paistiPfThread.interrupt();
+                    }
                 }
             }
             Coord src = player.rc.floor();
@@ -2649,9 +2660,12 @@ public class MapView extends PView implements DTarget, Console.Directory, PFList
     public void canceltasks() {
         if (pf != null)
             pf.terminate = true;
+
         if (paistiPf != null) {
-            paistiPf.terminate = true;
-            paistiPfThread.interrupt();
+            synchronized (paistiPf){
+                paistiPf.terminate = true;
+                paistiPfThread.interrupt();
+            }
         }
         stopWalker = true;
         if (steelrefueler != null)

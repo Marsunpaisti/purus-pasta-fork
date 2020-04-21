@@ -42,6 +42,7 @@ public class Map {
     private Vertex vxstart;
     private Vertex vxend;
     private GameUI gui;
+    private boolean onBoat = false;
 
     private Dbg dbg;
     private final static boolean DEBUG = false;
@@ -72,13 +73,21 @@ public class Map {
                 }
             }
 
+
             for ( String pose : poses
             ) {
+
+                /*
                 if (pose.toLowerCase().contains("riding")) {
-                    way = plbbox + 4;
+                    way = plbbox + 3;
                     clr = way + 1;
                 }
+                 */
+                if (pose.toLowerCase().contains("row")) {
+                    onBoat = true;
+                }
             }
+
         }
     }
 

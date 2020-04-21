@@ -43,6 +43,7 @@ public class PBotInventory {
 		List<Pattern> patterns = Arrays.stream(pattern).map(Pattern::compile).collect(Collectors.toList());
 		for(PBotItem item : getInventoryContents()) {
 			String name = item.getName();
+			if (name == null) continue;
 			for(Pattern p : patterns) {
 				if(p.matcher(name).matches())
 					items.add(item);
@@ -60,6 +61,7 @@ public class PBotInventory {
 		List<Pattern> patterns = Arrays.stream(pattern).map(Pattern::compile).collect(Collectors.toList());
 		for(PBotItem item : getInventoryContents()) {
 			String name = item.getResname();
+			if (name == null) continue;
 			for(Pattern p : patterns) {
 				if(p.matcher(name).matches())
 					items.add(item);

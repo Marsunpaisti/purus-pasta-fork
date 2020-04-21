@@ -50,11 +50,11 @@ public class PaistiPathfinder implements Runnable{
 
     @Override
     public void run() {
-        if (this.path == null) getPath(mv.player().rc.floor(), 3);
+        if (this.path == null) getPath(mv.player().rc.floor(), 1);
         if (this.path != null) {
             do {
                 walkPath(mv.player().rc.floor());
-            } while (!terminate);
+            } while (!shouldTerminate());
         } else {
             this.m.dbgdump();
             System.out.println("PaistiPathFinder Unable to find a path!");
@@ -71,6 +71,7 @@ public class PaistiPathfinder implements Runnable{
 
         boolean ridingHorse = false;
         boolean carryingObject = false;
+        boolean onBoat = false;
         if (mv.player() != null) {
             ArrayList<String> poses = new ArrayList<>();
             Drawable d = mv.player().getattr(Drawable.class);
@@ -92,6 +93,9 @@ public class PaistiPathfinder implements Runnable{
                     ridingHorse = true;
                 }
                 if (pose.toLowerCase().contains("banzai")) {
+                    carryingObject = true;
+                }
+                if (pose.toLowerCase().contains("row")) {
                     carryingObject = true;
                 }
             }
@@ -148,12 +152,13 @@ public class PaistiPathfinder implements Runnable{
 
             // FIXME
             try {
-                Thread.sleep(250);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             // need to recalculate map
+            System.out.println("Path not found, retrying");
             return getPath(mv.player().rc.floor(), retries-1);
         }
 
@@ -172,9 +177,15 @@ public class PaistiPathfinder implements Runnable{
         return path;
     }
 
+    private boolean shouldTerminate() {
+        synchronized (this){
+            return this.terminate;
+        }
+    }
+
     private void walkPath(Coord src) {
         Iterator<Edge> it = path.iterator();
-        while (it.hasNext() && !terminate) {
+        while (it.hasNext() && !shouldTerminate()) {
             Edge e = it.next();
 
             mc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin).floor(posres);
@@ -193,7 +204,7 @@ public class PaistiPathfinder implements Runnable{
 
             // wait for gob to start moving
             long moveWaitStart = System.currentTimeMillis();
-            while (!mv.player().isMoving() && !terminate) {
+            while (!mv.player().isMoving() && !shouldTerminate()) {
                 try {
                     Thread.sleep(25);
                 } catch (InterruptedException e1) {
@@ -204,7 +215,7 @@ public class PaistiPathfinder implements Runnable{
             }
 
             // wait for it to finish
-            while (!terminate) {
+            while (!shouldTerminate()) {
                 if (!mv.player().isMoving()) {
                     try {
                         Thread.sleep(25);
@@ -236,7 +247,9 @@ public class PaistiPathfinder implements Runnable{
             }
         }
 
-        terminate = true;
+        synchronized (this){
+            terminate = true;
+        }
     }
 
     static public boolean isInsideBoundBox(Coord gobRc, double gobA, GobHitbox.BBox gobBBox, Coord point) {
