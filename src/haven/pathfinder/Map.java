@@ -57,8 +57,6 @@ public class Map {
         dbg = new Dbg(DEBUG);
         dbg.init();
 
-        way = plbbox + 2;
-        clr = way + 1;
         if (gui.map.player() != null) {
             ArrayList<String> poses = new ArrayList<>();
             Drawable d = gui.map.player().getattr(Drawable.class);
@@ -74,16 +72,8 @@ public class Map {
                 }
             }
 
-
             for ( String pose : poses
             ) {
-
-                /*
-                if (pose.toLowerCase().contains("riding")) {
-                    way = plbbox + 3;
-                    clr = way + 1;
-                }
-                 */
                 if (pose.toLowerCase().contains("row")) {
                     onBoat = true;
                 }
