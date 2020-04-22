@@ -219,29 +219,32 @@ public class PaistiPathfinder implements Runnable{
             }
 
             // wait for it to finish
+            long iterTime = System.currentTimeMillis();
+            long notMovingDuration = 0;
             while (!shouldTerminate()) {
-                if (currentTarget != null && currentTarget.dist(mv.player().rc) < 1.5) {
-                    System.out.println("Reached wp");
+                long currentTime = System.currentTimeMillis();
+
+                //Counter to check how long we are stopped
+                if (!mv.player().isMoving()) {
+                    notMovingDuration += (currentTime - iterTime);
+                } else {
+                    notMovingDuration = 0;
+                }
+                iterTime = currentTime;
+
+                if (notMovingDuration >= 50) {
                     break;
                 }
 
-                if (!mv.player().isMoving()) {
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e1) {
-                        return;
-                    }
-                    if (!mv.player().isMoving())
-                        break;
+                if (currentTarget != null && currentTarget.dist(mv.player().rc) <= 1) {
+                    break;
                 }
 
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(10);
                 } catch (InterruptedException e1) {
                     return;
                 }
-
-                long now = System.currentTimeMillis();
 
                 /*
                 // FIXME

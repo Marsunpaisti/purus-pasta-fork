@@ -187,7 +187,19 @@ public class MapWnd extends Window {
         Runnable walker = () -> {
             Coord2d dest = null;
             Coord2d currentClickPos = null;
+            long iterTime = System.currentTimeMillis();
+            long notMovingDuration = 0;
             while (!ui.gui.map.stopWalker && clicks.size() > 0) {
+                long currentTime = System.currentTimeMillis();
+                //Counter to check how long we are stopped
+                if (!mv.player().isMoving()) {
+                    notMovingDuration += (currentTime - iterTime);
+                } else {
+                    notMovingDuration = 0;
+                }
+                iterTime = currentTime;
+
+
                 if (dest == null) {
                     dest = new Coord2d(clicks.getFirst().second).mul(posres);
                 }
@@ -210,7 +222,7 @@ public class MapWnd extends Window {
 
 
                 Coord2d unitVecTowardsDest = vecToDest.div(distanceToDest);
-                if (currentClickPos == null || currentClickPos.sub(ui.gui.map.player().rc).abs() <= 15) {
+                if (currentClickPos == null || currentClickPos.sub(ui.gui.map.player().rc).abs() <= 15 || notMovingDuration >= 300) {
                     //Try to move towards next destination with pf
                     boolean foundPath = false;
 
