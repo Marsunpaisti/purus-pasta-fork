@@ -22,7 +22,7 @@ public class Map {
     private final static int origintile = 44;
     public final static int origin = origintile * 11;
     public final static int sz = origin * 2;
-    public static int plbbox = 4;
+    public static int plbbox = 3;
     private static int way = plbbox + 2;
     private static int clr = way + 1;
     private final static int concaveclr = 2;
@@ -105,12 +105,19 @@ public class Map {
                     }
                 }
 
-                if (!name.equals("gfx/tiles/deep") &&
-                        !name.equals("gfx/tiles/cave") &&
-                        !name.equals("gfx/tiles/nil") &&
-                        !name.startsWith("gfx/tiles/rocks/") &&
-                        !isRidge)
-                    continue;
+                if (!onBoat) {
+                    if (!name.equals("gfx/tiles/deep") &&
+                            !name.equals("gfx/tiles/cave") &&
+                            !name.equals("gfx/tiles/nil") &&
+                            !name.startsWith("gfx/tiles/rocks/") &&
+                            !isRidge)
+                        continue;
+                } else {
+                    if (name.equals("gfx/tiles/deep") ||  name.equals("gfx/tiles/water")) {
+                        continue;
+                    }
+                }
+
 
 
                 int gcx = origin - (x * 11) - dx;
@@ -730,14 +737,14 @@ public class Map {
 
     // 3 pixels away from origin
     public Pair<Integer, Integer> getFreeLocation() {
-        if (map[origin + 3][origin] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin + 3, origin);
-        else if (map[origin - 3][origin] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin - 3, origin);
-        else if (map[origin][origin + 3] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin, origin + 3);
-        else if (map[origin][origin - 3] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin, origin - 3);
+        if (map[origin + 4][origin] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin + 4, origin);
+        else if (map[origin - 4][origin] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin - 4, origin);
+        else if (map[origin][origin + 4] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin, origin + 4);
+        else if (map[origin][origin - 4] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin, origin - 4);
 
         return null;
     }

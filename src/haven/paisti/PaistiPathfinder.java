@@ -5,8 +5,6 @@ import haven.*;
 import haven.pathfinder.*;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import static haven.OCache.posres;
 
@@ -21,7 +19,7 @@ public class PaistiPathfinder implements Runnable{
     private int clickb;
     private Gob gob;
     private String action;
-    public Coord mc;
+    public Coord clickCoord;
     private int modflags;
     private int interruptedRetries = 5;
     private static final int RESPONSE_TIMEOUT = 800;
@@ -96,7 +94,7 @@ public class PaistiPathfinder implements Runnable{
                     carryingObject = true;
                 }
                 if (pose.toLowerCase().contains("row")) {
-                    carryingObject = true;
+                    onBoat = true;
                 }
             }
         }
@@ -111,6 +109,12 @@ public class PaistiPathfinder implements Runnable{
 
                 if (ridingHorse) {
                     if (gob.getres() != null && gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 11) {
+                        continue;
+                    }
+                }
+
+                if (onBoat) {
+                    if (gob.getres() != null && gob.getres().name.contains("vehicle/rowboat") && gob.rc.dist(mv.player().rc) < 11) {
                         continue;
                     }
                 }
@@ -147,8 +151,8 @@ public class PaistiPathfinder implements Runnable{
 
             if (freeloc == null) return null;
 
-            mc = new Coord2d(src.x + freeloc.a - Map.origin, src.y + freeloc.b - Map.origin).floor(posres);
-            mv.wdgmsg("click", Coord.z, mc, 1, 0);
+            clickCoord = new Coord2d(src.x + freeloc.a - Map.origin, src.y + freeloc.b - Map.origin).floor(posres);
+            mv.wdgmsg("click", Coord.z, clickCoord, 1, 0);
 
             // FIXME
             try {
@@ -185,20 +189,20 @@ public class PaistiPathfinder implements Runnable{
 
     private void walkPath(Coord src) {
         Iterator<Edge> it = path.iterator();
+        Coord2d currentTarget = null;
         while (it.hasNext() && !shouldTerminate()) {
             Edge e = it.next();
-
-            mc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin).floor(posres);
+            currentTarget = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
+            clickCoord = currentTarget.floor(posres);
 
             if (action != null && !it.hasNext())
                 mv.gameui().act(action);
 
             if (gob != null && !it.hasNext()) {
-                mv.wdgmsg("click", gob.sc, mc, clickb, modflags, 0, (int) gob.id, gob.rc.floor(posres), 0, meshid);
+                mv.wdgmsg("click", gob.sc, clickCoord, clickb, modflags, 0, (int) gob.id, gob.rc.floor(posres), 0, meshid);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
-
             } else {
-                mv.wdgmsg("click", Coord.z, mc, 1, 0);
+                mv.wdgmsg("click", Coord.z, clickCoord, 1, 0);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
             }
 
@@ -216,6 +220,11 @@ public class PaistiPathfinder implements Runnable{
 
             // wait for it to finish
             while (!shouldTerminate()) {
+                if (currentTarget != null && currentTarget.dist(mv.player().rc) < 1.5) {
+                    System.out.println("Reached wp");
+                    break;
+                }
+
                 if (!mv.player().isMoving()) {
                     try {
                         Thread.sleep(25);
