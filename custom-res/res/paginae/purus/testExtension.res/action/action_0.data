@@ -4,7 +4,7 @@ paginae/amber/amber
 #uint16 pver
 1
 #String name
-Attempt to pick nearest herb
+Run test code snippet
 #String preq
 
 #uint16 hk
@@ -14,4 +14,4 @@ Attempt to pick nearest herb
 #String ad[0]
 @
 #String ad[1]
-herbPicker
+testExtension

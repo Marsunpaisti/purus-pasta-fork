@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -330,7 +329,7 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
             p.add(paginafor(Resource.local().load("paginae/purus/drinkWater")));
             p.add(paginafor(Resource.local().load("paginae/purus/transferToObject")));
             p.add(paginafor(Resource.local().load("paginae/purus/flowerPicker")));
-            p.add(paginafor(Resource.local().load("paginae/purus/herbPicker")));
+            p.add(paginafor(Resource.local().load("paginae/purus/testExtension")));
             // PBot Scripts
             p.add(paginafor(Resource.local().load("paginae/purus/PBotMenu")));
         }
@@ -579,8 +578,8 @@ public class MenuGrid extends Widget implements KeyBinding.Bindable {
             gui.transferingObjectThread.start();
         } else if(ad[1].equals("flowerPicker")) {
             new Thread(new FlowerPicker(gui)).start();
-        } else if(ad[1].equals("herbPicker")) {
-            new Thread(new herbPicker(gui)).start();
+        } else if(ad[1].equals("testExtension")) {
+            new Thread(new testExtension(gui)).start();
         }
     }
 

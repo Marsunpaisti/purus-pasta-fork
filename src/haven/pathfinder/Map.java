@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import haven.*;
+import haven.resutil.Ridges;
 
 public class Map {
     public final static byte CELL_FREE = 0;
@@ -21,7 +22,7 @@ public class Map {
     private final static int origintile = 44;
     public final static int origin = origintile * 11;
     public final static int sz = origin * 2;
-    public static int plbbox = 3;
+    public static int plbbox = 4;
     private static int way = plbbox + 2;
     private static int clr = way + 1;
     private final static int concaveclr = 2;
@@ -99,18 +100,28 @@ public class Map {
 
         for (int x = -origintile; x < origintile; x++) {
             for (int y = -origintile; y < origintile; y++) {
-                //Map borders
-                int t = mcache.gettile(pltc.sub(x, y));
+                Coord iterCoord = pltc.sub(x, y);
+                int t = mcache.gettile(iterCoord);
                 Resource res = mcache.tilesetr(t);
                 if (res == null)
                     continue;
-
                 String name = res.name;
+
+                boolean isRidge = false;
+                Tiler tl = gui.ui.sess.glob.map.tiler(t);
+                if (tl instanceof Ridges.RidgeTile) {
+                    if (Ridges.brokenp(gui.ui.sess.glob.map, iterCoord)) {
+                        isRidge = true;
+                    }
+                }
+
                 if (!name.equals("gfx/tiles/deep") &&
                         !name.equals("gfx/tiles/cave") &&
                         !name.equals("gfx/tiles/nil") &&
-                        !name.startsWith("gfx/tiles/rocks/"))
+                        !name.startsWith("gfx/tiles/rocks/") &&
+                        !isRidge)
                     continue;
+
 
                 int gcx = origin - (x * 11) - dx;
                 int gcy = origin - (y * 11) - dy;
@@ -122,10 +133,23 @@ public class Map {
                 }
 
                 // bounding box
-                Coord ca = new Coord(gcx + tbbax - plbbox, gcy + tbbay - plbbox);
-                Coord cb = new Coord(gcx + tbbbx + plbbox, gcy + tbbay - plbbox);
-                Coord cc = new Coord(gcx + tbbbx + plbbox, gcy + tbbby + plbbox);
-                Coord cd = new Coord(gcx + tbbax - plbbox, gcy + tbbby + plbbox);
+                Coord ca = null;
+                Coord cb = null;
+                Coord cc = null;
+                Coord cd = null;
+                if (!isRidge) {
+                    ca = new Coord(gcx + tbbax - plbbox, gcy + tbbay - plbbox);
+                    cb = new Coord(gcx + tbbbx + plbbox, gcy + tbbay - plbbox);
+                    cc = new Coord(gcx + tbbbx + plbbox, gcy + tbbby + plbbox);
+                    cd = new Coord(gcx + tbbax - plbbox, gcy + tbbby + plbbox);
+                } else {
+                    //Bigger boundingboxes for ridges
+                    ca = new Coord(gcx + tbbax*2 - plbbox, gcy + tbbay*2 - plbbox);
+                    cb = new Coord(gcx + tbbbx*2 + plbbox, gcy + tbbay*2 - plbbox);
+                    cc = new Coord(gcx + tbbbx*2 + plbbox, gcy + tbbby*2 + plbbox);
+                    cd = new Coord(gcx + tbbax*2 - plbbox, gcy + tbbby*2 + plbbox);
+                }
+
 
                 // calculate waypoints located on the angular bisector of the corner
                 int wax = ca.x - 1;
