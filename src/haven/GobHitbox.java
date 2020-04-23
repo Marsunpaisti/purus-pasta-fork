@@ -76,6 +76,7 @@ public class GobHitbox extends Sprite {
     private static final BBox bboxHwall = new BBox(new Coord(-1, 0), new Coord(0, 11));
     private static final BBox bboxBigGate = new BBox(new Coord(-6, -15), new Coord(5, 16));
     private static final BBox bboxSmallGate = new BBox(new Coord(-6, -11), new Coord(5, 11));
+    private static final BBox bboxStonePillar = new BBox(new Coord(-16, -16), new Coord(16, 16));
 
     public static BBox getBBox(Gob gob) {
         Resource res = null;
@@ -101,6 +102,8 @@ public class GobHitbox extends Sprite {
             return bboxGoat;
         else if (name.startsWith("gfx/kritter/pig/"))
             return bboxPig;
+        else if (name.startsWith("gfx/terobjs/stonepillar"))
+            return bboxStonePillar;
 
         // dual state gobs
         if (name.endsWith("gate") && name.startsWith("gfx/terobjs/arch")) {

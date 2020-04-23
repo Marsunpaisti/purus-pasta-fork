@@ -141,10 +141,10 @@ public class Map {
                     cd = new Coord(gcx + tbbax - plbbox, gcy + tbbby + plbbox);
                 } else {
                     //Bigger boundingboxes for ridges
-                    ca = new Coord(gcx + tbbax*2 - plbbox, gcy + tbbay*2 - plbbox);
-                    cb = new Coord(gcx + tbbbx*2 + plbbox, gcy + tbbay*2 - plbbox);
-                    cc = new Coord(gcx + tbbbx*2 + plbbox, gcy + tbbby*2 + plbbox);
-                    cd = new Coord(gcx + tbbax*2 - plbbox, gcy + tbbby*2 + plbbox);
+                    ca = new Coord(gcx + tbbax*3 - plbbox, gcy + tbbay*3 - plbbox);
+                    cb = new Coord(gcx + tbbbx*3 + plbbox, gcy + tbbay*3 - plbbox);
+                    cc = new Coord(gcx + tbbbx*3 + plbbox, gcy + tbbby*3 + plbbox);
+                    cd = new Coord(gcx + tbbax*3 - plbbox, gcy + tbbby*3 + plbbox);
                 }
 
 

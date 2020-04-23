@@ -207,7 +207,7 @@ public class MapWnd extends Window {
                 Coord2d vecToDest = dest.sub(ui.gui.map.player().rc);
                 double distanceToDest = vecToDest.abs();
 
-                if (distanceToDest <= 15) {
+                if (distanceToDest <= 18 || (distanceToDest <= 100 && notMovingDuration >= 3000)) {
                     if (clicks.size() > 0) {
                         clicks.pollFirst();
                     }
@@ -228,7 +228,7 @@ public class MapWnd extends Window {
 
                     int loopstart = (int)Math.round(Math.min(distanceToDest, 39*11));
                     System.out.println("Loopstart value: " + loopstart);
-                    for (int clickDistance = (int)Math.round(Math.min(distanceToDest, 39*11)); clickDistance >= 4*11; clickDistance = clickDistance - 22) {
+                    for (int clickDistance = loopstart; clickDistance >= 11; clickDistance = clickDistance - 22) {
                         System.out.println("Checking clickdistance " + clickDistance);
                         currentClickPos = ui.gui.map.player().rc.add(unitVecTowardsDest.mul(Math.min(distanceToDest, clickDistance)));
                         Coord2d tileCenter = currentClickPos.div(11, 11).floord().mul(11).add(5, 5);

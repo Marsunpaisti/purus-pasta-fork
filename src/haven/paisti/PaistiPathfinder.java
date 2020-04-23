@@ -156,7 +156,7 @@ public class PaistiPathfinder implements Runnable{
 
             // FIXME
             try {
-                Thread.sleep(200);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -201,9 +201,19 @@ public class PaistiPathfinder implements Runnable{
             if (gob != null && !it.hasNext()) {
                 mv.wdgmsg("click", gob.sc, clickCoord, clickb, modflags, 0, (int) gob.id, gob.rc.floor(posres), 0, meshid);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e1) {
+                    return;
+                }
             } else {
                 mv.wdgmsg("click", Coord.z, clickCoord, 1, 0);
                 MapView.pllastcc = new Coord2d(src.x + e.dest.x - Map.origin, src.y + e.dest.y - Map.origin);
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e1) {
+                    return;
+                }
             }
 
             // wait for gob to start moving
@@ -232,11 +242,11 @@ public class PaistiPathfinder implements Runnable{
                 }
                 iterTime = currentTime;
 
-                if (notMovingDuration >= 50) {
+                if (notMovingDuration >= 75) {
                     break;
                 }
 
-                if (currentTarget != null && currentTarget.dist(mv.player().rc) <= 1) {
+                if (currentTarget != null && currentTarget.dist(mv.player().rc) <= 0.7) {
                     break;
                 }
 
