@@ -113,7 +113,7 @@ public class Map {
                             !isRidge)
                         continue;
                 } else {
-                    if (name.equals("gfx/tiles/deep") ||  name.equals("gfx/tiles/water")) {
+                    if (name.equals("gfx/tiles/deep") || name.equals("gfx/tiles/water") || name.equals("gfx/tiles/odeep") || name.equals("gfx/tiles/owater")) {
                         continue;
                     }
                 }
