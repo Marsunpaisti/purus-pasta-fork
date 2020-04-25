@@ -76,7 +76,8 @@ public class PBotUtils {
 		return pf;
 	}
 
-	public static PaistiPathfinder getPaistiPfLeftClick(Coord mc, String action) {
+	public static PaistiPathfinder getPaistiPfLeftClick(double x, double y) {
+		Coord mc = new Coord((int)Math.round(x), (int)Math.round(y));
 		Gob player = PBotAPI.gui.map.player();
 		if (player == null)
 			return null;
@@ -87,7 +88,7 @@ public class PBotUtils {
 		if (gcx < 0 || gcx >= haven.pathfinder.Map.sz || gcy < 0 || gcy >= haven.pathfinder.Map.sz)
 			return null;
 
-		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), action);
+		PaistiPathfinder pf = new PaistiPathfinder(PBotAPI.gui.map, new Coord(gcx, gcy), null);
 		Iterable<Edge> path = pf.getPath(player.rc.floor(), 2);
 		if (path == null)
 			return null;
