@@ -96,6 +96,9 @@ public class PaistiPathfinder implements Runnable{
                 if (pose.toLowerCase().contains("row")) {
                     onBoat = true;
                 }
+                if (pose.toLowerCase().contains("snekkjaman")) {
+                    onBoat = true;
+                }
             }
         }
 
@@ -115,6 +118,9 @@ public class PaistiPathfinder implements Runnable{
 
                 if (onBoat) {
                     if (gob.getres() != null && gob.getres().name.contains("vehicle/rowboat") && gob.rc.dist(mv.player().rc) < 11) {
+                        continue;
+                    }
+                    if (gob.getres() != null && gob.getres().name.contains("vehicle/snekkja") && gob.rc.dist(mv.player().rc) < 95) {
                         continue;
                     }
                 }
@@ -246,7 +252,7 @@ public class PaistiPathfinder implements Runnable{
                     break;
                 }
 
-                if (currentTarget != null && currentTarget.dist(mv.player().rc) <= 0.7) {
+                if (currentTarget != null && currentTarget.dist(mv.player().rc) <= 0.4) {
                     break;
                 }
 

@@ -77,6 +77,9 @@ public class Map {
                 if (pose.toLowerCase().contains("row")) {
                     onBoat = true;
                 }
+                if (pose.toLowerCase().contains("snekkjaman")) {
+                    onBoat = true;
+                }
             }
 
         }
