@@ -201,7 +201,10 @@ public class MapWnd extends Window {
 
 
                 if (dest == null) {
-                    dest = new Coord2d(clicks.getFirst().second).mul(posres);
+                    synchronized (clicks){
+                        dest = new Coord2d(clicks.getFirst().second).mul(posres);
+
+                    }
                 }
 
                 Coord2d vecToDest = dest.sub(ui.gui.map.player().rc);
@@ -209,10 +212,14 @@ public class MapWnd extends Window {
 
                 if (distanceToDest <= 18 || (distanceToDest <= 100 && notMovingDuration >= 3000)) {
                     if (clicks.size() > 0) {
-                        clicks.pollFirst();
+                        synchronized (clicks) {
+                            clicks.pollFirst();
+                        }
                     }
                     if (clicks.size() > 0) {
-                        dest = clicks.getFirst().second.mul(posres);
+                        synchronized (clicks){
+                            dest = clicks.getFirst().second.mul(posres);
+                        }
                     }
 
                     //Calculate again if dest potentially has changed
@@ -254,7 +261,10 @@ public class MapWnd extends Window {
                 } catch(InterruptedException e) {}
 
             }
-            clicks.clear();
+
+            synchronized (clicks){
+                clicks.clear();
+            }
             ui.gui.map.mapWalker = null;
 
 /*
@@ -298,7 +308,9 @@ public class MapWnd extends Window {
 							ui.gui.map.stopWalker = true;
 							mv.wdgmsg("click", rootpos(), pl.rc.add(dif).floor(posres), button, 0);
 						} else if(ui.modshift) {
-							clicks.add(new CoordPair(loc.tc, pl.rc.add(dif).floor(posres)));
+        				    synchronized (clicks){
+                                clicks.add(new CoordPair(loc.tc, pl.rc.add(dif).floor(posres)));
+                            }
 							if(ui.gui.map.mapWalker == null) {
 								ui.gui.map.mapWalker = new Thread(walker);
 								ui.gui.map.stopWalker = false;
@@ -343,16 +355,18 @@ public class MapWnd extends Window {
 				}
 
                 Coord prevC = ploc;
-				for(CoordPair p:clicks) {
-					g.chcolor(0, 255, 0, 255);
-					Coord c = p.first.div(scalef()).add(sz.div(2)).sub(curloc.tc);
-					g.image(plx, c.sub(plx.sz().div(2)));
-					g.chcolor(0, 255, 255, 255);
-					if(prevC != null)
-						g.line(prevC, c, 2.0f); // Ugly
-					prevC = c;
-					g.chcolor();
-				}
+                synchronized (clicks){
+                    for(CoordPair p:clicks) {
+                        g.chcolor(0, 255, 0, 255);
+                        Coord c = p.first.div(scalef()).add(sz.div(2)).sub(curloc.tc);
+                        g.image(plx, c.sub(plx.sz().div(2)));
+                        g.chcolor(0, 255, 255, 255);
+                        if(prevC != null)
+                            g.line(prevC, c, 2.0f); // Ugly
+                        prevC = c;
+                        g.chcolor();
+                    }
+                }
             } catch (Loading l) {
             }
         }

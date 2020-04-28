@@ -111,18 +111,27 @@ public class PaistiPathfinder implements Runnable{
                     continue;
 
                 if (ridingHorse) {
-                    if (gob.getres() != null && gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 11) {
-                        continue;
+                    try {
+                        if (gob.getres() != null && gob.getres().name.contains("kritter/horse") && gob.rc.dist(mv.player().rc) < 11) {
+                            continue;
+                        }
+                    } catch (Loading l){
+                        System.out.println("Caught loading during PF: " + l);
                     }
                 }
 
                 if (onBoat) {
-                    if (gob.getres() != null && gob.getres().name.contains("vehicle/rowboat") && gob.rc.dist(mv.player().rc) < 11) {
-                        continue;
+                    try {
+                        if (gob.getres() != null && gob.getres().name.contains("vehicle/rowboat") && gob.rc.dist(mv.player().rc) < 11) {
+                            continue;
+                        }
+                        if (gob.getres() != null && gob.getres().name.contains("vehicle/snekkja") && gob.rc.dist(mv.player().rc) < 95) {
+                            continue;
+                        }
+                    } catch (Loading l){
+                        System.out.println("Caught loading during PF: " + l);
                     }
-                    if (gob.getres() != null && gob.getres().name.contains("vehicle/snekkja") && gob.rc.dist(mv.player().rc) < 95) {
-                        continue;
-                    }
+
                 }
 
                 if (carryingObject) {
