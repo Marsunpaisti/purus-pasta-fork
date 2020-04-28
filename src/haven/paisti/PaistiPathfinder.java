@@ -140,22 +140,13 @@ public class PaistiPathfinder implements Runnable{
                     }
                 }
 
-
                 GobHitbox.BBox box = GobHitbox.getBBox(gob);
-                int shrink = 0;
                 if (box != null && isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor())) {
-                    do {
-                        //"Shrink" box until player is no longer considered to be inside it
-                        shrink++;
-                        box = GobHitbox.getBBox(gob);
-                        box.a = box.a.add(shrink, shrink);
-                        box.b = box.b.sub(shrink, shrink);
-                        if (shrink >= 10) break; //Max shrink
-                    } while (isInsideBoundBox(gob.rc.floor(), gob.a, box, player.rc.floor()));
-                    m.addGobAndShrink(gob, new Coord(shrink, shrink));
+                    m.excludeGob(gob);
                     continue;
                 }
                 m.addGob(gob);
+
             }
         }
 

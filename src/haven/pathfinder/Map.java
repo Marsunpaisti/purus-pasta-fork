@@ -287,99 +287,6 @@ public class Map {
         dbg.rect(ca.x, ca.y, cb.x, cb.y, cc.x, cc.y, cd.x, cd.y, Color.CYAN);
     }
 
-    public void addGobAndShrink(Gob gob, Coord shrinkBy) {
-        GobHitbox.BBox bbox = GobHitbox.getBBox(gob);
-        GobHitbox.BBox bboxOriginal = GobHitbox.getBBox(gob);
-        if (bbox == null)
-            return;
-
-        bbox.a.add(shrinkBy.x, shrinkBy.y);
-        bbox.b.sub(shrinkBy.x, shrinkBy.y);
-        Coord bboxa = bbox.a;
-        Coord bboxb = bbox.b;
-        Coord bboxaOriginal = bboxOriginal.a;
-        Coord bboxbOriginal = bboxOriginal.b;
-
-        // gob coordinate relative to the origin (player's location)
-        int gcx = origin - (plc.x - gob.rc.floor().x);
-        int gcy = origin - (plc.y - gob.rc.floor().y);
-
-        // since non 90 degrees incremental rotation is wonky we slightly increase the bounding box for such gobs
-        // FIXME: but really should rotate around pixel's center
-        int rotadj = 0;
-        if (gob.a != 0 && gob.a != Math.PI && gob.a != Math.PI / 2.0 && gob.a != (3 * Math.PI) / 2) {
-            rotadj = 1;
-        }
-        Coord ca, cb, cc, cd, wa, wb, wc, wd, clra, clrb, clrc, clrd;
-
-        // do not rotate square gobs
-        // FIXME: rotating rasters realiably to mach actual bounding boxes is very tricky. need better way...
-        if (Math.abs(bboxa.x) + Math.abs(bboxb.x) == Math.abs(bboxa.y) + Math.abs(bboxb.y) && rotadj == 0) {
-            // bounding box
-            ca = new Coord(gcx + bboxa.x - plbbox, gcy + bboxa.y - plbbox);
-            cb = new Coord(gcx + bboxb.x + plbbox, gcy + bboxa.y - plbbox);
-            cc = new Coord(gcx + bboxb.x + plbbox, gcy + bboxb.y + plbbox);
-            cd = new Coord(gcx + bboxa.x - plbbox, gcy + bboxb.y + plbbox);
-
-            // calculate waypoints located on the angular bisector of the corner
-            wa = new Coord(gcx + bboxaOriginal.x - way, gcy + bboxaOriginal.y - way);
-            wb = new Coord(gcx + bboxbOriginal.x + way, gcy + bboxaOriginal.y - way);
-            wc = new Coord(gcx + bboxbOriginal.x + way, gcy + bboxbOriginal.y + way);
-            wd = new Coord(gcx + bboxaOriginal.x - way, gcy + bboxbOriginal.y + way);
-
-            // calculate TO clearance vertices
-            clra = new Coord(gcx + bboxa.x - clr, gcy + bboxa.y - clr);
-            clrb = new Coord(gcx + bboxb.x + clr, gcy + bboxa.y - clr);
-            clrc = new Coord(gcx + bboxb.x + clr, gcy + bboxb.y + clr);
-            clrd = new Coord(gcx + bboxa.x - clr, gcy + bboxb.y + clr);
-        } else {
-            // rotate the bounding box.
-            // FIXME: should rotate around pixel's center
-            double cos = Math.cos(gob.a);
-            double sin = Math.sin(gob.a);
-            ca = Utils.rotate(gcx + bboxa.x - plbbox, gcy + bboxa.y - plbbox, gcx, gcy, cos, sin);
-            cb = Utils.rotate(gcx + bboxb.x + plbbox, gcy + bboxa.y - plbbox, gcx, gcy, cos, sin);
-            cc = Utils.rotate(gcx + bboxb.x + plbbox, gcy + bboxb.y + plbbox, gcx, gcy, cos, sin);
-            cd = Utils.rotate(gcx + bboxa.x - plbbox, gcy + bboxb.y + plbbox, gcx, gcy, cos, sin);
-
-            // calculate waypoints located on the angular bisector of the corner
-            wa = Utils.rotate(gcx + bboxa.x - way - rotadj, gcy + bboxa.y - way - rotadj, gcx, gcy, cos, sin);
-            wb = Utils.rotate(gcx + bboxb.x + way + rotadj, gcy + bboxa.y - way - rotadj, gcx, gcy, cos, sin);
-            wc = Utils.rotate(gcx + bboxb.x + way + rotadj, gcy + bboxb.y + way + rotadj, gcx, gcy, cos, sin);
-            wd = Utils.rotate(gcx + bboxa.x - way - rotadj, gcy + bboxb.y + way + rotadj, gcx, gcy, cos, sin);
-
-            // calculate TO clearance vertices
-            clra = Utils.rotate(gcx + bboxa.x - clr - rotadj, gcy + bboxa.y - clr - rotadj, gcx, gcy, cos, sin);
-            clrb = Utils.rotate(gcx + bboxb.x + clr - rotadj, gcy + bboxa.y - clr - rotadj, gcx, gcy, cos, sin);
-            clrc = Utils.rotate(gcx + bboxb.x + clr + rotadj, gcy + bboxb.y + clr + rotadj, gcx, gcy, cos, sin);
-            clrd = Utils.rotate(gcx + bboxa.x - clr - rotadj, gcy + bboxb.y + clr + rotadj, gcx, gcy, cos, sin);
-        }
-
-        // exclude gobs near map edges so we won't need to do bounds checks all over the place
-        if (wa.x - mapborder < 0 || wa.y - mapborder < 0 || wa.x + mapborder >= sz || wa.y + mapborder >= sz ||
-                wb.x - mapborder < 0 || wb.y - mapborder < 0 || wb.x + mapborder >= sz || wb.y + mapborder >= sz ||
-                wc.x - mapborder < 0 || wc.y - mapborder < 0 || wc.x + mapborder >= sz || wc.y + mapborder >= sz ||
-                wd.x - mapborder < 0 || wd.y - mapborder < 0 || wd.x + mapborder >= sz || wd.y + mapborder >= sz)
-            return;
-
-        if (map[wa.x][wa.y] == CELL_FREE)
-            map[wa.x][wa.y] = CELL_WP;
-        if (map[wb.x][wb.y] == CELL_FREE)
-            map[wb.x][wb.y] = CELL_WP;
-        if (map[wc.x][wc.y] == CELL_FREE)
-            map[wc.x][wc.y] = CELL_WP;
-        if (map[wd.x][wd.y] == CELL_FREE)
-            map[wd.x][wd.y] = CELL_WP;
-
-        // plot bounding box
-        HashMap<Integer, Utils.MinMax> raster = Utils.plotRect(map, ca, cb, cc, cd, CELL_BLK);
-
-        // store traversable obstacles candidates
-        if (bboxb.x <= tomaxside && bboxb.y <= tomaxside)
-            tocandidates.add(new TraversableObstacle(wa, wb, wc, wd, clra, clrb, clrc, clrd, raster));
-
-        dbg.rect(ca.x, ca.y, cb.x, cb.y, cc.x, cc.y, cd.x, cd.y, Color.CYAN);
-    }
     public void excludeGob(Gob gob) {
         GobHitbox.BBox bbox = GobHitbox.getBBox(gob);
         if (bbox == null)
@@ -740,14 +647,14 @@ public class Map {
 
     // 3 pixels away from origin
     public Pair<Integer, Integer> getFreeLocation() {
-        if (map[origin + 4][origin] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin + 4, origin);
-        else if (map[origin - 4][origin] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin - 4, origin);
-        else if (map[origin][origin + 4] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin, origin + 4);
-        else if (map[origin][origin - 4] == CELL_FREE)
-            return new Pair<Integer, Integer>(origin, origin - 4);
+        if (map[origin + 3][origin] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin + 3, origin);
+        else if (map[origin - 3][origin] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin - 3, origin);
+        else if (map[origin][origin + 3] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin, origin + 3);
+        else if (map[origin][origin - 3] == CELL_FREE)
+            return new Pair<Integer, Integer>(origin, origin - 3);
 
         return null;
     }
